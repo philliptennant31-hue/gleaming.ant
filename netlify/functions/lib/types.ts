@@ -113,9 +113,23 @@ export interface ChatLink {
   path: string
 }
 
+/**
+ * A pre-filled quote handoff. When the assistant has gathered enough from the
+ * visitor, it emits this so the widget can drop them into the booking wizard
+ * with everything already applied. Only `services` is required; the rest are
+ * best-effort and validated server-side before being returned.
+ */
+export interface QuoteDraft {
+  services: string[]
+  band_code?: string
+  frequency_code?: string
+  postcode?: string
+}
+
 export interface ChatResponse {
   reply: string
   links: ChatLink[]
   suggested_replies: string[]
   source: 'ai' | 'rules'
+  quote_draft?: QuoteDraft
 }

@@ -131,7 +131,7 @@ export default function AreasPage() {
                   <td className={tdClass}>
                     <span className="flex flex-wrap gap-1">
                       {area.postcode_prefixes.length === 0 ? (
-                        <span className="text-ink-soft">—</span>
+                        <span className="text-ink-soft">-</span>
                       ) : (
                         area.postcode_prefixes.map((p) => (
                           <span key={p} className="rounded bg-pane px-1.5 py-0.5 font-mono text-xs text-teal-deep">
@@ -142,7 +142,7 @@ export default function AreasPage() {
                     </span>
                   </td>
                   <td className={`${tdClass} text-right font-mono`}>
-                    {area.surcharge > 0 ? formatGBP(area.surcharge) : '—'}
+                    {area.surcharge > 0 ? formatGBP(area.surcharge) : '-'}
                   </td>
                   <td className={tdClass}>
                     {area.is_core ? <Badge tone="teal" size="sm">Core</Badge> : <Badge tone="neutral" size="sm">Outer</Badge>}

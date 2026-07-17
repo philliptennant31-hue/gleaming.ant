@@ -53,7 +53,7 @@ export function formatTime(input: string): string {
 
 /** Minutes -> "1 hr 30 min" / "45 min" / "2 hr". */
 export function formatDuration(minutes: number): string {
-  if (!Number.isFinite(minutes) || minutes <= 0) return '—'
+  if (!Number.isFinite(minutes) || minutes <= 0) return '-'
   const hrs = Math.floor(minutes / 60)
   const mins = Math.round(minutes % 60)
   const bits: string[] = []

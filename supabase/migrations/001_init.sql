@@ -285,40 +285,40 @@ insert into public.services
   (slug, name, short_description, long_description, base_price, unit_label, duration_minutes, supports_frequency, price_note, icon, is_active, sort_order)
 values
   ('window-cleaning', 'Window Cleaning',
-   'Crystal-clear windows, frames and sills — every time.',
+   'Crystal-clear windows, frames and sills, every time.',
    'Our core service. We clean your windows, frames, sills and doors for a streak-free finish that lasts. Choose a regular 4- or 8-weekly clean for the best price, or book a one-off spruce-up. [PLACEHOLDER: confirm method — e.g. pure water reach & wash system]',
    15.00, 'per visit', 45, true,
    'Prices are placeholders pending confirmation', 'window', true, 0),
 
   ('gutter-clearing', 'Gutter Clearing',
    'Blocked gutters emptied, checked and flowing again.',
-   'Leaves, moss and debris out — protecting your home from damp and overflow damage. We clear all gutters and downpipes and check the flow before we leave. [PLACEHOLDER: confirm equipment — e.g. camera-guided vacuum system]',
+   'Leaves, moss and debris out, keeping your home safe from damp and overflow damage. We clear all gutters and downpipes and check the flow before we leave. [PLACEHOLDER: confirm equipment — e.g. camera-guided vacuum system]',
    70.00, 'per visit', 90, false,
    'Prices are placeholders pending confirmation', 'gutter', true, 1),
 
   ('fascia-soffit', 'Fascia & Soffit Cleaning',
-   'Brighten the whole frontage — fascias, soffits and gutter faces.',
+   'Brighten the whole frontage: fascias, soffits and gutter faces.',
    'We wash down fascias, soffits and external gutter faces to lift years of grime and bring back the white. Ideal alongside a gutter clear.',
    80.00, 'per visit', 120, false,
    'Prices are placeholders pending confirmation', 'fascia', true, 2),
 
   ('conservatory-cleaning', 'Conservatory Cleaning',
-   'Roof, glass and frames — let the light back in.',
-   'Full conservatory clean including roof panels, glass, frames and sills. Sized quotes depend on your conservatory — the price shown is a guide. [PLACEHOLDER: confirm whether roof cleaning is included or priced separately]',
+   'Roof, glass and frames: let the light back in.',
+   'Full conservatory clean including roof panels, glass, frames and sills. Sized quotes depend on your conservatory, so the price shown is a guide. [PLACEHOLDER: confirm whether roof cleaning is included or priced separately]',
    50.00, 'per visit', 90, true,
-   'Guide price — depends on conservatory size', 'conservatory', true, 3),
+   'Guide price, depends on conservatory size', 'conservatory', true, 3),
 
   ('solar-panel-cleaning', 'Solar Panel Cleaning',
-   'Clean panels generate more — protect your investment.',
+   'Clean panels generate more and protect your investment.',
    'Dirty solar panels can lose a meaningful share of their output. We clean them safely with the right equipment and no harsh chemicals. [PLACEHOLDER: confirm price basis — per panel or per system]',
    75.00, 'per visit', 90, false,
-   'Guide price — depends on number of panels', 'solar', true, 4),
+   'Guide price, depends on number of panels', 'solar', true, 4),
 
   ('pressure-washing', 'Driveway & Patio Pressure Washing',
-   'Lift the grime — driveways, patios and paths renewed.',
+   'Lift the grime: driveways, patios and paths renewed.',
    '[PLACEHOLDER: confirm this service is offered — listed as "& more" on Instagram]',
    90.00, 'per visit', 150, false,
-   'Placeholder service — awaiting confirmation', 'pressure', false, 5);
+   'Placeholder service, awaiting confirmation', 'pressure', false, 5);
 
 insert into public.service_prices (service_id, band_code, price)
 select s.id, b.code,
@@ -359,19 +359,19 @@ insert into public.business_hours (day_of_week, is_open, open_time, close_time) 
 
 insert into public.faqs (question, answer, category, sort_order) values
   ('Are you insured?',
-   'Yes — Gleaming Ant is fully insured, so your home is protected while we work.',
+   'Yes, Gleaming Ant is fully insured, so your home is protected while we work.',
    'general', 0),
   ('How do I get a quote?',
-   'Use our online booking tool for an instant quote based on your property and the services you need, or send us a message — quotes are always free.',
+   'Use our online booking tool for an instant quote based on your property and the services you need, or send us a message. Quotes are always free.',
    'pricing', 1),
   ('Do I need to be home when you clean?',
-   'Not usually — as long as we can access the areas that need cleaning (for example, a side gate to the back garden), you don''t need to be in. [PLACEHOLDER: confirm access/payment arrangements when customer is out]',
+   'Not usually. As long as we can access the areas that need cleaning (for example, a side gate to the back garden), you don''t need to be in. [PLACEHOLDER: confirm access/payment arrangements when customer is out]',
    'general', 2),
   ('What happens if it rains?',
-   'Light rain doesn''t affect a professional clean — your windows will still dry clear. If the weather is bad enough to affect the result, we''ll rearrange your visit. [PLACEHOLDER: confirm rain guarantee policy]',
+   'Light rain doesn''t affect a professional clean, and your windows will still dry clear. If the weather is bad enough to affect the result, we''ll rearrange your visit. [PLACEHOLDER: confirm rain guarantee policy]',
    'general', 3),
   ('How often should I have my windows cleaned?',
-   'Most of our customers choose a regular clean every 4 or 8 weeks — it keeps windows consistently spotless and costs less per visit than a one-off.',
+   'Most of our customers choose a regular clean every 4 or 8 weeks. It keeps windows consistently spotless and costs less per visit than a one-off.',
    'services', 4),
   ('Which areas do you cover?',
    'We cover Basildon, Laindon, Benfleet, Canvey Island, South Woodham Ferrers, Stanford-le-Hope and surrounding Essex areas. Not sure? Enter your postcode in the booking tool or drop us a message.',

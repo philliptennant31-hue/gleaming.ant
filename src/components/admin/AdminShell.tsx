@@ -110,7 +110,7 @@ export function AdminShell({
     <div className="min-h-screen bg-paper lg:flex">
       {/* Desktop sidebar */}
       <aside className="bg-chalkboard sticky top-0 hidden h-screen w-64 shrink-0 flex-col gap-6 px-4 py-5 lg:flex">
-        <Link to="/admin" aria-label="Gleaming Ant admin — dashboard" className="px-2">
+        <Link to="/admin" aria-label="Gleaming Ant admin dashboard" className="px-2">
           <Logo badgeSize={34} tone="light" />
         </Link>
         <NavItems />
@@ -119,7 +119,7 @@ export function AdminShell({
 
       {/* Mobile top bar */}
       <div className="bg-chalkboard sticky top-0 z-30 flex items-center justify-between px-4 py-3 lg:hidden">
-        <Link to="/admin" aria-label="Gleaming Ant admin — dashboard">
+        <Link to="/admin" aria-label="Gleaming Ant admin dashboard">
           <Logo badgeSize={30} tone="light" />
         </Link>
         <button
@@ -141,7 +141,7 @@ export function AdminShell({
             <div className="flex items-center justify-between">
               <Link
                 to="/admin"
-                aria-label="Gleaming Ant admin — dashboard"
+                aria-label="Gleaming Ant admin dashboard"
                 onClick={() => setDrawerOpen(false)}
                 className="px-1"
               >

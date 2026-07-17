@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { answerWithRules, isRoutePath } from './brain'
+import { answerWithRules, isRoutePath, validateQuoteDraft } from './brain'
 import type { BusinessData, ChatMessage, ChatResponse } from './types'
 
 // ---------------------------------------------------------------------------
@@ -12,7 +12,7 @@ const data: BusinessData = {
       id: 'svc-window',
       slug: 'window-cleaning',
       name: 'Window Cleaning',
-      short_description: 'Crystal-clear windows, frames and sills — every time.',
+      short_description: 'Crystal-clear windows, frames and sills, every time.',
       long_description: '',
       base_price: 15,
       unit_label: 'per visit',
@@ -42,7 +42,7 @@ const data: BusinessData = {
       id: 'svc-solar',
       slug: 'solar-panel-cleaning',
       name: 'Solar Panel Cleaning',
-      short_description: 'Clean panels generate more — protect your investment.',
+      short_description: 'Clean panels generate more and protect your investment.',
       long_description: '',
       base_price: 75,
       unit_label: 'per visit',
@@ -110,7 +110,7 @@ const data: BusinessData = {
     {
       id: 'f1',
       question: 'Are you insured?',
-      answer: 'Yes — Gleaming Ant is fully insured, so your home is protected while we work.',
+      answer: 'Yes, Gleaming Ant is fully insured, so your home is protected while we work.',
       category: 'general',
       sort_order: 0,
       is_active: true,
@@ -127,7 +127,7 @@ const data: BusinessData = {
       id: 'f3',
       question: 'Do I need to be home when you clean?',
       answer:
-        "Not usually — as long as we can access the areas that need cleaning you don't need to be in.",
+        "Not usually. As long as we can access the areas that need cleaning you don't need to be in.",
       category: 'general',
       sort_order: 2,
       is_active: true,
@@ -342,6 +342,111 @@ describe('answerWithRules — contract', () => {
     }
     assertShape(answerWithRules([{ role: 'user', content: 'what services do you offer?' }], empty))
     assertShape(answerWithRules([{ role: 'user', content: 'do you cover SS14?' }], empty))
+  })
+})
+
+describe('answerWithRules — quote handoff extraction', () => {
+  const bookMsg = (content: string): ChatResponse =>
+    answerWithRules([{ role: 'user', content }], data)
+
+  it('extracts a service on a booking intent', () => {
+    const res = bookMsg('I want to book a window clean')
+    expect(res.quote_draft?.services).toEqual(['window-cleaning'])
+    assertShape(res)
+  })
+
+  it('extracts a service on a pricing intent too', () => {
+    const res = bookMsg('how much is window cleaning?')
+    expect(res.quote_draft?.services).toContain('window-cleaning')
+  })
+
+  it('infers a property band from a bedroom count', () => {
+    const res = bookMsg('book me in for a 3 bed window clean')
+    expect(res.quote_draft?.band_code).toBe('band_3')
+  })
+
+  it('maps 5+ bedrooms to the top band', () => {
+    const res = bookMsg('quote for a 6 bedroom window clean please')
+    expect(res.quote_draft?.band_code).toBe('band_5p')
+  })
+
+  it('infers a frequency from "monthly"', () => {
+    const res = bookMsg('book a monthly window clean')
+    expect(res.quote_draft?.frequency_code).toBe('every_4_weeks')
+  })
+
+  it('infers a one-off frequency', () => {
+    const res = bookMsg('book a one-off window clean')
+    expect(res.quote_draft?.frequency_code).toBe('one_off')
+  })
+
+  it('extracts an outcode as the postcode', () => {
+    const res = bookMsg('can I book a window clean in SS14')
+    expect(res.quote_draft?.postcode).toBe('SS14')
+  })
+
+  it('builds a full multi-service draft from the whole history', () => {
+    const messages: ChatMessage[] = [
+      { role: 'user', content: 'how much is window cleaning and gutter clearing?' },
+      { role: 'assistant', content: 'Happy to help!' },
+      { role: 'user', content: 'book them for my 4 bed house in CM3, every 8 weeks' },
+    ]
+    const res = answerWithRules(messages, data)
+    expect(res.quote_draft?.services).toEqual(['window-cleaning', 'gutter-clearing'])
+    expect(res.quote_draft?.band_code).toBe('band_4')
+    expect(res.quote_draft?.frequency_code).toBe('every_8_weeks')
+    expect(res.quote_draft?.postcode).toBe('CM3')
+    assertShape(res)
+  })
+
+  it('adds no draft when a booking intent mentions no service', () => {
+    const res = bookMsg("I'd like to book a clean")
+    expect(res.quote_draft).toBeUndefined()
+    assertShape(res)
+  })
+
+  it('adds no draft to a non-quote intent even if a service is named', () => {
+    const res = bookMsg('are you insured for window cleaning?')
+    expect(res.quote_draft).toBeUndefined()
+  })
+})
+
+describe('validateQuoteDraft', () => {
+  it('drops invalid band, frequency and postcode but keeps a valid service', () => {
+    const draft = validateQuoteDraft(
+      {
+        services: ['window-cleaning', 'not-a-real-service'],
+        band_code: 'band_99',
+        frequency_code: 'never',
+        postcode: 'NOTAPOSTCODE',
+      },
+      data,
+    )
+    expect(draft).toEqual({ services: ['window-cleaning'] })
+  })
+
+  it('keeps valid optional fields and dedupes services', () => {
+    const draft = validateQuoteDraft(
+      {
+        services: ['window-cleaning', 'window-cleaning', 'gutter-clearing'],
+        band_code: 'band_3',
+        frequency_code: 'every_8_weeks',
+        postcode: 'ss14 1aa',
+      },
+      data,
+    )
+    expect(draft).toEqual({
+      services: ['window-cleaning', 'gutter-clearing'],
+      band_code: 'band_3',
+      frequency_code: 'every_8_weeks',
+      postcode: 'ss14 1aa',
+    })
+  })
+
+  it('returns undefined when no valid service survives', () => {
+    expect(validateQuoteDraft({ services: ['nope'], band_code: 'band_3' }, data)).toBeUndefined()
+    expect(validateQuoteDraft({ services: [] }, data)).toBeUndefined()
+    expect(validateQuoteDraft(null, data)).toBeUndefined()
   })
 })
 

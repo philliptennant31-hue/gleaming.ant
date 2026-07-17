@@ -88,10 +88,14 @@ reads as dirt — these sections must still feel clean.
 Friendly local pro, plain-spoken, zero corporate filler. Contractions welcome.
 Say "we" and "your". Short sentences. British English.
 - Buttons say what they do: "Get an instant quote", "Book this clean",
-  "Send message" — never "Submit" or "Learn more".
+  "Send message", never "Submit" or "Learn more".
 - No invented claims (no "10 years experience", no fake review quotes). Where
   real content is missing use visible `[PLACEHOLDER: what's needed]` markers
   and log them in docs/PLACEHOLDERS.md.
+- No em dashes anywhere in site copy. Use a comma, a colon or a separate
+  sentence instead.
+- Avoid stock AI phrasing. Cut words and patterns like "seamless",
+  "effortless" and "we've got you covered".
 - Headline direction for hero (pick/refine one, don't use all):
   "The small team behind seriously clean windows." /
   "Gleaming windows. Tidy gutters. One friendly visit." /

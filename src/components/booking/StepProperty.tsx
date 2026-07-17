@@ -114,7 +114,7 @@ export function StepProperty({
           </legend>
           <p className="mb-3 text-sm text-ink-soft">
             A regular round keeps things consistently spotless and costs less per visit than a one-off. You can
-            change or cancel any time — we'll confirm the schedule with you.
+            change or cancel any time, and we'll confirm the schedule with you.
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
             {frequencies.map((freq) => (
@@ -131,7 +131,7 @@ export function StepProperty({
         </fieldset>
       ) : (
         <p className="mt-8 rounded-card border border-pane bg-pane/25 px-4 py-3 text-sm text-ink-soft">
-          The services you've chosen are priced as a one-off visit — no regular schedule needed.
+          The services you've chosen are priced as a one-off visit. No regular schedule needed.
         </p>
       )}
     </div>

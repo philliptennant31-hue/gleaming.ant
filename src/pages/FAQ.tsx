@@ -90,7 +90,7 @@ export default function FAQ() {
           <div className="mt-12 flex flex-col items-center gap-4 rounded-card bg-pane/40 p-8 text-center">
             <h2 className="font-display text-xl font-bold text-ink">Still wondering about something?</h2>
             <p className="max-w-md text-ink-soft">
-              Drop us a message and we'll get back to you — no question too small.
+              Drop us a message and we'll get back to you. No question too small.
             </p>
             <Button to="/contact" leftIcon={<MessageCircle className="h-4 w-4" />}>
               Message us

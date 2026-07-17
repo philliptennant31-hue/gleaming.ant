@@ -288,7 +288,7 @@ function PriceMatrixEditor({
                       inputMode="decimal"
                       min="0"
                       step="0.01"
-                      aria-label={`${s.name} — ${b.label} price`}
+                      aria-label={`${s.name}, ${b.label} price`}
                       className={cellInput('w-24')}
                       value={draft[k] ?? ''}
                       placeholder={String(s.base_price)}

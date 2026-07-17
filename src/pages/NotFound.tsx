@@ -27,7 +27,7 @@ export default function NotFound() {
             This page needs a clean
           </h1>
           <p className="max-w-md text-lg text-ink-soft">
-            We couldn't find what you were after — even our busiest ant takes a wrong turn now and then.
+            We couldn't find what you were after. Even our busiest ant takes a wrong turn now and then.
             Let's get you back to something gleaming.
           </p>
 

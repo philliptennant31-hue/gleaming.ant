@@ -49,7 +49,7 @@ change. Others are page copy or assets.
 |---|---|---|
 | About-page story | About → "Our story" (two marked paragraphs) | Founder's story in their own words + what makes Gleaming Ant different (no invented claims) |
 | Real job photos | Home "See the difference" section | Before/after photos (they have some on Instagram) to feature on the site |
-| Official logo files | Everywhere (`Logo`, `AntMascot`, favicon are clean SVG recreations) | Official vector logo files if available, to replace the recreation |
+| Official logo files | Everywhere (`Logo`/`BrandBadge`, `AntMascot`, favicon) | Site artwork was rebuilt as SVG to faithfully match the supplied logo (tilted four-pane window, squeegee, ant, sparkles, GLEAMING ANT / WINDOW & EXTERIOR CLEANING banners). A high-res raster export (PNG/transparent) from the client's original file is still welcome for social/OG images and print. |
 
 ## Legal
 
@@ -95,3 +95,28 @@ The assistant has **no visible `[PLACEHOLDER]` markers** — it degrades gracefu
 | `ANTHROPIC_API_KEY` | Netlify env (set in the UI, never committed) | **Already active** (2026-07-17): the Netlify team has a shared `ANTHROPIC_API_KEY`, which this project inherits — live replies verified as `source: "ai"`. Decide whether the team key should keep billing for this client's bot, or set a project-scoped key to override it. Remove/override it to fall back to the free rules brain. |
 | `CHAT_MODEL` | Netlify env (optional) | Defaults to `claude-opus-4-8`. The owner can set a cheaper model (e.g. `claude-haiku-4-5`) to cut per-message cost — see docs/reports/phase-4.md for the cost note. |
 | Assistant answer quality | `/api/chat` system prompt (built from live DB data) | The bot only knows what's in Supabase. As the client confirms real prices, payment methods, hours and contact details (the rows above), Sparkle's answers improve automatically — no code change needed. |
+
+## Notifications (Phase 6)
+
+Confirming a booking in the admin now offers to notify the customer. It is
+deliberately tiered so nothing depends on services that are not configured yet:
+
+- **Works today, zero setup (manual):** confirmed bookings show a "Notify the
+  customer" group in the booking drawer. "Email confirmation" opens the owner's
+  own mail app with the subject and full message prefilled from real booking
+  data; "Text confirmation" (shown when the booking has a phone number) does the
+  same in the messages app. The owner reads it over and presses send.
+- **Automatic email (one env var away):** after Confirm, the admin calls
+  `/api/notify-booking`, which sends a branded confirmation email through
+  Resend when `RESEND_API_KEY` exists. Until then the endpoint reports "not
+  configured" and the admin sees a toast pointing at the manual buttons. The
+  manual buttons stay visible either way, and a "Resend confirmation email"
+  action re-triggers the automatic email on already-confirmed bookings.
+- **SMS:** manual only (the sms: button). Automated texting is intentionally
+  not built; see the row below for the future option.
+
+| Item | Where it appears | What we need |
+|---|---|---|
+| `RESEND_API_KEY` | Netlify env (set in the UI, never committed) | Create a free Resend account (resend.com), create an API key, and add it in Netlify as `RESEND_API_KEY`. From that moment confirmation emails send automatically; no deploy or code change needed. |
+| Sender address (`NOTIFY_FROM`) | The From line of the automatic confirmation email | Until a domain is verified, sending uses `Gleaming Ant <onboarding@resend.dev>`. Note the resend.dev test sender only delivers to the Resend account owner's own address, so real customers will not receive it. Verify `gleamingant.co.uk` in Resend (DNS records), then set `NOTIFY_FROM` in Netlify, for example `Gleaming Ant <hello@gleamingant.co.uk>`. |
+| Automated SMS (future option) | Not built anywhere; the manual "Text confirmation" button covers texting today | If automated texts are wanted later: a Twilio (or similar) account with a UK number, its credentials in Netlify env, and a small extension of `/api/notify-booking` to send via its API. Decide whether the cost per text is worth it before building. |

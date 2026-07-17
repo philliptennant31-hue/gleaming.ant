@@ -294,7 +294,7 @@ function BlockedSlotsEditor({ blocked, onSaved }: { blocked: BlockedSlot[]; onSa
                 <td className={`${tdClass} font-mono text-xs`}>
                   {formatTime(slot.start_time)} – {formatTime(slot.end_time)}
                 </td>
-                <td className={tdClass}>{slot.reason || <span className="text-ink-soft">—</span>}</td>
+                <td className={tdClass}>{slot.reason || <span className="text-ink-soft">-</span>}</td>
                 <td className={`${tdClass} text-right`}>
                   <DangerButton onClick={() => setToDelete(slot)} aria-label="Remove block">
                     <Trash2 className="h-4 w-4" aria-hidden="true" />

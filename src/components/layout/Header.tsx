@@ -49,7 +49,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-pane/80 bg-paper/85 backdrop-blur supports-[backdrop-filter]:bg-paper/70">
       <Container>
         <div className="flex h-16 items-center justify-between gap-4">
-          <Link to="/" aria-label="Gleaming Ant — home" className="rounded-lg">
+          <Link to="/" aria-label="Gleaming Ant home" className="rounded-lg">
             <Logo badgeSize={38} />
           </Link>
 

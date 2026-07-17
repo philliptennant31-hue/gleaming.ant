@@ -19,7 +19,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Sparkle } from '../brand/Sparkle'
 import { cn } from '../../lib/cn'
-import type { ChatResponse, DisplayMessage } from './types'
+import type { ChatResponse, DisplayMessage, QuoteDraft } from './types'
 
 const STORAGE_KEY = 'ga_sparkle_chat_v1'
 const MAX_INPUT = 600
@@ -39,6 +39,24 @@ function newId(): string {
     return crypto.randomUUID()
   }
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
+
+/** Keep a quote draft only when it carries at least one service. */
+function cleanQuoteDraft(draft: QuoteDraft | undefined): QuoteDraft | undefined {
+  if (!draft || !Array.isArray(draft.services)) return undefined
+  const services = draft.services.filter((s) => typeof s === 'string' && s.trim().length > 0)
+  return services.length > 0 ? { ...draft, services } : undefined
+}
+
+/** Build a shareable /booking URL from a draft (only present fields, encoded). */
+function buildQuoteUrl(draft: QuoteDraft): string {
+  const params = new URLSearchParams()
+  params.set('services', draft.services.join(','))
+  if (draft.band_code) params.set('band', draft.band_code)
+  if (draft.frequency_code) params.set('frequency', draft.frequency_code)
+  if (draft.postcode) params.set('postcode', draft.postcode)
+  const qs = params.toString()
+  return qs ? `/booking?${qs}` : '/booking'
 }
 
 function greetingMessage(): DisplayMessage {
@@ -182,6 +200,7 @@ export default function ChatWidget() {
             suggestions: Array.isArray(data.suggested_replies)
               ? data.suggested_replies.slice(0, 3)
               : [],
+            quoteDraft: cleanQuoteDraft(data.quote_draft),
           },
         ])
       } catch {
@@ -192,7 +211,7 @@ export default function ChatWidget() {
             role: 'assistant',
             local: true,
             content:
-              "I can't reach the assistant right now — try the FAQ or message the team and they'll be happy to help.",
+              "I can't reach the assistant right now. Try the FAQ or message the team and they'll be happy to help.",
             links: [
               { label: 'Read our FAQs', path: '/faq' },
               { label: 'Message the team', path: '/contact' },
@@ -321,7 +340,7 @@ export default function ChatWidget() {
           ref={panelRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Sparkle — here to help"
+          aria-label="Sparkle, here to help"
           className="fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col overflow-hidden rounded-t-2xl border border-pane bg-paper shadow-lift sm:inset-x-auto sm:bottom-6 sm:right-6 sm:h-[600px] sm:max-h-[calc(100vh-3rem)] sm:w-[380px] sm:rounded-card"
         >
           {/* Header */}
@@ -354,6 +373,7 @@ export default function ChatWidget() {
             {messages.map((message, index) => {
               const isLast = index === messages.length - 1
               const isUser = message.role === 'user'
+              const quoteDraft = cleanQuoteDraft(message.quoteDraft)
               return (
                 <div
                   key={message.id}
@@ -375,6 +395,17 @@ export default function ChatWidget() {
                     >
                       {message.content}
                     </div>
+
+                    {quoteDraft && (
+                      <button
+                        type="button"
+                        onClick={() => handleNavigate(buildQuoteUrl(quoteDraft))}
+                        className="inline-flex items-center gap-1.5 rounded-btn bg-amber px-3.5 py-2 text-xs font-bold text-ink shadow-card transition-colors hover:bg-amber-deep"
+                      >
+                        <Sparkle size={14} />
+                        Continue your quote
+                      </button>
+                    )}
 
                     {message.links && message.links.length > 0 && (
                       <div className="flex flex-wrap gap-2">

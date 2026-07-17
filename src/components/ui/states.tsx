@@ -29,7 +29,7 @@ export function LoadingState({
 
 export function ErrorState({
   onRetry,
-  message = 'Something went wrong — try again or message us.',
+  message = 'Something went wrong. Try again or message us.',
   tone = 'ink',
   className,
 }: {

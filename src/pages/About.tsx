@@ -33,7 +33,7 @@ export default function About() {
       <PageHeader
         eyebrow="About"
         title="The small team behind seriously clean windows"
-        lead="Gleaming Ant is a young, hardworking local business, launched in 2026 to keep Essex homes bright — one friendly, reliable visit at a time."
+        lead="Gleaming Ant is a young, hardworking local business, launched in 2026 to keep Essex homes bright, one friendly, reliable visit at a time."
       />
 
       {/* Story */}
@@ -102,7 +102,7 @@ export default function About() {
               </h2>
               <div className="mt-4 space-y-4 leading-relaxed text-ink">
                 <p>
-                  Ants are small, but they're famously diligent — and far stronger than they look. That's
+                  Ants are small, but they're famously diligent and far stronger than they look. That's
                   exactly the spirit we bring to every job: quietly hardworking, paying attention to the
                   details, and shifting more than you'd expect from a small local team.
                 </p>

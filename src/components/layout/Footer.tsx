@@ -106,8 +106,8 @@ export function Footer() {
             <div className="lg:col-span-4">
               <Logo tone="light" badgeSize={44} withTagline />
               <p className="mt-4 max-w-xs text-sm leading-relaxed text-pane/75">
-                Reliable, friendly and fully insured window &amp; exterior cleaning across Essex —
-                regular or one-off, always with a free quote.
+                Reliable, friendly and fully insured window &amp; exterior cleaning across Essex.
+                Regular or one-off, always with a free quote.
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-4 text-sm">
                 <a

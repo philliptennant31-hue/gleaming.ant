@@ -1,4 +1,5 @@
 import { ArrowRight, Layers, Percent, RefreshCw } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useAsync } from '../lib/useAsync'
 import {
   fetchActiveServices,
@@ -46,11 +47,27 @@ function PriceMatrix({ services, bands, prices }: Pick<PricingData, 'services' |
         <tbody>
           {services.map((service) => (
             <tr key={service.id} className="border-b border-pane/60 last:border-0 hover:bg-pane/15">
-              <th scope="row" className="sticky left-0 z-10 bg-white px-5 py-4 text-left font-semibold text-ink">
+              <th
+                scope="row"
+                className="sticky left-0 z-10 bg-white px-5 py-4 text-left font-semibold text-ink"
+              >
                 <span className="flex items-center gap-2.5">
-                  <ServiceIcon name={service.icon} className="h-4 w-4 text-teal-deep" />
-                  {service.name}
+                  <ServiceIcon name={service.icon} className="h-4 w-4 shrink-0 text-teal-deep" />
+                  <Link
+                    to={`/booking?services=${service.slug}`}
+                    className="rounded-sm text-ink hover:text-teal-deep hover:underline"
+                  >
+                    {service.name}
+                  </Link>
                 </span>
+                <Link
+                  to={`/booking?services=${service.slug}`}
+                  aria-label={`Quote ${service.name}`}
+                  className="mt-1.5 inline-flex items-center gap-1 rounded-sm text-xs font-semibold text-teal-deep hover:gap-1.5 hover:text-ink"
+                >
+                  Quote this
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                </Link>
               </th>
               {bands.map((band) => (
                 <td key={band.code} className="px-5 py-4 text-right font-mono text-ink">
@@ -93,7 +110,7 @@ function FrequencyExplainer({ frequencies }: { frequencies: Frequency[] }) {
             <h3 className="mt-3 font-display text-lg font-bold text-ink">{freq.label}</h3>
             <p className="mt-1 text-sm text-ink-soft">
               {isBest
-                ? 'Our lowest price per visit — spotless all year round.'
+                ? 'Our lowest price per visit, spotless all year round.'
                 : savings > 0
                   ? 'A relaxed regular round that still beats a one-off.'
                   : 'Perfect for a first clean or a one-time refresh.'}
@@ -123,7 +140,7 @@ export default function Pricing() {
       <PageHeader
         eyebrow="Pricing"
         title="Clear prices, no surprises"
-        lead="Prices are set by property size — pick your services and property, and the booking tool gives you an exact quote in seconds."
+        lead="Prices are set by property size. Pick your services and property, and the booking tool gives you an exact quote in seconds."
       >
         <Button to="/booking" rightIcon={<ArrowRight className="h-4 w-4" />}>
           Get an instant quote
@@ -170,8 +187,8 @@ export default function Pricing() {
                     <h2 className="font-display text-2xl font-bold text-ink">Bundle &amp; save</h2>
                   </div>
                   <p className="mt-3 max-w-2xl text-ink-soft">
-                    Booking more than one service in a single visit? We take a slice off the total —
-                    the more you bundle, the bigger the discount.
+                    Booking more than one service in a single visit? We take a slice off the total.
+                    The more you bundle, the bigger the discount.
                   </p>
                   <ul className="mt-6 flex flex-wrap gap-4">
                     {data.bundles.map((bundle) => (
@@ -195,7 +212,7 @@ export default function Pricing() {
                 <SectionHeading
                   align="center"
                   title="See your exact price"
-                  description="Every quote is worked out live from this price list — bundles and area checks included."
+                  description="Every quote is worked out live from this price list, bundles and area checks included."
                 />
                 <Button to="/booking" size="lg" rightIcon={<ArrowRight className="h-5 w-5" />}>
                   Get an instant quote

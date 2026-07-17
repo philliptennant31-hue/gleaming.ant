@@ -80,7 +80,7 @@ export default function BookingConfirmedPage() {
             You're booked in, {firstName}!
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-lg text-ink-soft">
-            Thanks for choosing Gleaming Ant. We've got your request — here's everything for your records.
+            Thanks for choosing Gleaming Ant. We've got your request. Here's everything for your records.
           </p>
         </div>
 
@@ -161,7 +161,7 @@ export default function BookingConfirmedPage() {
           <ul className="mt-3 space-y-2.5 text-sm text-ink">
             <li className="flex items-start gap-2.5">
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-teal-deep" aria-hidden="true" />
-              We'll confirm your day and time by message — [PLACEHOLDER: confirmation channel — e.g. text /
+              We'll confirm your day and time by message. [PLACEHOLDER: confirmation channel — e.g. text /
               WhatsApp / email].
             </li>
             {quote.outsideArea && (
@@ -173,7 +173,7 @@ export default function BookingConfirmedPage() {
             )}
             <li className="flex items-start gap-2.5">
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-teal-deep" aria-hidden="true" />
-              There's nothing to pay now — [PLACEHOLDER: confirm how and when payment is taken].
+              There's nothing to pay now. [PLACEHOLDER: confirm how and when payment is taken].
             </li>
           </ul>
         </div>

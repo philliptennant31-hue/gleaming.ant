@@ -93,7 +93,7 @@ export function Stepper({ steps, current, furthest, onNavigate }: StepperProps) 
                       {circle}
                       {labelEl}
                       <span className="sr-only">
-                        {isComplete ? 'Completed — go back to this step' : 'Go to this step'}
+                        {isComplete ? 'Completed. Go back to this step' : 'Go to this step'}
                       </span>
                     </button>
                   ) : (

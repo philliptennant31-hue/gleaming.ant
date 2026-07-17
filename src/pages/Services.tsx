@@ -18,7 +18,7 @@ export default function Services() {
       <PageHeader
         eyebrow="Services"
         title="Everything we clean"
-        lead="Windows are our bread and butter, but we look after the whole exterior. Pick a single job or bundle a few — every service comes with a free, upfront quote."
+        lead="Windows are our bread and butter, but we look after the whole exterior. Pick a single job or bundle a few. Every service comes with a free, upfront quote."
       >
         <Button to="/booking" rightIcon={<ArrowRight className="h-4 w-4" />}>
           Get an instant quote

@@ -123,7 +123,7 @@ export default function Contact() {
                   <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-teal/15 text-teal-deep">
                     <CheckCircle2 className="h-8 w-8" aria-hidden="true" />
                   </span>
-                  <h2 className="font-display text-2xl font-bold text-ink">Message sent — thank you</h2>
+                  <h2 className="font-display text-2xl font-bold text-ink">Message sent, thank you</h2>
                   <p className="max-w-sm text-ink-soft">
                     We've got your message and will be in touch as soon as we can. For anything urgent,
                     reach us on the details listed here.
@@ -182,7 +182,7 @@ export default function Contact() {
                       label="How can we help?"
                       required
                       rows={5}
-                      placeholder="Tell us what you need — the more detail, the better."
+                      placeholder="Tell us what you need. The more detail, the better."
                       value={values.message}
                       onChange={(e) => update('message', e.target.value)}
                       error={errors.message}
@@ -231,7 +231,7 @@ export default function Contact() {
               <div className="rounded-card border border-pane bg-pane/30 p-6">
                 <h2 className="font-display text-lg font-bold text-ink">Prefer socials?</h2>
                 <p className="mt-2 text-sm text-ink-soft">
-                  Follow along and message us on Instagram — before-and-afters go up there too.
+                  Follow along and message us on Instagram. Before-and-afters go up there too.
                 </p>
                 <div className="mt-4">
                   <Button

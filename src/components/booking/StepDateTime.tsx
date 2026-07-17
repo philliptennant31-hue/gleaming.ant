@@ -171,7 +171,7 @@ export function StepDateTime({
                   </legend>
                   {slots.length === 0 ? (
                     <p className="text-sm text-ink-soft">
-                      No times left on that day — try another.
+                      No times left on that day. Try another.
                     </p>
                   ) : (
                     <div

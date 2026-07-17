@@ -19,12 +19,12 @@ const STEPS = [
   {
     icon: Calculator,
     title: 'Pick your quote',
-    body: 'Tell us your property and what you need. Our instant quote gives you a fair, upfront price — no waiting around.',
+    body: 'Tell us your property and what you need. Our instant quote gives you a fair, upfront price. No waiting around.',
   },
   {
     icon: Sparkles,
     title: 'We clean',
-    body: "We turn up when we say we will and leave everything gleaming — windows, frames and sills included.",
+    body: "We turn up when we say we will and leave everything gleaming: windows, frames and sills included.",
   },
   {
     icon: PoundSterling,
@@ -46,7 +46,7 @@ function ServicesSection() {
             id="services-heading"
             eyebrow="What we clean"
             title="Exterior cleaning, done properly"
-            description="From a quick window round to the full frontage — pick what you need, or bundle a few and save."
+            description="From a quick window round to the full frontage. Pick what you need, or bundle a few and save."
             className="max-w-2xl"
           />
           <Button to="/services" variant="ghost" rightIcon={<ArrowRight className="h-4 w-4" />}>
@@ -100,7 +100,7 @@ export default function Home() {
               </h1>
 
               <p className="rise-in rise-in-2 mt-5 max-w-lg text-lg leading-relaxed text-pane/85">
-                We're the small, hardworking local team keeping Essex homes bright — reliable,
+                We're the small, hardworking local team keeping Essex homes bright. Reliable,
                 friendly and fully insured, on a regular round or a one-off spruce-up.
               </p>
 
@@ -194,7 +194,7 @@ export default function Home() {
                 tone="light"
                 eyebrow="Regular rounds"
                 title="Every 4 weeks, like clockwork"
-                description="Most of our customers go regular — it keeps windows consistently spotless and costs less per visit than a one-off. Set it once and forget it; we'll be there."
+                description="Most of our customers go regular. It keeps windows consistently spotless and costs less per visit than a one-off. Set it once and forget it; we'll be there."
               />
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button to="/booking" size="lg">
@@ -210,7 +210,7 @@ export default function Home() {
               {[
                 { h: 'Best price per visit', p: 'Regular 4-weekly cleans are our lowest rate.' },
                 { h: 'Never a chore', p: "We remember your schedule so you don't have to." },
-                { h: 'Flexible', p: 'Switch to 8-weekly or pause any time — just ask.' },
+                { h: 'Flexible', p: 'Switch to 8-weekly or pause any time. Just ask.' },
                 { h: 'No contracts', p: 'Stay because the windows are gleaming, not the small print.' },
               ].map((item) => (
                 <li key={item.h} className="rounded-card border border-white/12 bg-white/5 p-5">
@@ -252,7 +252,7 @@ export default function Home() {
               id="cta-heading"
               align="center"
               title="Ready for gleaming windows?"
-              description="Get a free, instant quote in under a minute — no obligation, no pushy calls."
+              description="Get a free, instant quote in under a minute. No obligation, and we won't hassle you with calls."
             />
             <div className="flex flex-wrap justify-center gap-3">
               <Button to="/booking" size="lg" rightIcon={<ArrowRight className="h-5 w-5" />}>

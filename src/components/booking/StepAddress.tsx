@@ -22,7 +22,7 @@ function AreaFeedback({ postcode, matchedArea }: { postcode: string; matchedArea
       <div className="mt-2 flex items-start gap-2 rounded-lg bg-teal/10 px-3 py-2.5 text-sm text-teal-deep">
         <Check className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
         <span>
-          Great — we cover <strong className="font-semibold">{matchedArea.name}</strong>. No travel surcharge.
+          Great news, we cover <strong className="font-semibold">{matchedArea.name}</strong>. No travel surcharge.
         </span>
       </div>
     )
@@ -46,7 +46,7 @@ function AreaFeedback({ postcode, matchedArea }: { postcode: string; matchedArea
       <div className="mt-2 flex items-start gap-2 rounded-lg bg-pane/50 px-3 py-2.5 text-sm text-ink">
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-teal-deep" aria-hidden="true" />
         <span>
-          That looks like it might be outside our usual area — send your booking through anyway and we'll
+          That looks like it might be outside our usual area. Send your booking through anyway and we'll
           confirm by message whether we can reach you.
         </span>
       </div>
@@ -61,7 +61,7 @@ export function StepAddress({ address, onChange, matchedArea, errors }: StepAddr
     <div>
       <StepHeader
         title="Where are we heading?"
-        lead="Pop in your address so we know where to come — and check we cover your postcode."
+        lead="Pop in your address so we know where to come, and check we cover your postcode."
       />
 
       <div className="grid gap-5">

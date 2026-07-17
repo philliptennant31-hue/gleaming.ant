@@ -17,7 +17,7 @@ import { AdminHeading, BookingStatusBadge } from '../../components/admin/primiti
 import { fetchDashboardData, type DashboardData } from '../../components/admin/data'
 
 function itemsSummary(booking: Booking): string {
-  if (!booking.items || booking.items.length === 0) return '—'
+  if (!booking.items || booking.items.length === 0) return '-'
   return booking.items.map((i) => i.name).join(', ')
 }
 

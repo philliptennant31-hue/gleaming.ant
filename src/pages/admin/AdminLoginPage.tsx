@@ -80,7 +80,7 @@ export default function AdminLoginPage() {
   return (
     <div className="flex min-h-screen flex-col bg-paper">
       <div className="border-b border-pane px-6 py-4">
-        <Link to="/" aria-label="Gleaming Ant — home">
+        <Link to="/" aria-label="Gleaming Ant home">
           <Logo badgeSize={36} />
         </Link>
       </div>
@@ -96,7 +96,7 @@ export default function AdminLoginPage() {
                 <h1 className="mt-5 font-display text-2xl font-bold text-ink">Check your inbox</h1>
                 <p className="mt-2 text-ink-soft">
                   We’ve sent a magic link to <span className="font-semibold text-ink">{sentEmail}</span>. Open it on
-                  this device to sign in — no password needed.
+                  this device to sign in, no password needed.
                 </p>
                 <p className="mt-4 text-sm text-ink-soft">
                   Didn’t get it? Check spam, or resend below.

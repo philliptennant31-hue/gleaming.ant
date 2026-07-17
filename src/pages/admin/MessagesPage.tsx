@@ -147,7 +147,7 @@ export default function MessagesPage() {
         footer={
           selected ? (
             <Button
-              href={`mailto:${selected.email}?subject=${encodeURIComponent('Re: your enquiry — Gleaming Ant')}`}
+              href={`mailto:${selected.email}?subject=${encodeURIComponent('Re: your Gleaming Ant enquiry')}`}
               size="sm"
               leftIcon={<Mail className="h-4 w-4" />}
               onClick={() => void setStatus(selected.id, 'replied')}

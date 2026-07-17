@@ -11,7 +11,7 @@
 
 import Anthropic from '@anthropic-ai/sdk'
 import { loadBusinessData } from './lib/data'
-import { answerWithRules, isRoutePath } from './lib/brain'
+import { answerWithRules, isRoutePath, validateQuoteDraft } from './lib/brain'
 import type { BusinessData, ChatLink, ChatMessage, ChatResponse } from './lib/types'
 
 const MAX_MESSAGES = 12
@@ -92,6 +92,17 @@ const RESPONSE_SCHEMA: Record<string, unknown> = {
       },
     },
     suggested_replies: { type: 'array', items: { type: 'string' } },
+    quote_draft: {
+      type: 'object',
+      properties: {
+        services: { type: 'array', items: { type: 'string' } },
+        band_code: { type: 'string' },
+        frequency_code: { type: 'string' },
+        postcode: { type: 'string' },
+      },
+      required: ['services'],
+      additionalProperties: false,
+    },
   },
   required: ['reply', 'links', 'suggested_replies'],
   additionalProperties: false,
@@ -169,13 +180,13 @@ function buildSystemPrompt(data: BusinessData): string {
   const contact =
     contactLines.length > 0
       ? contactLines.join(', ')
-      : 'not yet published — direct people to the /contact page'
+      : 'not yet published, so direct people to the /contact page'
 
   return [
     "You are Sparkle, the friendly assistant for Gleaming Ant, a window & exterior cleaning company in Essex, UK.",
     'Your job is to help visitors with services, prices, coverage areas, and booking.',
     '',
-    `Business: ${settings.business.name} — ${settings.business.tagline}. Serves ${settings.business.area}.`,
+    `Business: ${settings.business.name}, ${settings.business.tagline}. Serves ${settings.business.area}.`,
     `Contact: ${contact}`,
     '',
     'SERVICES (JSON):',
@@ -194,14 +205,25 @@ function buildSystemPrompt(data: BusinessData): string {
     'ROUTE MAP (only ever link to these paths):',
     ROUTE_MAP,
     '',
+    'QUOTE HANDOFF:',
+    '- When a visitor wants a price or to book, help them start a quote. Gather what is missing conversationally, ONE thing at a time, in this order: which service(s), property size (bedrooms), how often, and postcode.',
+    '- Use the exact CODES below when you record a choice (never the labels):',
+    `  Property size (band_code): ${data.propertyBands.map((b) => `${b.code} = ${b.label}`).join('; ') || 'unavailable'}`,
+    `  How often (frequency_code): ${data.frequencies.map((f) => `${f.code} = ${f.label}`).join('; ') || 'unavailable'}`,
+    '  Services: use the "slug" of each service from the SERVICES data above.',
+    '- Infer codes where you can: "3 bed semi" -> band_3; "two bed flat" -> band_1_2; "5 bedroom" -> band_5p; "every month"/"monthly" -> every_4_weeks; "every 8 weeks" -> every_8_weeks; "one-off"/"just once" -> one_off.',
+    '- Once you know at least one service AND the visitor wants to proceed, include a `quote_draft` object with everything gathered so far (services is required; band_code, frequency_code, postcode are optional) and add a /booking link labelled "Continue your quote". Keep asking for the next missing detail in your reply.',
+    '- Never block the handoff on missing fields. A partial draft is fine. Only include quote_draft once the visitor actually wants a price or to book.',
+    '',
     'STRICT RULES:',
     '- Only discuss Gleaming Ant, its services, prices, areas, and booking. Politely decline anything else and steer back.',
     '- Never invent prices, policies, hours, or contact details. Use ONLY the data above. If it is not there, say the team will confirm and point to /contact or /booking.',
     '- Quote prices as the "from" price and note the exact price depends on property size; recommend /booking for an instant quote.',
     '- Links must come from the route map only. Use /services/:slug with a real slug from the data.',
     '- Keep replies under 120 words, warm and plain-spoken UK English (say "we" and "your"; contractions welcome). No corporate filler, no invented claims.',
+    '- Never use em dashes. Use commas or separate sentences.',
     '- Provide at most 2 links and at most 3 short suggested replies (each a question a visitor might ask next).',
-    '- Respond ONLY with the required JSON object.',
+    '- Respond ONLY with the required JSON object. Include quote_draft only when handing a visitor into a quote (see QUOTE HANDOFF).',
   ].join('\n')
 }
 
@@ -213,7 +235,7 @@ function toAiHistory(messages: ChatMessage[]): Anthropic.MessageParam[] {
   return history.map((m) => ({ role: m.role, content: m.content }))
 }
 
-function coerceAiResponse(parsed: unknown): ChatResponse {
+function coerceAiResponse(parsed: unknown, data: BusinessData): ChatResponse {
   if (!parsed || typeof parsed !== 'object') {
     throw new Error('AI response is not an object')
   }
@@ -240,7 +262,15 @@ function coerceAiResponse(parsed: unknown): ChatResponse {
         .slice(0, 3)
     : []
 
-  return { reply, links, suggested_replies, source: 'ai' }
+  const result: ChatResponse = { reply, links, suggested_replies, source: 'ai' }
+
+  // Validate the model's draft against live data before trusting it: real
+  // active slugs only, valid band/frequency codes, postcode-ish postcode, and
+  // dropped entirely if no service survives.
+  const quote_draft = validateQuoteDraft(obj.quote_draft, data)
+  if (quote_draft) result.quote_draft = quote_draft
+
+  return result
 }
 
 async function answerWithClaude(
@@ -261,7 +291,7 @@ async function answerWithClaude(
     .join('')
     .trim()
 
-  return coerceAiResponse(JSON.parse(text))
+  return coerceAiResponse(JSON.parse(text), data)
 }
 
 // ---------------------------------------------------------------------------

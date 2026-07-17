@@ -408,7 +408,7 @@ function AdminEmailsManager({
                     </span>
                   </td>
                   <td className={`${tdClass} text-ink-soft`}>
-                    {admin.added_at ? new Date(admin.added_at).toLocaleDateString('en-GB') : '—'}
+                    {admin.added_at ? new Date(admin.added_at).toLocaleDateString('en-GB') : '-'}
                   </td>
                   <td className={`${tdClass} text-right`}>
                     <DangerButton
@@ -454,7 +454,7 @@ function AdminEmailsManager({
 
         <p className="flex items-start gap-2 text-xs text-ink-soft">
           <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-teal-deep" aria-hidden="true" />
-          New admins sign in with a magic link — no password to set. They’ll appear here once added.
+          New admins sign in with a magic link, no password to set. They’ll appear here once added.
         </p>
       </div>
 

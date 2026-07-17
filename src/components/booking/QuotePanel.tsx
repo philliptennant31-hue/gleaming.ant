@@ -118,13 +118,13 @@ export function QuoteContent({ quote, bandLabel, frequencyLabel, showFrequency, 
           {!bandLabel && (
             <p className="mt-4 flex items-start gap-1.5 rounded-lg bg-pane/40 px-3 py-2 text-xs text-ink-soft">
               <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              Prices are a "from" guide — choose your property size for the exact quote.
+              Prices are a "from" guide. Choose your property size for the exact quote.
             </p>
           )}
           {quote.outsideArea && postcode.trim() !== '' && (
             <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-pane/40 px-3 py-2 text-xs text-ink-soft">
               <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              Looks like you're outside our usual patch — send the booking through and we'll confirm by message.
+              Looks like you're outside our usual patch. Send the booking through and we'll confirm by message.
             </p>
           )}
         </>

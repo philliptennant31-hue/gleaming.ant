@@ -123,7 +123,11 @@ export default function ServiceDetail() {
                 </p>
 
                 <div className="mt-8">
-                  <Button to="/booking" size="lg" rightIcon={<ArrowRight className="h-5 w-5" />}>
+                  <Button
+                    to={`/booking?services=${data.service.slug}`}
+                    size="lg"
+                    rightIcon={<ArrowRight className="h-5 w-5" />}
+                  >
                     Book this clean
                   </Button>
                 </div>
@@ -146,7 +150,7 @@ export default function ServiceDetail() {
                     </p>
                   )}
                   <div className="mt-5">
-                    <Button to="/booking" fullWidth>
+                    <Button to={`/booking?services=${data.service.slug}`} fullWidth>
                       Get your exact quote
                     </Button>
                   </div>

@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Check, TriangleAlert } from 'lucide-react'
 import {
   fetchActiveServices,
@@ -47,6 +47,7 @@ function scrollToTop() {
 export default function BookingPage() {
   useDocumentTitle('Get an instant quote | Gleaming Ant')
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { settings } = useSiteSettings()
 
   const catalogue = useAsync<CatalogueData>(async () => {
@@ -75,6 +76,50 @@ export default function BookingPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(false)
+
+  // ---- URL-param prefill (Sparkle handoff + entry-point deep links) ----
+  // Applied exactly once, after the catalogue loads. The URL is left intact so
+  // links stay shareable. Unknown param values are ignored silently.
+  const prefillApplied = useRef(false)
+  useEffect(() => {
+    if (prefillApplied.current) return
+    const cat = catalogue.data
+    if (!cat) return
+    prefillApplied.current = true
+
+    const bySlug = new Map(cat.services.map((s) => [s.slug, s]))
+    const ids: string[] = []
+    const seen = new Set<string>()
+    for (const slug of (searchParams.get('services') ?? '').split(',')) {
+      const service = bySlug.get(slug.trim())
+      if (service && !seen.has(service.id)) {
+        seen.add(service.id)
+        ids.push(service.id)
+      }
+    }
+    // Zero valid services -> behave exactly as a fresh load (step 1, nothing set).
+    if (ids.length === 0) return
+
+    setSelectedServiceIds(ids)
+
+    const bandParam = searchParams.get('band')
+    const validBand = bandParam && cat.bands.some((b) => b.code === bandParam) ? bandParam : ''
+    if (validBand) setBandCode(validBand)
+
+    const frequencyParam = searchParams.get('frequency')
+    if (frequencyParam && cat.frequencies.some((f) => f.code === frequencyParam)) {
+      setFrequencyCode(frequencyParam)
+    }
+
+    const postcodeParam = searchParams.get('postcode')?.trim()
+    if (postcodeParam) setAddress((a) => ({ ...a, postcode: postcodeParam }))
+
+    // Services only -> step 2 (Property). Services + a valid band -> step 3
+    // (Address). Never deeper: address always needs manual input.
+    const startStep = validBand ? 3 : 2
+    setStep(startStep)
+    setFurthest(startStep)
+  }, [catalogue.data, searchParams])
 
   const data = catalogue.data
   const services = useMemo(() => data?.services ?? [], [data])
@@ -350,7 +395,7 @@ export default function BookingPage() {
             as="h1"
             eyebrow="Instant quote & booking"
             title="Build your quote"
-            description="Answer a few quick questions and watch your price update live — it only takes a minute, and there's nothing to pay now."
+            description="Answer a few quick questions and watch your price update live. It only takes a minute, and there's nothing to pay now."
           />
         </Container>
       </div>

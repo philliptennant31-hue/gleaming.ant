@@ -17,7 +17,7 @@ export function StepServices({ services, selectedIds, onToggle, error }: StepSer
     <div>
       <StepHeader
         title="What can we clean for you?"
-        lead="Pick everything you'd like doing in one visit — bundle two or more and we'll take a discount off the total."
+        lead="Pick everything you'd like doing in one visit. Bundle two or more and we'll take a discount off the total."
       />
 
       {error && (

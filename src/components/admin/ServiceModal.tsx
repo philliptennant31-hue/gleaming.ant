@@ -79,7 +79,7 @@ export function ServiceModal({
     }
     const slug = draft.slug.trim() || slugify(name)
     if (!slug) {
-      setError('Could not build a slug — add a name with letters or numbers.')
+      setError('Could not build a slug. Add a name with letters or numbers.')
       return
     }
     const payload: ServiceDraft = {
@@ -111,7 +111,7 @@ export function ServiceModal({
       onClose()
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Could not save the service.'
-      setError(/duplicate|unique/i.test(message) ? 'That slug is already in use — choose another.' : message)
+      setError(/duplicate|unique/i.test(message) ? 'That slug is already in use. Choose another.' : message)
     } finally {
       setSaving(false)
     }

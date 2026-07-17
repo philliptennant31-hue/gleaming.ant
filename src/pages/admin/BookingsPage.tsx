@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Ban, CalendarCheck, Check, CircleCheck } from 'lucide-react'
+import { Ban, CalendarCheck, Check, CircleCheck, Mail, MessageCircle, Send } from 'lucide-react'
 import { useAsync } from '../../lib/useAsync'
 import { formatDate, formatDuration, formatGBP, formatTime } from '../../lib/format'
 import type { Booking, BookingStatus } from '../../lib/types'
@@ -26,12 +26,17 @@ import {
   updateBookingNotes,
   updateBookingStatus,
 } from '../../components/admin/data'
+import {
+  buildConfirmationEmailLink,
+  buildConfirmationSmsLink,
+  requestConfirmationEmail,
+} from '../../components/admin/notify'
 
 type StatusFilter = 'all' | BookingStatus
 type TimeFilter = 'upcoming' | 'past' | 'all'
 
 function itemsSummary(booking: Booking): string {
-  if (!booking.items || booking.items.length === 0) return '—'
+  if (!booking.items || booking.items.length === 0) return '-'
   return booking.items.map((i) => i.name).join(', ')
 }
 
@@ -48,6 +53,7 @@ export default function BookingsPage() {
   const [savingNotes, setSavingNotes] = useState(false)
   const [busyStatus, setBusyStatus] = useState(false)
   const [confirmCancel, setConfirmCancel] = useState(false)
+  const [notifying, setNotifying] = useState(false)
 
   const selected = useMemo(
     () => data?.find((b) => b.id === selectedId) ?? null,
@@ -80,12 +86,28 @@ export default function BookingsPage() {
       await updateBookingStatus(id, next)
       toast.show(`Booking marked ${next}.`)
       reload()
+      // Fire-and-forget: the status change is already saved, so a notify
+      // failure only ever produces a toast, never a rollback.
+      if (next === 'confirmed') void notifyCustomer(id)
     } catch {
       toast.show('Could not update the booking. Try again.', 'error')
     } finally {
       setBusyStatus(false)
       setConfirmCancel(false)
     }
+  }
+
+  async function notifyCustomer(id: string) {
+    setNotifying(true)
+    const outcome = await requestConfirmationEmail(id)
+    if (outcome.kind === 'sent') {
+      toast.show(`Confirmation email sent to ${outcome.email}`)
+    } else if (outcome.kind === 'not_configured') {
+      toast.show('Automatic email is not set up yet, use the buttons below to send it yourself', 'info')
+    } else {
+      toast.show('Automatic email failed, use the buttons below', 'error')
+    }
+    setNotifying(false)
   }
 
   async function saveNotes(id: string) {
@@ -144,7 +166,7 @@ export default function BookingsPage() {
           <EmptyState
             icon={<CalendarCheck className="h-6 w-6" />}
             title="No bookings match"
-            body="Try widening the filters — or new bookings will appear here as they come in."
+            body="Try widening the filters, or new bookings will appear here as they come in."
           />
         ) : (
           <TableCard minWidth={860}>
@@ -174,7 +196,7 @@ export default function BookingsPage() {
                   <td className={`${tdClass} font-mono text-xs`}>{b.reference}</td>
                   <td className={tdClass}>{b.customer_name}</td>
                   <td className={tdClass}>
-                    <span className="block text-ink">{b.area_name || '—'}</span>
+                    <span className="block text-ink">{b.area_name || '-'}</span>
                     <span className="font-mono text-xs text-ink-soft">{b.postcode}</span>
                   </td>
                   <td className={`${tdClass} max-w-[16rem]`}>
@@ -251,12 +273,20 @@ export default function BookingsPage() {
               <span className="text-ink-soft">Booked {formatDate(selected.created_at)}</span>
             </div>
 
+            {selected.status === 'confirmed' && (
+              <NotifyCustomerPanel
+                booking={selected}
+                notifying={notifying}
+                onResend={() => void notifyCustomer(selected.id)}
+              />
+            )}
+
             <DetailSection title="Appointment">
               <DetailRow label="Date" value={formatDate(selected.service_date)} />
               <DetailRow label="Time" value={formatTime(selected.start_time)} mono />
               <DetailRow label="Duration" value={formatDuration(selected.duration_minutes)} />
-              <DetailRow label="Frequency" value={selected.frequency || '—'} />
-              <DetailRow label="Property band" value={selected.property_band || '—'} />
+              <DetailRow label="Frequency" value={selected.frequency || '-'} />
+              <DetailRow label="Property band" value={selected.property_band || '-'} />
             </DetailSection>
 
             <DetailSection title="Customer">
@@ -277,7 +307,7 @@ export default function BookingsPage() {
                       {selected.phone}
                     </a>
                   ) : (
-                    '—'
+                    '-'
                   )
                 }
               />
@@ -363,6 +393,66 @@ export default function BookingsPage() {
         onConfirm={() => selected && void changeStatus(selected.id, 'cancelled')}
       />
     </div>
+  )
+}
+
+function NotifyCustomerPanel({
+  booking,
+  notifying,
+  onResend,
+}: {
+  booking: Booking
+  notifying: boolean
+  onResend: () => void
+}) {
+  const emailLink = buildConfirmationEmailLink(booking)
+  const smsLink = buildConfirmationSmsLink(booking)
+  return (
+    <section className="rounded-card border border-pane bg-paper/70 p-4">
+      <h3 className="text-xs font-bold uppercase tracking-wide text-ink-soft">Notify the customer</h3>
+      <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">
+        Each button opens a ready-made confirmation in your own mail or messages app, so you can
+        read it over and press send.
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Button
+          variant="secondary"
+          size="sm"
+          href={emailLink}
+          leftIcon={<Mail className="h-4 w-4" aria-hidden="true" />}
+        >
+          Email confirmation
+        </Button>
+        {smsLink && (
+          <Button
+            variant="secondary"
+            size="sm"
+            href={smsLink}
+            leftIcon={<MessageCircle className="h-4 w-4" aria-hidden="true" />}
+          >
+            Text confirmation
+          </Button>
+        )}
+      </div>
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-pane/70 pt-3">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onResend}
+          disabled={notifying}
+          leftIcon={
+            notifying ? (
+              <Spinner size={16} className="text-teal-deep" />
+            ) : (
+              <Send className="h-4 w-4" aria-hidden="true" />
+            )
+          }
+        >
+          {notifying ? 'Sending…' : 'Resend confirmation email'}
+        </Button>
+        <p className="text-xs text-ink-soft">Sends the automatic email again, if it is set up.</p>
+      </div>
+    </section>
   )
 }
 

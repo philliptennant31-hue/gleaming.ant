@@ -15,6 +15,7 @@ import type {
   ChatMessage,
   ChatResponse,
   Faq,
+  QuoteDraft,
   Service,
   ServiceArea,
   ServicePrice,
@@ -419,7 +420,7 @@ function pricingResponse(text: string, data: BusinessData): ChatResponse {
   if (service) {
     const price = fromPrice(service, data.servicePrices)
     return reply(
-      `${service.name} starts from ${gbp(price)}. The exact price depends on your property size — check the full price list or grab an instant online quote.`,
+      `${service.name} starts from ${gbp(price)}. The exact price depends on your property size. Check the full price list or grab an instant online quote.`,
       [LINK_PRICES, LINK_QUOTE],
       ['Which areas do you cover?', 'How often should I book?', 'Book a clean'],
     )
@@ -433,7 +434,7 @@ function pricingResponse(text: string, data: BusinessData): ChatResponse {
 
 function bookingResponse(): ChatResponse {
   return reply(
-    "Booking's easy — use our online tool for an instant quote and pick a slot that suits you. Quotes are always free.",
+    "Booking's easy. Use our online tool for an instant quote and pick a slot that suits you. Quotes are always free.",
     [LINK_QUOTE, LINK_PRICES],
     ['Which areas do you cover?', 'What services do you offer?', 'Are you insured?'],
   )
@@ -444,20 +445,20 @@ function areasResponse(outcode: string | null, data: BusinessData): ChatResponse
     const area = matchArea(outcode, data.serviceAreas)
     if (area && area.surcharge > 0) {
       return reply(
-        `We can reach ${outcode} — it's just outside our core patch, so a small travel surcharge may apply. Get an instant quote to see the full price.`,
+        `We can reach ${outcode}, though it's just outside our core patch, so a small travel surcharge may apply. Get an instant quote to see the full price.`,
         [LINK_QUOTE, LINK_AREAS],
         ['What services do you offer?', 'How much is window cleaning?', 'Book a clean'],
       )
     }
     if (area) {
       return reply(
-        `Good news — we cover ${area.name}! Pop your details into the booking tool for an instant quote.`,
+        `Good news, we cover ${area.name}! Pop your details into the booking tool for an instant quote.`,
         [LINK_QUOTE, LINK_AREAS],
         ['How much is window cleaning?', 'What services do you offer?', 'Book a clean'],
       )
     }
     return reply(
-      `I can't confirm from here whether we regularly cover ${outcode} — drop the team a message and we'll let you know right away.`,
+      `I can't confirm from here whether we regularly cover ${outcode}. Drop the team a message and we'll let you know right away.`,
       [LINK_CONTACT, LINK_AREAS],
       ['What services do you offer?', 'How much is window cleaning?', 'Book a clean'],
     )
@@ -479,7 +480,7 @@ function areasResponse(outcode: string | null, data: BusinessData): ChatResponse
 
 function frequencyResponse(): ChatResponse {
   return reply(
-    'Most customers go for a regular clean every 4 or 8 weeks — it keeps everything spotless and costs less per visit than a one-off. You pick the schedule when you book.',
+    'Most customers go for a regular clean every 4 or 8 weeks. It keeps everything spotless and costs less per visit than a one-off. You pick the schedule when you book.',
     [LINK_QUOTE, LINK_PRICES],
     ['How much is window cleaning?', 'Which areas do you cover?', 'Book a clean'],
   )
@@ -491,7 +492,7 @@ function insuranceResponse(data: BusinessData): ChatResponse {
   const text =
     answer.length >= 8
       ? answer
-      : "Yes — Gleaming Ant is fully insured, so your home is protected while we work."
+      : "Yes, Gleaming Ant is fully insured, so your home is protected while we work."
   return reply(text, [LINK_FAQ], [
     'What services do you offer?',
     'Which areas do you cover?',
@@ -505,7 +506,7 @@ function paymentResponse(data: BusinessData): ChatResponse {
   const text =
     answer.length >= 8
       ? answer
-      : "The team will confirm the payment options with you — just drop us a message and we'll sort it out."
+      : "The team will confirm the payment options with you. Just drop us a message and we'll sort it out."
   return reply(text, [LINK_CONTACT, LINK_FAQ], [
     'What services do you offer?',
     'Which areas do you cover?',
@@ -523,7 +524,7 @@ function contactResponse(data: BusinessData): ChatResponse {
     text = `You can reach the team on ${channels}, or use our contact page and we'll come straight back to you.`
   } else {
     text =
-      "The quickest way to reach the team is our contact page — leave your details and they'll get back to you soon."
+      "The quickest way to reach the team is our contact page. Leave your details and they'll get back to you soon."
   }
   return reply(text, [{ label: 'Contact us', path: '/contact' }], [
     'What services do you offer?',
@@ -586,6 +587,144 @@ function fallbackResponse(): ChatResponse {
 }
 
 // ---------------------------------------------------------------------------
+// Quote-draft handoff — validation + rules-based extraction
+// ---------------------------------------------------------------------------
+
+// UK-postcode-ish: an outcode (e.g. SS14, CM3, EC1A) optionally followed by an
+// incode (e.g. 1AA). Shape only — deliberately lenient, not a validity check.
+const POSTCODE_RE = /^[A-Z]{1,2}[0-9][A-Z0-9]?(?:\s*[0-9][A-Z]{2})?$/i
+
+/**
+ * Validate a candidate quote draft against live catalogue data. Filters
+ * `services` to real active slugs, drops invalid band/frequency codes, keeps a
+ * postcode only if it looks like a UK postcode, and returns `undefined` if no
+ * valid service survives (so an empty draft is never returned). Shared by the
+ * AI path (chat.ts) and the rules path below, so both apply identical rules.
+ */
+export function validateQuoteDraft(
+  draft: unknown,
+  data: BusinessData,
+): QuoteDraft | undefined {
+  if (!draft || typeof draft !== 'object') return undefined
+  const raw = draft as Record<string, unknown>
+
+  const activeSlugs = new Set(data.services.map((s) => s.slug))
+  const services: string[] = []
+  const seen = new Set<string>()
+  if (Array.isArray(raw.services)) {
+    for (const item of raw.services) {
+      if (typeof item !== 'string') continue
+      const slug = item.trim()
+      if (activeSlugs.has(slug) && !seen.has(slug)) {
+        seen.add(slug)
+        services.push(slug)
+      }
+    }
+  }
+  if (services.length === 0) return undefined
+
+  const result: QuoteDraft = { services }
+
+  const bandCode = typeof raw.band_code === 'string' ? raw.band_code.trim() : ''
+  if (bandCode && data.propertyBands.some((b) => b.code === bandCode)) {
+    result.band_code = bandCode
+  }
+
+  const freqCode = typeof raw.frequency_code === 'string' ? raw.frequency_code.trim() : ''
+  if (freqCode && data.frequencies.some((f) => f.code === freqCode)) {
+    result.frequency_code = freqCode
+  }
+
+  const postcode = typeof raw.postcode === 'string' ? raw.postcode.trim() : ''
+  if (postcode && POSTCODE_RE.test(postcode)) {
+    result.postcode = postcode
+  }
+
+  return result
+}
+
+/** Collect every active service whose name/synonyms appear in the text. */
+function findServices(text: string, services: Service[]): Service[] {
+  const found: Service[] = []
+  for (const service of services) {
+    const terms = new Set<string>()
+    for (const word of service.name.toLowerCase().split(/[^a-z]+/)) {
+      if (word.length >= 4 && !NAME_STOP.has(word)) terms.add(word)
+    }
+    for (const synonym of SERVICE_SYNONYMS[service.slug] ?? []) terms.add(synonym)
+    if (matches(text, [...terms])) found.push(service)
+  }
+  return found
+}
+
+/** "3 bed" / "4-bed" / "5 bedroom" → a property band code (per SPEC ranges). */
+function extractBandCode(text: string): string | undefined {
+  const match = text.match(/(\d+)\s*(?:-|\s)?bed/i)
+  if (!match) return undefined
+  const beds = parseInt(match[1], 10)
+  if (!Number.isFinite(beds) || beds < 1) return undefined
+  if (beds <= 2) return 'band_1_2'
+  if (beds === 3) return 'band_3'
+  if (beds === 4) return 'band_4'
+  return 'band_5p'
+}
+
+/**
+ * Frequency words → a frequency code (per SPEC). More specific patterns are
+ * checked first so "every 8 weeks regular" resolves to 8-weekly, not the
+ * generic "regular". Bare "once" is deliberately excluded ("once a month"
+ * means monthly, not a one-off).
+ */
+function extractFrequencyCode(text: string): string | undefined {
+  if (/\b(one[-\s]?off|one[-\s]?time|just once|only once|once off)\b/i.test(text)) {
+    return 'one_off'
+  }
+  if (/\b(8[-\s]?week|8 weeks|eight[-\s]?week|eight weeks)\b/i.test(text)) {
+    return 'every_8_weeks'
+  }
+  if (/\b(4[-\s]?week|4 weeks|four[-\s]?week|four weeks|monthly|every month|regular)\b/i.test(text)) {
+    return 'every_4_weeks'
+  }
+  return undefined
+}
+
+/**
+ * Build a validated quote draft from the FULL visitor history: mentioned
+ * services, a bedroom count, a frequency word and an outcode. Returns
+ * `undefined` when no active service is mentioned.
+ */
+function extractQuoteDraft(messages: ChatMessage[], data: BusinessData): QuoteDraft | undefined {
+  const userText = messages
+    .filter((m) => m.role === 'user')
+    .map((m) => m.content)
+    .join('\n')
+  if (!userText.trim()) return undefined
+
+  const lower = userText.toLowerCase()
+  const services = findServices(lower, data.services).map((s) => s.slug)
+
+  return validateQuoteDraft(
+    {
+      services,
+      band_code: extractBandCode(lower),
+      frequency_code: extractFrequencyCode(lower),
+      postcode: detectOutcode(userText) ?? undefined,
+    },
+    data,
+  )
+}
+
+/** Attach a validated quote draft to a response when the history yields one. */
+function withQuoteDraft(
+  res: ChatResponse,
+  messages: ChatMessage[],
+  data: BusinessData,
+): ChatResponse {
+  const draft = extractQuoteDraft(messages, data)
+  return draft ? { ...res, quote_draft: draft } : res
+}
+
+// ---------------------------------------------------------------------------
 // Entry point
 // ---------------------------------------------------------------------------
 
@@ -600,8 +739,8 @@ export function answerWithRules(
   if (!text) return greetingResponse()
   if (isGreeting(text)) return greetingResponse()
 
-  if (matches(text, PRICING_KEYWORDS)) return pricingResponse(text, data)
-  if (matches(text, BOOKING_KEYWORDS)) return bookingResponse()
+  if (matches(text, PRICING_KEYWORDS)) return withQuoteDraft(pricingResponse(text, data), messages, data)
+  if (matches(text, BOOKING_KEYWORDS)) return withQuoteDraft(bookingResponse(), messages, data)
 
   const outcode = detectOutcode(raw)
   const townHit = data.serviceAreas.some((area) =>

@@ -89,7 +89,7 @@ export default function Areas() {
                 <h2 className="font-display text-xl font-bold text-ink">Just outside our patch?</h2>
                 <p className="mt-2 text-ink-soft">
                   Pop your postcode into the booking tool. If you're a little further out we'll still show
-                  you a quote and confirm by message before anything's booked — no obligation either way.
+                  you a quote and confirm by message before anything's booked. No obligation either way.
                 </p>
               </div>
               <Button to="/contact" variant="secondary" leftIcon={<MessageCircle className="h-4 w-4" />}>

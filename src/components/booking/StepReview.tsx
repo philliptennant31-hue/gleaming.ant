@@ -72,7 +72,7 @@ export function StepReview({
   return (
     <div>
       <StepHeader
-        title="Nearly there — your details"
+        title="Nearly there, your details"
         lead="Tell us how to reach you and check everything over. We'll confirm your booking by message; there's nothing to pay now."
       />
 
@@ -108,7 +108,7 @@ export function StepReview({
         />
         <Textarea
           label="Anything we should know?"
-          hint="Optional — access notes, gate codes, a friendly dog, parking…"
+          hint="Optional: access notes, gate codes, a friendly dog, parking…"
           rows={3}
           value={details.notes}
           onChange={(e) => onDetailsChange('notes', e.target.value)}
@@ -121,17 +121,17 @@ export function StepReview({
         <dl className="mt-2 divide-y divide-pane">
           <ReviewRow
             label="Services"
-            value={lines.map((l) => l.name).join(', ') || '—'}
+            value={lines.map((l) => l.name).join(', ') || '-'}
             onEdit={() => onEdit(1)}
           />
-          <ReviewRow label="Property size" value={bandLabel ?? '—'} onEdit={() => onEdit(2)} />
+          <ReviewRow label="Property size" value={bandLabel ?? '-'} onEdit={() => onEdit(2)} />
           {showFrequency && frequencyLabel && (
             <ReviewRow label="Frequency" value={frequencyLabel} onEdit={() => onEdit(2)} />
           )}
-          <ReviewRow label="Address" value={addressLine || '—'} onEdit={() => onEdit(3)} />
+          <ReviewRow label="Address" value={addressLine || '-'} onEdit={() => onEdit(3)} />
           <ReviewRow
             label="Date & time"
-            value={date && time ? `${formatDate(date)} at ${formatTime(time)}` : '—'}
+            value={date && time ? `${formatDate(date)} at ${formatTime(time)}` : '-'}
             onEdit={() => onEdit(4)}
           />
         </dl>
@@ -143,7 +143,7 @@ export function StepReview({
       </div>
 
       <p className="mt-6 text-sm text-ink-soft">
-        By sending this you're asking us to book the clean above — it's not charged yet. We'll be in touch to
+        By sending this you're asking us to book the clean above. It's not charged yet. We'll be in touch to
         confirm the day and time.
       </p>
     </div>
