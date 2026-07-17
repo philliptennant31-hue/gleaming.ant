@@ -93,7 +93,7 @@ The assistant has **no visible `[PLACEHOLDER]` markers** — it degrades gracefu
 | Item | Where it appears | What we need |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | Netlify env (set in the UI, never committed) | **Already active** (2026-07-17): the Netlify team has a shared `ANTHROPIC_API_KEY`, which this project inherits — live replies verified as `source: "ai"`. Decide whether the team key should keep billing for this client's bot, or set a project-scoped key to override it. Remove/override it to fall back to the free rules brain. |
-| `CHAT_MODEL` | Netlify env (optional) | Defaults to `claude-opus-4-8`. The owner can set a cheaper model (e.g. `claude-haiku-4-5`) to cut per-message cost — see docs/reports/phase-4.md for the cost note. |
+| `CHAT_MODEL` | Netlify env (optional) | **Set to `claude-sonnet-5`** (2026-07-17) after a cost/quality review: near-identical service at about a third of Opus cost, roughly 1.2p a message. The code default remains `claude-opus-4-8` if the variable is removed; `claude-haiku-4-5` is the budget option (~0.4p). |
 | Assistant answer quality | `/api/chat` system prompt (built from live DB data) | The bot only knows what's in Supabase. As the client confirms real prices, payment methods, hours and contact details (the rows above), Sparkle's answers improve automatically — no code change needed. |
 
 ## Notifications (Phase 6)
