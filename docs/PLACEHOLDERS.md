@@ -63,3 +63,35 @@ change. Others are page copy or assets.
 | Item | Where it appears | What we need |
 |---|---|---|
 | Custom domain | `site_settings.business.domain` = `gleamingant.co.uk`; site currently on `gleaming-ant.netlify.app` | Point `gleamingant.co.uk` DNS at Netlify and set the domain (update canonical/OG URLs when live) |
+
+## Admin & authentication (Phase 3)
+
+The management dashboard at `/admin` is built and wired to live Supabase CRUD. It
+lets the client fill in most of the placeholders above (contact details, prices,
+hours, services, FAQs via settings/services tables) without a code change. A few
+infrastructure/config items still need action before it works end-to-end in
+production:
+
+| Item | Where it appears | What we need |
+|---|---|---|
+| Supabase Auth redirect allowlist | Magic-link sign-in (`emailRedirectTo` → `${origin}/admin`) | In Supabase → Auth → URL Configuration, set **Site URL** and add **Redirect URLs** for `https://gleaming-ant.netlify.app/admin` and the production domain `https://gleamingant.co.uk/admin` (and `http://localhost:5173/admin` for local dev). Without these, magic links won't return to the dashboard. |
+| Magic-link email branding/delivery | The email the admin receives to sign in | Confirm Supabase Auth email sender/SMTP and (optionally) brand the "Magic Link" email template. The default Supabase sender works for low volume but is unbranded. |
+| Admin allowlist members | `admin_emails` table, managed in **Settings → Who can sign in** | Only `phillip.tennant31@gmail.com` is seeded. Add/remove real team emails via the dashboard (a signed-in admin can't remove their own access). |
+| Booking source note | Bookings appear in the dashboard once Phase 2 (booking wizard) writes them | Until Phase 2 ships, the Bookings/Dashboard views will be empty except for any rows inserted directly. Not a defect — flagged so the empty state isn't mistaken for a bug. |
+
+## Booking (Phase 2)
+
+| Item | Where it appears | What we need |
+|---|---|---|
+| Booking confirmation channel | Booking confirmation page ("we'll confirm your day and time by message — [PLACEHOLDER]") | How the team confirms a booking (text / WhatsApp / email) so the copy can name it — currently kept vague as "by message" |
+| Payment timing on a booking | Booking confirmation page ("there's nothing to pay now — [PLACEHOLDER]") | Confirm how and when payment is taken for a booked clean (complements the existing "Payment methods" row) |
+
+## Chatbot — "Sparkle" (Phase 4)
+
+The assistant has **no visible `[PLACEHOLDER]` markers** — it degrades gracefully (falls back to the built-in rules brain, and never invents prices/policies). These are configuration/infrastructure TODOs only.
+
+| Item | Where it appears | What we need |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Netlify env (set in the UI, never committed) | Optional. When set, `/api/chat` answers with Claude; when absent it uses the deterministic rules fallback. Set it in Netlify → Site settings → Environment variables to enable AI replies. |
+| `CHAT_MODEL` | Netlify env (optional) | Defaults to `claude-opus-4-8`. The owner can set a cheaper model (e.g. `claude-haiku-4-5`) to cut per-message cost — see docs/reports/phase-4.md for the cost note. |
+| Assistant answer quality | `/api/chat` system prompt (built from live DB data) | The bot only knows what's in Supabase. As the client confirms real prices, payment methods, hours and contact details (the rows above), Sparkle's answers improve automatically — no code change needed. |
