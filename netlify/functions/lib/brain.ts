@@ -691,9 +691,14 @@ function extractFrequencyCode(text: string): string | undefined {
 /**
  * Build a validated quote draft from the FULL visitor history: mentioned
  * services, a bedroom count, a frequency word and an outcode. Returns
- * `undefined` when no active service is mentioned.
+ * `undefined` when no active service is mentioned. Used by the rules brain
+ * below, and by chat.ts as the server-side guarantee when the AI response
+ * omits `quote_draft` (or validation dropped it).
  */
-function extractQuoteDraft(messages: ChatMessage[], data: BusinessData): QuoteDraft | undefined {
+export function extractQuoteDraft(
+  messages: ChatMessage[],
+  data: BusinessData,
+): QuoteDraft | undefined {
   const userText = messages
     .filter((m) => m.role === 'user')
     .map((m) => m.content)

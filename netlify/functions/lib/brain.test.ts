@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { answerWithRules, isRoutePath, validateQuoteDraft } from './brain'
+import { answerWithRules, extractQuoteDraft, isRoutePath, validateQuoteDraft } from './brain'
 import type { BusinessData, ChatMessage, ChatResponse } from './types'
 
 // ---------------------------------------------------------------------------
@@ -447,6 +447,34 @@ describe('validateQuoteDraft', () => {
     expect(validateQuoteDraft({ services: ['nope'], band_code: 'band_3' }, data)).toBeUndefined()
     expect(validateQuoteDraft({ services: [] }, data)).toBeUndefined()
     expect(validateQuoteDraft(null, data)).toBeUndefined()
+  })
+})
+
+describe('extractQuoteDraft (exported for the chat.ts server guarantee)', () => {
+  it('builds the full draft from the live-test sentence', () => {
+    const draft = extractQuoteDraft(
+      [
+        {
+          role: 'user',
+          content:
+            'I want window cleaning and gutter clearing at my 3 bed house in SS7 1AB, every 4 weeks. Can you sort me a quote?',
+        },
+      ],
+      data,
+    )
+    expect(draft).toBeDefined()
+    expect(draft?.services).toEqual(['window-cleaning', 'gutter-clearing'])
+    expect(draft?.band_code).toBe('band_3')
+    expect(draft?.frequency_code).toBe('every_4_weeks')
+    expect(draft?.postcode).toContain('SS7')
+  })
+
+  it('returns undefined when the history names no service', () => {
+    const draft = extractQuoteDraft(
+      [{ role: 'user', content: 'Can you sort me a quote for my 3 bed house in SS7?' }],
+      data,
+    )
+    expect(draft).toBeUndefined()
   })
 })
 

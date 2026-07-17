@@ -11,7 +11,7 @@
 
 import Anthropic from '@anthropic-ai/sdk'
 import { loadBusinessData } from './lib/data'
-import { answerWithRules, isRoutePath, validateQuoteDraft } from './lib/brain'
+import { answerWithRules, extractQuoteDraft, isRoutePath, validateQuoteDraft } from './lib/brain'
 import type { BusinessData, ChatLink, ChatMessage, ChatResponse } from './lib/types'
 
 const MAX_MESSAGES = 12
@@ -212,7 +212,8 @@ function buildSystemPrompt(data: BusinessData): string {
     `  How often (frequency_code): ${data.frequencies.map((f) => `${f.code} = ${f.label}`).join('; ') || 'unavailable'}`,
     '  Services: use the "slug" of each service from the SERVICES data above.',
     '- Infer codes where you can: "3 bed semi" -> band_3; "two bed flat" -> band_1_2; "5 bedroom" -> band_5p; "every month"/"monthly" -> every_4_weeks; "every 8 weeks" -> every_8_weeks; "one-off"/"just once" -> one_off.',
-    '- Once you know at least one service AND the visitor wants to proceed, include a `quote_draft` object with everything gathered so far (services is required; band_code, frequency_code, postcode are optional) and add a /booking link labelled "Continue your quote". Keep asking for the next missing detail in your reply.',
+    '- Once the visitor has named at least one service AND wants a price or to book, you MUST include the `quote_draft` object. Never skip it: put everything gathered so far in it (services is required; add band_code, frequency_code and postcode when known), using the exact slugs and codes listed above. Keep asking for the next missing detail in your reply.',
+    '- Never use the label "Continue your quote" on an ordinary link. That button is generated automatically from quote_draft, so a link with that label but no draft is a broken handoff. If you add a link alongside the draft, give it a different label.',
     '- Never block the handoff on missing fields. A partial draft is fine. Only include quote_draft once the visitor actually wants a price or to book.',
     '',
     'STRICT RULES:',
@@ -273,6 +274,29 @@ function coerceAiResponse(parsed: unknown, data: BusinessData): ChatResponse {
   return result
 }
 
+/**
+ * Server-side guarantee for the quote handoff. Models sometimes skip the
+ * optional `quote_draft` schema field even mid-handoff (observed in live
+ * testing: a "Continue your quote" link with no draft). When the coerced AI
+ * response has no draft, fall back to the rules-side extraction over the same
+ * message history; it only yields a draft when at least one real service was
+ * mentioned. A present, valid model draft always wins. Never throws: on any
+ * error the response is returned unchanged.
+ */
+function ensureQuoteDraft(
+  result: ChatResponse,
+  messages: ChatMessage[],
+  data: BusinessData,
+): ChatResponse {
+  if (result.quote_draft) return result
+  try {
+    const draft = extractQuoteDraft(messages, data)
+    return draft ? { ...result, quote_draft: draft } : result
+  } catch {
+    return result
+  }
+}
+
 async function answerWithClaude(
   messages: ChatMessage[],
   data: BusinessData,
@@ -324,7 +348,7 @@ export default async function handler(req: Request): Promise<Response> {
   let result: ChatResponse
   if (process.env.ANTHROPIC_API_KEY) {
     try {
-      result = await answerWithClaude(messages, data)
+      result = ensureQuoteDraft(await answerWithClaude(messages, data), messages, data)
     } catch (error) {
       if (error instanceof Anthropic.APIError) {
         console.error(`Sparkle: Claude API error (${error.status ?? 'n/a'}) — using rules fallback`, error.message)

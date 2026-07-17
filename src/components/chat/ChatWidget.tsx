@@ -374,6 +374,11 @@ export default function ChatWidget() {
               const isLast = index === messages.length - 1
               const isUser = message.role === 'user'
               const quoteDraft = cleanQuoteDraft(message.quoteDraft)
+              // The handoff button already goes to /booking (prefilled), so
+              // drop any plain /booking link that would duplicate it.
+              const links = (message.links ?? []).filter(
+                (link) => !quoteDraft || link.path !== '/booking',
+              )
               return (
                 <div
                   key={message.id}
@@ -407,9 +412,9 @@ export default function ChatWidget() {
                       </button>
                     )}
 
-                    {message.links && message.links.length > 0 && (
+                    {links.length > 0 && (
                       <div className="flex flex-wrap gap-2">
-                        {message.links.map((link) => (
+                        {links.map((link) => (
                           <button
                             key={`${message.id}-${link.path}-${link.label}`}
                             type="button"

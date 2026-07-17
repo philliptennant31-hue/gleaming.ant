@@ -1,14 +1,50 @@
 # Phase 5 report — URL-param prefill, entry points & Sparkle quote handoff
 
-Status: **complete**. Both quality gates pass.
+Status: **complete**, including the post-live-test handoff fix (see the
+"Live-test fix" section). Both quality gates pass.
 
 ```
 npx tsc --noEmit  -> clean (exit 0) across every file touched
-npx vitest run    -> 4 files, 81 tests, all pass (includes my 13 new brain tests)
+npx vitest run    -> 4 files, 83 tests, all pass (includes my 15 new brain tests)
 ```
 
 `vite build` was intentionally **not** run (shared `dist/`). No new dependencies,
 no git commands.
+
+## Live-test fix: guaranteed quote_draft on the AI path
+
+Live testing found the model sometimes treats the optional `quote_draft` schema
+field as skippable: for "window cleaning and gutter clearing at my 3 bed house
+in SS7 1AB, every 4 weeks" it returned a link labelled "Continue your quote" to
+plain `/booking` and NO draft, so the widget rendered an unprefilled link. Root
+cause included a prompt line of mine that told the model to "add a /booking link
+labelled Continue your quote", which it obeyed instead of the schema field.
+Four-part fix:
+
+1. **Server guarantee (`netlify/functions/chat.ts`)**: `extractQuoteDraft` is
+   now exported from `lib/brain.ts` and a never-throwing `ensureQuoteDraft`
+   wrapper runs after every successful AI coercion. If the model omitted the
+   draft (or validation dropped it), the rules-side extraction runs over the
+   same message history and attaches its validated draft when at least one real
+   service was named. A present, valid model draft always wins; any error keeps
+   the response unchanged. Note the deliberate trade-off: the fallback does not
+   re-check quote intent (the guarantee beats precision here), so an AI reply in
+   a conversation that has named a service can carry a draft even off a
+   non-quote turn. Extraction still requires a named service, so greetings and
+   generic questions never produce one.
+2. **Prompt hardening (same file)**: the QUOTE HANDOFF section now says the
+   `quote_draft` object MUST be included (never skipped) once a service is named
+   and the visitor wants a price or to book, using the exact slugs/codes listed;
+   and that the label "Continue your quote" must never be used on an ordinary
+   link because that button is generated automatically from `quote_draft`.
+3. **Widget tidy-up (`src/components/chat/ChatWidget.tsx`)**: when a message
+   carries a `quoteDraft`, links whose path is exactly `/booking` are filtered
+   out so a look-alike link never duplicates the handoff button.
+4. **Coverage (`netlify/functions/lib/brain.test.ts`)**: a new
+   `extractQuoteDraft` describe block asserts the exact live-test sentence
+   yields services `['window-cleaning','gutter-clearing']`, `band_code`
+   `band_3`, `frequency_code` `every_4_weeks` and a postcode containing `SS7`,
+   plus a no-service-no-draft case.
 
 ## What was built
 
