@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Menu, ShieldCheck, X } from 'lucide-react'
 import { PRIMARY_NAV, INSTAGRAM_URL } from '../../lib/nav'
@@ -79,7 +80,9 @@ export function Header() {
         </div>
       </Container>
 
-      {open && (
+      {/* Portal: the header's backdrop-blur creates a containing block for
+          fixed descendants, which would trap the sheet at header height. */}
+      {open && createPortal(
         <div
           id="mobile-menu"
           role="dialog"
@@ -142,7 +145,8 @@ export function Header() {
               </span>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </header>
   )
