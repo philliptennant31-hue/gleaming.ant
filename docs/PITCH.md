@@ -110,12 +110,15 @@ Total: roughly £0 to £4 a month, plus the domain.
 | What | Cost | Notes |
 |---|---|---|
 | Website hosting | £0 | Netlify free tier, as above. |
-| Database and sign-in | About £19 a month | Supabase Pro. The one upgrade I would make once real customer data builds up, for daily backups and no sleeping. |
+| Database and sign-in | £0 | Supabase free tier, as above. |
+| Nightly backups | £0 | A free scheduled job I set up that copies your whole database to private storage every night. Your data is small, so this covers you well. |
 | Sparkle the assistant | About £3.70 a month | Claude Sonnet 5 at 300 messages, as above. |
 | Confirmation emails | £0 | Resend free tier: 3,000 emails a month, 100 a day. Well inside your numbers. |
 | Automated texts | About £4 to £5 a month | Twilio: about 4p a text. Around 100 texts covers a confirmation and a day-before reminder for 50 cleans. A one-way sender name is free, so no number to rent. |
 
-Total: roughly £26 to £28 a month, plus the domain.
+Total: roughly £8 to £10 a month, plus the domain.
+
+One optional upgrade for later: Supabase Pro at about £19 a month swaps the free backup job for managed daily backups with one-click restore and support. Worth it once the round is big enough that an hour of lost bookings would sting; not needed on day one.
 
 **The accounts, and who owns them**
 

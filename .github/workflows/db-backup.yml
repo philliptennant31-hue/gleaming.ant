@@ -1,0 +1,55 @@
+# Nightly database backup.
+#
+# Dumps the whole Supabase Postgres database, encrypts it, and stores it as a
+# workflow artifact for 90 days. The repository is public, so the dump is
+# always encrypted before upload; without the passphrase the artifact is
+# useless to anyone else.
+#
+# One-time setup (repo owner, ~2 minutes):
+#   1. Supabase dashboard -> Project settings -> Database: copy the pooler
+#      connection string (URI, port 5432 "session" mode) and, if you never set
+#      one, reset the database password.
+#   2. gh secret set SUPABASE_DB_URL    (paste the full postgres:// URI)
+#   3. gh secret set BACKUP_PASSPHRASE  (a long random phrase; store it in a
+#      password manager - a backup you cannot decrypt is no backup)
+#
+# Restore (documented for the day it matters):
+#   gh run download <run-id> -n db-backup
+#   openssl enc -d -aes-256-cbc -pbkdf2 -in backup.sql.gz.enc -out backup.sql.gz
+#   gunzip backup.sql.gz && psql "$SUPABASE_DB_URL" < backup.sql
+
+name: db-backup
+
+on:
+  schedule:
+    - cron: "17 2 * * *" # 02:17 UTC nightly
+  workflow_dispatch: {}
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check secrets are configured
+        run: |
+          if [ -z "${{ secrets.SUPABASE_DB_URL }}" ] || [ -z "${{ secrets.BACKUP_PASSPHRASE }}" ]; then
+            echo "SUPABASE_DB_URL and BACKUP_PASSPHRASE secrets are not set; see the comments in this workflow."
+            exit 1
+          fi
+
+      - name: Dump, compress and encrypt
+        env:
+          DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+          pg_dump "$DB_URL" --no-owner --no-privileges | gzip > backup.sql.gz
+          openssl enc -aes-256-cbc -pbkdf2 -pass env:PASSPHRASE -in backup.sql.gz -out backup.sql.gz.enc
+          rm backup.sql.gz
+          ls -la backup.sql.gz.enc
+
+      - name: Upload encrypted backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: db-backup
+          path: backup.sql.gz.enc
+          retention-days: 90

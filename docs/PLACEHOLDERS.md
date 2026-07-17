@@ -96,6 +96,12 @@ The assistant has **no visible `[PLACEHOLDER]` markers** — it degrades gracefu
 | `CHAT_MODEL` | Netlify env (optional) | **Set to `claude-sonnet-5`** (2026-07-17) after a cost/quality review: near-identical service at about a third of Opus cost, roughly 1.2p a message. The code default remains `claude-opus-4-8` if the variable is removed; `claude-haiku-4-5` is the budget option (~0.4p). |
 | Assistant answer quality | `/api/chat` system prompt (built from live DB data) | The bot only knows what's in Supabase. As the client confirms real prices, payment methods, hours and contact details (the rows above), Sparkle's answers improve automatically — no code change needed. |
 
+## Backups
+
+| Item | Where it appears | What we need |
+|---|---|---|
+| Nightly backup secrets | `.github/workflows/db-backup.yml` (runs nightly, currently skips with a clear error until configured) | Phillip, ~2 minutes, credentials stay with you: Supabase dashboard → Project settings → Database → copy the session-pooler URI (reset the DB password if unknown), then `gh secret set SUPABASE_DB_URL` and `gh secret set BACKUP_PASSPHRASE` (long random phrase, keep it in a password manager). First green run = backups live, £0. |
+
 ## Notifications (Phase 6)
 
 Confirming a booking in the admin now offers to notify the customer. It is
