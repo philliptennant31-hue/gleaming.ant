@@ -1,0 +1,27 @@
+# Netlify configuration for gleaming-ant
+# Build-time env vars here are PUBLIC values (publishable key ships in the JS bundle by design).
+# Secrets (ANTHROPIC_API_KEY) are set in the Netlify UI, never here.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  VITE_SUPABASE_URL = "https://qrmbkqohrvylxswcqsal.supabase.co"
+  VITE_SUPABASE_ANON_KEY = "sb_publishable_9CR0ol6Gm3ROkox_bBm0Xg_d6w76Bym"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# API routes -> serverless functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# SPA fallback (must come after /api/*)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
