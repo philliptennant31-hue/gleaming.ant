@@ -74,7 +74,7 @@ production:
 
 | Item | Where it appears | What we need |
 |---|---|---|
-| Supabase Auth redirect allowlist | Magic-link sign-in (`emailRedirectTo` → `${origin}/admin`) | In Supabase → Auth → URL Configuration, set **Site URL** and add **Redirect URLs** for `https://gleaming-ant.netlify.app/admin` and the production domain `https://gleamingant.co.uk/admin` (and `http://localhost:5173/admin` for local dev). Without these, magic links won't return to the dashboard. |
+| Supabase Auth redirect allowlist | Magic-link sign-in (`emailRedirectTo` → `${origin}/admin`) | **DONE for now** (2026-07-17): Site URL = `https://gleaming-ant.netlify.app`, redirect URLs cover the Netlify URL and `http://localhost:5173`. Remaining: add `https://gleamingant.co.uk/**` when the custom domain goes live. |
 | Magic-link email branding/delivery | The email the admin receives to sign in | Confirm Supabase Auth email sender/SMTP and (optionally) brand the "Magic Link" email template. The default Supabase sender works for low volume but is unbranded. |
 | Admin allowlist members | `admin_emails` table, managed in **Settings → Who can sign in** | Only `phillip.tennant31@gmail.com` is seeded. Add/remove real team emails via the dashboard (a signed-in admin can't remove their own access). |
 | Booking source note | Bookings appear in the dashboard once Phase 2 (booking wizard) writes them | Until Phase 2 ships, the Bookings/Dashboard views will be empty except for any rows inserted directly. Not a defect — flagged so the empty state isn't mistaken for a bug. |
@@ -92,6 +92,6 @@ The assistant has **no visible `[PLACEHOLDER]` markers** — it degrades gracefu
 
 | Item | Where it appears | What we need |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Netlify env (set in the UI, never committed) | Optional. When set, `/api/chat` answers with Claude; when absent it uses the deterministic rules fallback. Set it in Netlify → Site settings → Environment variables to enable AI replies. |
+| `ANTHROPIC_API_KEY` | Netlify env (set in the UI, never committed) | **Already active** (2026-07-17): the Netlify team has a shared `ANTHROPIC_API_KEY`, which this project inherits — live replies verified as `source: "ai"`. Decide whether the team key should keep billing for this client's bot, or set a project-scoped key to override it. Remove/override it to fall back to the free rules brain. |
 | `CHAT_MODEL` | Netlify env (optional) | Defaults to `claude-opus-4-8`. The owner can set a cheaper model (e.g. `claude-haiku-4-5`) to cut per-message cost — see docs/reports/phase-4.md for the cost note. |
 | Assistant answer quality | `/api/chat` system prompt (built from live DB data) | The bot only knows what's in Supabase. As the client confirms real prices, payment methods, hours and contact details (the rows above), Sparkle's answers improve automatically — no code change needed. |
