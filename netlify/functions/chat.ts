@@ -276,22 +276,33 @@ function coerceAiResponse(parsed: unknown, data: BusinessData): ChatResponse {
 
 /**
  * Server-side guarantee for the quote handoff. Models sometimes skip the
- * optional `quote_draft` schema field even mid-handoff (observed in live
- * testing: a "Continue your quote" link with no draft). When the coerced AI
- * response has no draft, fall back to the rules-side extraction over the same
- * message history; it only yields a draft when at least one real service was
- * mentioned. A present, valid model draft always wins. Never throws: on any
- * error the response is returned unchanged.
+ * optional `quote_draft` schema field even mid-handoff, or send it with only
+ * the services filled while the history plainly names the property size,
+ * frequency or postcode (both observed in live testing). The rules-side
+ * extraction over the same history fills whatever is missing: the AI's own
+ * values always win per field, extraction only tops up gaps. Never throws:
+ * on any error the response is returned unchanged.
  */
 function ensureQuoteDraft(
   result: ChatResponse,
   messages: ChatMessage[],
   data: BusinessData,
 ): ChatResponse {
-  if (result.quote_draft) return result
   try {
-    const draft = extractQuoteDraft(messages, data)
-    return draft ? { ...result, quote_draft: draft } : result
+    const extracted = extractQuoteDraft(messages, data)
+    if (!result.quote_draft) {
+      return extracted ? { ...result, quote_draft: extracted } : result
+    }
+    if (!extracted) return result
+    return {
+      ...result,
+      quote_draft: {
+        services: result.quote_draft.services,
+        band_code: result.quote_draft.band_code ?? extracted.band_code,
+        frequency_code: result.quote_draft.frequency_code ?? extracted.frequency_code,
+        postcode: result.quote_draft.postcode ?? extracted.postcode,
+      },
+    }
   } catch {
     return result
   }
