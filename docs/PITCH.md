@@ -118,7 +118,7 @@ Total: roughly £0 to £4 a month, plus the domain.
 
 Total: roughly £8 to £10 a month, plus the domain.
 
-One optional upgrade for later: Supabase Pro at about £19 a month swaps the free backup job for managed daily backups with one-click restore and support. Worth it once the round is big enough that an hour of lost bookings would sting; not needed on day one.
+One optional upgrade for later: Supabase Pro at about £19 a month swaps the free backup job for managed daily backups with one-click restore and support. To be clear about when you would need it: not for space or traffic. The free tier holds years of bookings for a round this size, and the nightly backup keeps the database active, so the free tier's sleep rule never bites. The £19 buys recovery speed and someone to call. The day this system runs your whole week's diary, that is worth having. I will tell you when you are there; today you are not.
 
 **The accounts, and who owns them**
 
@@ -151,7 +151,23 @@ All optional, for whenever it suits you.
 
 ## 8. Cost to you
 
-> [FOR PHILLIP: your price and terms]
->
-> Your build fee, any ongoing or hosting arrangement, and your terms go here.
-> Left blank on purpose so no numbers are invented for you.
+It starts with a free month. Use the site for 30 days. If it has not brought
+you work by then, I take it down and we are square.
+
+After that, two ways to have it:
+
+**The handover, £500.** Everything moves into your name: the domain live on
+gleamingant.co.uk, your email on the admin, backups running, and an hour on
+the phone showing you round. You fill in your details and prices yourself
+from a simple checklist.
+
+**The launch, £750.** The handover, plus I do the lot with you. We sit down
+once and go through the question list, I put every answer in, set up the
+confirmation emails, and stay on call through your first month live.
+
+**Day to day after that.** The site runs in your name at about £10 a month
+all in, cheaper than a Wix plan, and you are not tied to me at all. Small
+things, message me and I will usually just sort them. Bigger jobs from the
+list above, a fixed price agreed before I start. If you would rather I
+formally keep an eye on the whole thing, £15 a month covers monitoring,
+backup checks and small changes without the clock running.
