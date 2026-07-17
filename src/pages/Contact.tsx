@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { CheckCircle2, Mail, MessageCircle, Phone, TriangleAlert } from 'lucide-react'
+import { CheckCircle2, TriangleAlert } from 'lucide-react'
 import { submitContactMessage } from '../lib/api'
 import { InstagramIcon } from '../components/brand/icons'
+import { ChatBubbleIcon, MailIcon, PhoneIcon } from '../components/brand/icons-brand'
 import { useSiteSettings } from '../lib/settings'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
 import { INSTAGRAM_URL } from '../lib/nav'
@@ -208,19 +209,19 @@ export default function Contact() {
                 <h2 className="font-display text-lg font-bold text-ink">Reach us directly</h2>
                 <div className="mt-5 space-y-4">
                   <ContactDetail
-                    icon={<Phone className="h-4 w-4" />}
+                    icon={<PhoneIcon className="h-4 w-4" />}
                     label="Phone"
                     value={contact.phone}
                     href={isPlaceholder(contact.phone) ? undefined : `tel:${contact.phone.replace(/\s/g, '')}`}
                   />
                   <ContactDetail
-                    icon={<Mail className="h-4 w-4" />}
+                    icon={<MailIcon className="h-4 w-4" />}
                     label="Email"
                     value={contact.email}
                     href={isPlaceholder(contact.email) ? undefined : `mailto:${contact.email}`}
                   />
                   <ContactDetail
-                    icon={<MessageCircle className="h-4 w-4" />}
+                    icon={<ChatBubbleIcon className="h-4 w-4" />}
                     label="WhatsApp"
                     value={contact.whatsapp}
                     href={waHref}

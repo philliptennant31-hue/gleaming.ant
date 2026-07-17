@@ -1,4 +1,5 @@
-import { Check, Clock, RefreshCw, TriangleAlert } from 'lucide-react'
+import { Check, TriangleAlert } from 'lucide-react'
+import { ClockIcon, RepeatIcon } from '../brand/icons-brand'
 import { cn } from '../../lib/cn'
 import { formatDuration, formatGBP } from '../../lib/format'
 import type { Service } from '../../lib/types'
@@ -69,12 +70,12 @@ export function StepServices({ services, selectedIds, onToggle, error }: StepSer
                 <span className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm">
                   <span className="font-mono font-semibold text-ink">from {formatGBP(service.base_price)}</span>
                   <span className="inline-flex items-center gap-1 text-ink-soft">
-                    <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+                    <ClockIcon className="h-3.5 w-3.5" />
                     {formatDuration(service.duration_minutes)}
                   </span>
                   {service.supports_frequency && (
                     <span className="inline-flex items-center gap-1 text-teal-deep">
-                      <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
+                      <RepeatIcon className="h-3.5 w-3.5" />
                       Regular option
                     </span>
                   )}

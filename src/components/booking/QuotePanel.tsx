@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { ChevronDown, Clock, Info, MapPin, Sparkles } from 'lucide-react'
+import { ChevronDown, Info } from 'lucide-react'
+import { ClockIcon, MapPinIcon, SparkleBurstIcon } from '../brand/icons-brand'
 import { cn } from '../../lib/cn'
 import { formatDuration, formatGBP } from '../../lib/format'
 import type { QuoteBreakdown } from '../../lib/pricing'
@@ -101,13 +102,13 @@ export function QuoteContent({ quote, bandLabel, frequencyLabel, showFrequency, 
 
           <dl className="mt-4 space-y-1.5 text-xs text-ink-soft">
             <div className="flex items-center gap-1.5">
-              <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+              <ClockIcon className="h-3.5 w-3.5" />
               <dt className="sr-only">Estimated time on site</dt>
               <dd>Around {formatDuration(quote.durationMinutes)} on site</dd>
             </div>
             {quote.areaName && (
               <div className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                <MapPinIcon className="h-3.5 w-3.5" />
                 <dt className="sr-only">Area</dt>
                 <dd>{quote.areaName}</dd>
               </div>
@@ -183,7 +184,7 @@ export function QuotePanel(props: QuoteView) {
             className="flex w-full items-center justify-between gap-3 border-t border-pane bg-white px-5 py-3 text-left shadow-[0_-8px_24px_-16px_rgba(34,65,79,0.4)]"
           >
             <span className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-teal-deep" aria-hidden="true" />
+              <SparkleBurstIcon className="h-4 w-4" />
               <span className="text-sm font-semibold text-ink">
                 {hasLines ? 'Your quote' : 'Build your quote'}
               </span>

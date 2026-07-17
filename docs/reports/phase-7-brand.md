@@ -92,3 +92,61 @@ in z-order, so overlapping parts cut visible white seams into their neighbours
 (articulation) while each part's own outline stays sealed. Legs and antennae run
 behind the body (emerging naturally) except the rear leg, which lies over the
 abdomen so it stays visible above the banner.
+
+---
+
+## Addendum — bespoke sticker icon set (rev 3)
+
+The public site's expressive icons (generic lucide art) were rebuilt as bespoke
+mini-stickers in the badge's own visual language.
+
+### New artwork
+
+`src/components/brand/icons-brand.tsx` — 23 marks in a shared **32×32 viewBox**,
+one construction language: ink-navy `#1E3A47` primary shapes, aqua `#4FC3C8` /
+`#A9E3E6` glass-and-water accents, a ~1.2-unit **white outer rim** (white underlay,
+the badge technique), navy strokes ~2.2, round joins, gentle radii, the badge's
+anticlockwise tilt where a tilt fits. Fixed artwork colours (stickers, not glyph
+fonts) — verified legible at 14–48px on paper, pane tint and chalkboard.
+
+- **Service set**: `WindowPaneIcon` (tilted two-tone pane + wipe shine),
+  `GutterIcon` (water-filled channel + leaf), `FasciaIcon` (roofline over board),
+  `ConservatoryIcon` (glass end-gable), `SolarIcon` (tilted cell grid + glint),
+  `PressureWashIcon` (lance spray fan onto paving), `SparkleBurstIcon` (brand
+  4-point star pair, also the fallback).
+- **Support set**: `SqueegeeIcon`, `QuoteCalcIcon`, `PoundCoinIcon`,
+  `CalendarTickIcon` (Reliable), `SmileIcon` (Friendly), `ShieldTickIcon`
+  (Fully insured), `MapPinIcon`, `ClockIcon`, `RepeatIcon`, `CalendarIcon`,
+  `BundleIcon` (two stacked panes), `PercentIcon`, `HouseIcon` (with a mini brand
+  pane), `ChatBubbleIcon` (bubble + sparkle), `PhoneIcon`, `MailIcon`.
+
+`ServiceIcon.tsx` keeps its exact API (`{ name, className }`, DB key map, sparkle
+fallback) and now resolves to the sticker set — the admin services table inherits
+the new marks automatically with no admin code change.
+
+### Where lucide was swapped (public site only)
+
+Home (steps, hero eyebrow pin, area chips, empty state), About (values trio),
+TrustChips, Contact (phone/email/WhatsApp method tiles), Services + Areas + FAQ
+(tiles/empty states), Pricing (frequency, bundle, percent), ServiceDetail (badge
+chips + hero tile), ServiceCard (regular chip), ComingSoon (fallback), booking
+QuotePanel / StepAddress / StepProperty / StepDateTime / StepServices,
+BookingConfirmedPage (meta rows). Tiles that were `bg-teal-deep text-white`
+(Home steps, About values, ServiceDetail hero) became `bg-pane` so the navy
+stickers sit on their home surface.
+
+### Deliberately left alone
+
+Functional glyphs (arrows, chevrons, menu/close, form-state ticks/crosses,
+spinner, `Info` callouts, `Pencil` edit, `Copy`), button-control icons (e.g.
+"Message us" `MessageCircle`, NotFound's `Home`), `ScrollText` legal notices on
+Privacy/Terms (amber warning context), `InstagramIcon` (social glyph), everything
+under `src/pages/admin` + `src/components/admin`, the chat widget, and
+`src/components/layout/**` (Header/Footer icons are outside this task's ownership
+— flag if the footer's contact icons should follow in a later pass).
+
+### Gates
+
+`npx tsc --noEmit` clean; `npx vitest run` 83/83 green; preview page
+(`scratch/logo-preview.html`, "Sticker icon set" cards on paper + chalkboard +
+size ramp) renders with no console errors. No new dependencies.

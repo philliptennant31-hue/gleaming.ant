@@ -1,4 +1,5 @@
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import { SparkleBurstIcon } from '../components/brand/icons-brand'
 import { useAsync } from '../lib/useAsync'
 import { fetchActiveServices } from '../lib/api'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -31,7 +32,7 @@ export default function Services() {
           {error && <ErrorState onRetry={reload} />}
           {!loading && !error && data && data.length === 0 && (
             <EmptyState
-              icon={<Sparkles className="h-6 w-6" />}
+              icon={<SparkleBurstIcon className="h-6 w-6" />}
               title="Services coming soon"
               body="We're finalising our service list. Message us and we'll tell you exactly what we can do for you."
             />

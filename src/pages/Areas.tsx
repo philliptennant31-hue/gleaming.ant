@@ -1,4 +1,5 @@
-import { ArrowRight, Check, MapPin, MessageCircle } from 'lucide-react'
+import { ArrowRight, Check, MessageCircle } from 'lucide-react'
+import { MapPinIcon } from '../components/brand/icons-brand'
 import { useAsync } from '../lib/useAsync'
 import { fetchServiceAreas } from '../lib/api'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -17,7 +18,7 @@ function AreaCard({ area }: { area: ServiceArea }) {
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-pane text-teal-deep">
-            <MapPin className="h-5 w-5" aria-hidden="true" />
+            <MapPinIcon className="h-5 w-5" />
           </span>
           <h2 className="font-display text-lg font-bold text-ink">{area.name}</h2>
         </div>
@@ -69,7 +70,7 @@ export default function Areas() {
           {error && <ErrorState onRetry={reload} />}
           {!loading && !error && data && data.length === 0 && (
             <EmptyState
-              icon={<MapPin className="h-6 w-6" />}
+              icon={<MapPinIcon className="h-6 w-6" />}
               title="Area list coming soon"
               body="We're mapping out our coverage. Message us with your postcode and we'll confirm."
             />

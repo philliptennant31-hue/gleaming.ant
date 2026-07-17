@@ -1,4 +1,5 @@
 import { ChevronDown, MessageCircle } from 'lucide-react'
+import { ChatBubbleIcon } from '../components/brand/icons-brand'
 import { useAsync } from '../lib/useAsync'
 import { fetchFaqs } from '../lib/api'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -55,7 +56,7 @@ export default function FAQ() {
           {error && <ErrorState onRetry={reload} />}
           {!loading && !error && data && data.length === 0 && (
             <EmptyState
-              icon={<MessageCircle className="h-6 w-6" />}
+              icon={<ChatBubbleIcon className="h-6 w-6" />}
               title="No FAQs just yet"
               body="We're writing these up. In the meantime, ask us anything directly."
               action={

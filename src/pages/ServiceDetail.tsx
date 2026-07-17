@@ -1,4 +1,5 @@
-import { ArrowLeft, ArrowRight, Clock, RefreshCw } from 'lucide-react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ClockIcon, RepeatIcon } from '../components/brand/icons-brand'
 import { Link, useParams } from 'react-router-dom'
 import { useAsync } from '../lib/useAsync'
 import { fetchPropertyBands, fetchServiceBySlug, fetchServicePrices } from '../lib/api'
@@ -99,16 +100,16 @@ export default function ServiceDetail() {
               {/* Story */}
               <div>
                 <div className="flex items-center gap-4">
-                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-deep text-white">
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pane">
                     <ServiceIcon name={data.service.icon} className="h-7 w-7" />
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {data.service.supports_frequency && (
-                      <Badge tone="teal" leftIcon={<RefreshCw className="h-3.5 w-3.5" />}>
+                      <Badge tone="teal" leftIcon={<RepeatIcon className="h-3.5 w-3.5" />}>
                         Regular option
                       </Badge>
                     )}
-                    <Badge tone="neutral" leftIcon={<Clock className="h-3.5 w-3.5" />}>
+                    <Badge tone="neutral" leftIcon={<ClockIcon className="h-3.5 w-3.5" />}>
                       {formatDuration(data.service.duration_minutes)} typical
                     </Badge>
                   </div>

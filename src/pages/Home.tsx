@@ -1,5 +1,12 @@
-import { ArrowRight, Calculator, MapPin, PoundSterling, Sparkles } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { InstagramIcon } from '../components/brand/icons'
+import {
+  MapPinIcon,
+  PoundCoinIcon,
+  QuoteCalcIcon,
+  SparkleBurstIcon,
+  SqueegeeIcon,
+} from '../components/brand/icons-brand'
 import { useAsync } from '../lib/useAsync'
 import { fetchActiveServices } from '../lib/api'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -17,17 +24,17 @@ import { HeroArt } from '../components/site/HeroArt'
 
 const STEPS = [
   {
-    icon: Calculator,
+    icon: QuoteCalcIcon,
     title: 'Pick your quote',
     body: 'Tell us your property and what you need. Our instant quote gives you a fair, upfront price. No waiting around.',
   },
   {
-    icon: Sparkles,
+    icon: SqueegeeIcon,
     title: 'We clean',
     body: "We turn up when we say we will and leave everything gleaming: windows, frames and sills included.",
   },
   {
-    icon: PoundSterling,
+    icon: PoundCoinIcon,
     title: 'Pay after',
     body: 'Settle up once the job is done and you are happy. [PLACEHOLDER: payment methods — e.g. bank transfer, card, direct debit]',
   },
@@ -59,7 +66,7 @@ function ServicesSection() {
           {error && <ErrorState onRetry={reload} />}
           {!loading && !error && data && data.length === 0 && (
             <EmptyState
-              icon={<Sparkles className="h-6 w-6" />}
+              icon={<SparkleBurstIcon className="h-6 w-6" />}
               title="Services coming soon"
               body="We're getting our service list ready. Message us in the meantime and we'll help."
             />
@@ -91,7 +98,7 @@ export default function Home() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-pane">
-                <MapPin className="h-3.5 w-3.5 text-teal" aria-hidden="true" />
+                <MapPinIcon className="h-3.5 w-3.5" />
                 Essex · Window &amp; exterior cleaning
               </span>
 
@@ -142,8 +149,8 @@ export default function Home() {
             {STEPS.map((step, i) => (
               <li key={step.title} className="relative rounded-card border border-pane bg-white p-7 shadow-card">
                 <div className="flex items-center gap-4">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-teal-deep text-white">
-                    <step.icon className="h-6 w-6" aria-hidden="true" />
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-pane">
+                    <step.icon className="h-6 w-6" />
                   </span>
                   <span className="font-mono text-3xl font-semibold text-pane" aria-hidden="true">
                     0{i + 1}
@@ -170,7 +177,7 @@ export default function Home() {
                   key={area}
                   className="inline-flex items-center gap-1.5 rounded-full border border-pane bg-white px-3.5 py-1.5 text-sm font-medium text-ink-soft"
                 >
-                  <MapPin className="h-3.5 w-3.5 text-teal" aria-hidden="true" />
+                  <MapPinIcon className="h-3.5 w-3.5" />
                   {area}
                 </li>
               ))}

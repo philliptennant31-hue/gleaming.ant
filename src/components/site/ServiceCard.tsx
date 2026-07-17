@@ -1,7 +1,8 @@
-import { ArrowRight, RefreshCw } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import type { Service } from '../../lib/types'
 import { formatGBP } from '../../lib/format'
 import { ServiceIcon } from '../brand/ServiceIcon'
+import { RepeatIcon } from '../brand/icons-brand'
 import { Card } from '../ui/Card'
 
 export function ServiceCard({ service }: { service: Service }) {
@@ -13,7 +14,7 @@ export function ServiceCard({ service }: { service: Service }) {
         </span>
         {service.supports_frequency && (
           <span className="inline-flex items-center gap-1 rounded-full bg-teal/12 px-2.5 py-1 text-xs font-semibold text-teal-deep">
-            <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
+            <RepeatIcon className="h-3.5 w-3.5" />
             Regular option
           </span>
         )}

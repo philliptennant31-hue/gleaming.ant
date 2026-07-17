@@ -1,4 +1,5 @@
-import { Check, Info, MapPin } from 'lucide-react'
+import { Check, Info } from 'lucide-react'
+import { MapPinIcon } from '../brand/icons-brand'
 import { formatGBP } from '../../lib/format'
 import { normalisePostcode } from '../../lib/pricing'
 import type { ServiceArea } from '../../lib/types'
@@ -106,7 +107,7 @@ export function StepAddress({ address, onChange, matchedArea, errors }: StepAddr
       </div>
 
       <p className="mt-5 flex items-center gap-1.5 text-xs text-ink-soft">
-        <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+        <MapPinIcon className="h-3.5 w-3.5 shrink-0" />
         We only use your address to plan and confirm your clean.
       </p>
     </div>

@@ -1,4 +1,5 @@
-import { ArrowRight, CalendarCheck, ShieldCheck, Smile } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import { CalendarTickIcon, ShieldTickIcon, SmileIcon } from '../components/brand/icons-brand'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
 import { Container } from '../components/ui/Container'
 import { Button } from '../components/ui/Button'
@@ -9,17 +10,17 @@ import { Sparkle } from '../components/brand/Sparkle'
 
 const VALUES = [
   {
-    icon: CalendarCheck,
+    icon: CalendarTickIcon,
     title: 'Reliable',
     body: "We turn up when we say we will, on a schedule you can set your watch by. That's the whole point of a regular round.",
   },
   {
-    icon: Smile,
+    icon: SmileIcon,
     title: 'Friendly',
     body: "A local face, not a faceless firm. We're easy to talk to and happy to work around you and your home.",
   },
   {
-    icon: ShieldCheck,
+    icon: ShieldTickIcon,
     title: 'Fully insured',
     body: 'Your home is protected while we work. Fully insured means peace of mind for you and for us.',
   },
@@ -74,8 +75,8 @@ export default function About() {
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {VALUES.map((value) => (
               <div key={value.title} className="rounded-card border border-pane bg-white p-7 shadow-card">
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-teal-deep text-white">
-                  <value.icon className="h-6 w-6" aria-hidden="true" />
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-pane">
+                  <value.icon className="h-6 w-6" />
                 </span>
                 <h3 className="mt-5 font-display text-xl font-bold text-ink">{value.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-soft">{value.body}</p>

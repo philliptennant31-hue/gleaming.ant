@@ -1,4 +1,5 @@
-import { ArrowRight, Layers, Percent, RefreshCw } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import { BundleIcon, PercentIcon, RepeatIcon } from '../components/brand/icons-brand'
 import { Link } from 'react-router-dom'
 import { useAsync } from '../lib/useAsync'
 import {
@@ -98,7 +99,7 @@ function FrequencyExplainer({ frequencies }: { frequencies: Frequency[] }) {
             className={`rounded-card border p-5 ${isBest ? 'border-teal bg-teal/5' : 'border-pane bg-white'}`}
           >
             <div className="flex items-center justify-between gap-2">
-              <RefreshCw className="h-5 w-5 text-teal-deep" aria-hidden="true" />
+              <RepeatIcon className="h-5 w-5" />
               {isBest ? (
                 <Badge tone="teal">Best value</Badge>
               ) : savings > 0 ? (
@@ -182,7 +183,7 @@ export default function Pricing() {
                 <div className="rounded-card border border-amber/30 bg-amber/5 p-7 sm:p-9">
                   <div className="flex items-center gap-3">
                     <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-amber/15 text-amber-deep">
-                      <Layers className="h-6 w-6" aria-hidden="true" />
+                      <BundleIcon className="h-6 w-6" />
                     </span>
                     <h2 className="font-display text-2xl font-bold text-ink">Bundle &amp; save</h2>
                   </div>
@@ -196,7 +197,7 @@ export default function Pricing() {
                         key={bundle.id}
                         className="flex items-center gap-3 rounded-xl border border-pane bg-white px-5 py-4"
                       >
-                        <Percent className="h-5 w-5 text-amber-deep" aria-hidden="true" />
+                        <PercentIcon className="h-5 w-5 shrink-0" />
                         <span className="text-ink">
                           <span className="font-mono text-lg font-semibold">{bundle.discount_percent}%</span> off{' '}
                           {bundle.min_services}+ services

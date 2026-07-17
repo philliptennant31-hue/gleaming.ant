@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { Check, Clock, Copy, MapPin } from 'lucide-react'
+import { Check, Copy } from 'lucide-react'
+import { ClockIcon, MapPinIcon } from '../../components/brand/icons-brand'
 import { useDocumentTitle } from '../../lib/useDocumentTitle'
 import { formatDate, formatDuration, formatGBP, formatTime } from '../../lib/format'
 import type { QuoteBreakdown } from '../../lib/pricing'
@@ -141,13 +142,13 @@ export default function BookingConfirmedPage() {
 
           <dl className="mt-4 space-y-1.5 text-xs text-ink-soft">
             <div className="flex items-center gap-1.5">
-              <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+              <ClockIcon className="h-3.5 w-3.5" />
               <dt className="sr-only">Estimated time on site</dt>
               <dd>Around {formatDuration(quote.durationMinutes)} on site</dd>
             </div>
             {quote.areaName && (
               <div className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                <MapPinIcon className="h-3.5 w-3.5" />
                 <dt className="sr-only">Area</dt>
                 <dd>{quote.areaName}</dd>
               </div>

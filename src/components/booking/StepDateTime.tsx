@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CalendarDays, Clock, TriangleAlert } from 'lucide-react'
+import { TriangleAlert } from 'lucide-react'
+import { CalendarIcon, ClockIcon } from '../brand/icons-brand'
 import { cn } from '../../lib/cn'
 import { supabase } from '../../lib/supabase'
 import { useAsync } from '../../lib/useAsync'
@@ -115,7 +116,7 @@ export function StepDateTime({
         <>
           {selectableDates.length === 0 ? (
             <EmptyState
-              icon={<CalendarDays className="h-6 w-6" />}
+              icon={<CalendarIcon className="h-6 w-6" />}
               title="No times to show just now"
               body="We couldn't find an open slot in the next few weeks. Send us a message and we'll sort a time that works."
             />
@@ -123,7 +124,7 @@ export function StepDateTime({
             <>
               <fieldset>
                 <legend className="mb-3 flex items-center gap-2 text-sm font-semibold text-ink">
-                  <CalendarDays className="h-4 w-4 text-teal-deep" aria-hidden="true" />
+                  <CalendarIcon className="h-4 w-4" />
                   Choose a day
                 </legend>
                 <div
@@ -166,7 +167,7 @@ export function StepDateTime({
               {date && (
                 <fieldset className="mt-8">
                   <legend className="mb-3 flex items-center gap-2 text-sm font-semibold text-ink">
-                    <Clock className="h-4 w-4 text-teal-deep" aria-hidden="true" />
+                    <ClockIcon className="h-4 w-4" />
                     Choose a time on {formatDate(date)}
                   </legend>
                   {slots.length === 0 ? (

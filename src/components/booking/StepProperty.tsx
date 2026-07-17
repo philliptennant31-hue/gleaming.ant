@@ -1,4 +1,5 @@
-import { Home, RefreshCw, TriangleAlert } from 'lucide-react'
+import { TriangleAlert } from 'lucide-react'
+import { HouseIcon, RepeatIcon } from '../brand/icons-brand'
 import { cn } from '../../lib/cn'
 import type { Frequency, PropertyBand } from '../../lib/types'
 import { StepHeader } from './StepHeader'
@@ -89,7 +90,7 @@ export function StepProperty({
 
       <fieldset>
         <legend className="mb-3 flex items-center gap-2 text-sm font-semibold text-ink">
-          <Home className="h-4 w-4 text-teal-deep" aria-hidden="true" />
+          <HouseIcon className="h-4 w-4" />
           Property size
         </legend>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -109,7 +110,7 @@ export function StepProperty({
       {showFrequency ? (
         <fieldset className="mt-8">
           <legend className="mb-1 flex items-center gap-2 text-sm font-semibold text-ink">
-            <RefreshCw className="h-4 w-4 text-teal-deep" aria-hidden="true" />
+            <RepeatIcon className="h-4 w-4" />
             How often?
           </legend>
           <p className="mb-3 text-sm text-ink-soft">

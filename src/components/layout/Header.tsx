@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Menu, ShieldCheck, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
+import { ShieldTickIcon } from '../brand/icons-brand'
 import { PRIMARY_NAV, INSTAGRAM_URL } from '../../lib/nav'
 import { cn } from '../../lib/cn'
 import { Logo } from '../brand/Logo'
@@ -140,7 +141,7 @@ export function Header() {
                 @gleaming.ant
               </a>
               <span className="inline-flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+                <ShieldTickIcon className="h-4 w-4" aria-hidden="true" />
                 Fully insured
               </span>
             </div>

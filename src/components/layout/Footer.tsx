@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom'
-import { Clock, Mail, MessageCircle, Phone, ShieldCheck } from 'lucide-react'
+import {
+  ChatBubbleIcon,
+  ClockIcon,
+  MailIcon,
+  PhoneIcon,
+  ShieldTickIcon,
+} from '../brand/icons-brand'
 import { InstagramIcon } from '../brand/icons'
 import { fetchBusinessHours } from '../../lib/api'
 import { useAsync } from '../../lib/useAsync'
@@ -120,7 +126,7 @@ export function Footer() {
                   @gleaming.ant
                 </a>
                 <span className="inline-flex items-center gap-1.5 text-pane/80">
-                  <ShieldCheck className="h-4 w-4 text-teal" aria-hidden="true" />
+                  <ShieldTickIcon className="h-4 w-4" aria-hidden="true" />
                   Fully insured
                 </span>
               </div>
@@ -167,19 +173,19 @@ export function Footer() {
               <h2 className="text-sm font-bold uppercase tracking-wider text-white">Get in touch</h2>
               <ul className="mt-4 space-y-3">
                 <ContactRow
-                  icon={<Phone className="h-4 w-4" />}
+                  icon={<PhoneIcon className="h-4 w-4" />}
                   label="Phone"
                   value={contact.phone}
                   href={isPlaceholder(contact.phone) ? undefined : `tel:${contact.phone.replace(/\s/g, '')}`}
                 />
                 <ContactRow
-                  icon={<Mail className="h-4 w-4" />}
+                  icon={<MailIcon className="h-4 w-4" />}
                   label="Email"
                   value={contact.email}
                   href={isPlaceholder(contact.email) ? undefined : `mailto:${contact.email}`}
                 />
                 <ContactRow
-                  icon={<MessageCircle className="h-4 w-4" />}
+                  icon={<ChatBubbleIcon className="h-4 w-4" />}
                   label="WhatsApp"
                   value={contact.whatsapp}
                   href={waHref}
@@ -187,7 +193,7 @@ export function Footer() {
               </ul>
               <div className="mt-6">
                 <h3 className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-white">
-                  <Clock className="h-4 w-4 text-teal" aria-hidden="true" />
+                  <ClockIcon className="h-4 w-4" aria-hidden="true" />
                   Hours
                 </h3>
                 <div className="mt-3">
