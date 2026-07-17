@@ -1,0 +1,125 @@
+import { ArrowRight, CalendarCheck, ShieldCheck, Smile } from 'lucide-react'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
+import { Container } from '../components/ui/Container'
+import { Button } from '../components/ui/Button'
+import { SectionHeading } from '../components/ui/SectionHeading'
+import { PageHeader } from '../components/layout/PageHeader'
+import { Logo } from '../components/brand/Logo'
+import { Sparkle } from '../components/brand/Sparkle'
+
+const VALUES = [
+  {
+    icon: CalendarCheck,
+    title: 'Reliable',
+    body: "We turn up when we say we will, on a schedule you can set your watch by. That's the whole point of a regular round.",
+  },
+  {
+    icon: Smile,
+    title: 'Friendly',
+    body: "A local face, not a faceless firm. We're easy to talk to and happy to work around you and your home.",
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Fully insured',
+    body: 'Your home is protected while we work. Fully insured means peace of mind for you and for us.',
+  },
+]
+
+export default function About() {
+  useDocumentTitle('About Us | Gleaming Ant')
+
+  return (
+    <>
+      <PageHeader
+        eyebrow="About"
+        title="The small team behind seriously clean windows"
+        lead="Gleaming Ant is a young, hardworking local business, launched in 2026 to keep Essex homes bright — one friendly, reliable visit at a time."
+      />
+
+      {/* Story */}
+      <section className="py-14 sm:py-16" aria-labelledby="story-heading">
+        <Container size="narrow">
+          <h2 id="story-heading" className="font-display text-2xl font-bold text-ink">
+            Our story
+          </h2>
+          <div className="mt-5 space-y-4 leading-relaxed text-ink">
+            <p>
+              [PLACEHOLDER: the founder's story — who started Gleaming Ant, their background, and why they
+              set up a window &amp; exterior cleaning business in Essex. A short, personal paragraph in the
+              owner's own words works best here.]
+            </p>
+            <p>
+              [PLACEHOLDER: what makes Gleaming Ant different — the approach to a clean, the kit used, and
+              the promise made to every customer. Keep it honest and specific; no invented claims.]
+            </p>
+            <p>
+              What we can tell you today: we're small, we're local, and we care about doing the job
+              properly. Whether it's a regular window round or the full frontage, you'll get the same
+              reliable, friendly, fully insured service every time.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Values */}
+      <section className="border-y border-pane bg-pane/35 py-14 sm:py-16" aria-labelledby="values-heading">
+        <Container>
+          <SectionHeading
+            id="values-heading"
+            align="center"
+            eyebrow="What we stand for"
+            title="Reliable, friendly, fully insured"
+            description="It's the promise in our bio, and it's how we run every single visit."
+          />
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {VALUES.map((value) => (
+              <div key={value.title} className="rounded-card border border-pane bg-white p-7 shadow-card">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-teal-deep text-white">
+                  <value.icon className="h-6 w-6" aria-hidden="true" />
+                </span>
+                <h3 className="mt-5 font-display text-xl font-bold text-ink">{value.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft">{value.body}</p>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* Why the ant */}
+      <section className="py-14 sm:py-16" aria-labelledby="ant-heading">
+        <Container>
+          <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.3fr]">
+            <div className="relative flex justify-center">
+              <div className="absolute -inset-4 rounded-[2rem] bg-pane/50 blur-2xl" aria-hidden="true" />
+              <div className="relative rounded-card border border-pane bg-white px-10 py-12 shadow-card">
+                <Sparkle size={18} className="absolute right-6 top-6 text-teal/40" />
+                <Logo badgeSize={72} withTagline />
+              </div>
+            </div>
+            <div>
+              <h2 id="ant-heading" className="font-display text-2xl font-bold text-ink">
+                Why the ant?
+              </h2>
+              <div className="mt-4 space-y-4 leading-relaxed text-ink">
+                <p>
+                  Ants are small, but they're famously diligent — and far stronger than they look. That's
+                  exactly the spirit we bring to every job: quietly hardworking, paying attention to the
+                  details, and shifting more than you'd expect from a small local team.
+                </p>
+                <p>
+                  It's also a reminder to stay humble and do the little things well. A streak-free sill.
+                  A gutter checked twice. The kind of care that keeps customers on the round for years.
+                </p>
+              </div>
+              <div className="mt-7">
+                <Button to="/booking" rightIcon={<ArrowRight className="h-4 w-4" />}>
+                  Get an instant quote
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+    </>
+  )
+}
