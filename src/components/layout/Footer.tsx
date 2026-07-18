@@ -10,7 +10,7 @@ import { InstagramIcon } from '../brand/icons'
 import { fetchBusinessHours } from '../../lib/api'
 import { useAsync } from '../../lib/useAsync'
 import { useSiteSettings } from '../../lib/settings'
-import { formatTime } from '../../lib/format'
+import { formatTime, formatWhatsAppDisplay } from '../../lib/format'
 import { PRIMARY_NAV, INSTAGRAM_URL } from '../../lib/nav'
 import type { BusinessHours } from '../../lib/types'
 import { Logo } from '../brand/Logo'
@@ -101,6 +101,9 @@ export function Footer() {
   const waHref = isPlaceholder(contact.whatsapp)
     ? undefined
     : `https://wa.me/${contact.whatsapp.replace(/[^\d]/g, '')}`
+  const waDisplay = isPlaceholder(contact.whatsapp)
+    ? contact.whatsapp
+    : formatWhatsAppDisplay(contact.whatsapp)
 
   return (
     <footer className="on-deep mt-auto">
@@ -187,7 +190,7 @@ export function Footer() {
                 <ContactRow
                   icon={<ChatBubbleIcon className="h-4 w-4" />}
                   label="WhatsApp"
-                  value={contact.whatsapp}
+                  value={waDisplay}
                   href={waHref}
                 />
               </ul>

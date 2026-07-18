@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { CheckCircle2, TriangleAlert } from 'lucide-react'
 import { submitContactMessage } from '../lib/api'
+import { formatWhatsAppDisplay } from '../lib/format'
 import { InstagramIcon } from '../components/brand/icons'
 import { ChatBubbleIcon, MailIcon, PhoneIcon } from '../components/brand/icons-brand'
 import { useSiteSettings } from '../lib/settings'
@@ -105,6 +106,9 @@ export default function Contact() {
   const waHref = isPlaceholder(contact.whatsapp)
     ? undefined
     : `https://wa.me/${contact.whatsapp.replace(/[^\d]/g, '')}`
+  const waDisplay = isPlaceholder(contact.whatsapp)
+    ? contact.whatsapp
+    : formatWhatsAppDisplay(contact.whatsapp)
 
   return (
     <>
@@ -223,7 +227,7 @@ export default function Contact() {
                   <ContactDetail
                     icon={<ChatBubbleIcon className="h-4 w-4" />}
                     label="WhatsApp"
-                    value={contact.whatsapp}
+                    value={waDisplay}
                     href={waHref}
                   />
                 </div>

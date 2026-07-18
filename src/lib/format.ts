@@ -13,6 +13,17 @@ export function formatGBP(n: number): string {
   )
 }
 
+/**
+ * Display a WhatsApp number (stored digits-only with country code for wa.me,
+ * e.g. "447497386385") as the familiar local format, e.g. "07497 386385".
+ * Falls back to the input unchanged if it isn't a UK-style number.
+ */
+export function formatWhatsAppDisplay(stored: string): string {
+  const digits = stored.replace(/[^\d]/g, '')
+  const local = digits.startsWith('44') ? '0' + digits.slice(2) : digits
+  return local.length === 11 ? `${local.slice(0, 5)} ${local.slice(5)}` : stored
+}
+
 /** Parse 'YYYY-MM-DD' (or a Date) into a local Date, avoiding UTC day-shift. */
 function toLocalDate(input: string | Date): Date | null {
   if (input instanceof Date) return Number.isNaN(input.getTime()) ? null : input
