@@ -411,7 +411,9 @@ export default function BookingPage() {
 
               <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_22rem]">
                 <div className="min-w-0 pb-28 lg:pb-0">
-                  {renderStep(data)}
+                  <div key={step} className="step-swap">
+                    {renderStep(data)}
+                  </div>
 
                   {submitError && isLastStep && (
                     <div

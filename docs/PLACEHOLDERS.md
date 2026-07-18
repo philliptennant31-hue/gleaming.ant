@@ -32,7 +32,7 @@ change. Others are page copy or assets.
 
 | Item | Where it appears | What we need |
 |---|---|---|
-| Window cleaning method | Service detail (window) long description | Confirm method (e.g. pure-water reach & wash) |
+| Window cleaning method | Service detail (window) long description | Confirm method (e.g. pure-water reach & wash). **The real photos now on this page visually confirm a pure-water reach-&-wash (water-fed pole) system; reword the copy to state it once Antony confirms. DB text, editable in admin.** |
 | Gutter equipment | Service detail (gutter) long description | Confirm equipment (e.g. camera-guided vacuum) |
 | Conservatory roof | Service detail (conservatory) long description | Confirm whether roof cleaning is included or priced separately |
 | Solar price basis | Service detail (solar) long description | Per panel or per system |
@@ -66,8 +66,34 @@ surcharge). Base is Basildon.
 | Item | Where it appears | What we need |
 |---|---|---|
 | About-page story | About → "Our story" | **DRAFTED (2026-07-18, source: gleamingant.co.uk)** → real copy written from their founder facts (Antony, local Essex window cleaner; reputation via reliability, attention to detail and high standards; homes + commercial across Essex from Basildon). The `[PLACEHOLDER]` markers are gone. **Pending: Antony's sign-off on tone/wording** in his own words. |
-| Real job photos | Home "See the difference" section | Before/after photos (they have some on Instagram) to feature on the site |
+| Real job photos | Home "See the difference", About "Our story", Window service detail | **RESOLVED (2026-07-18, source: client's live site gleamingant.co.uk)** — shipped six genuine phone-shot photos to `public/images/work/` (founder-at-van, a reach-&-wash action shot, and window + door before/after pairs). Pending Antony's blessing and the original full-res files. See the note below. |
 | Official logo files | Everywhere (`Logo`/`BrandBadge`, `AntMascot`, favicon) | Site artwork was rebuilt as SVG to faithfully match the supplied logo (tilted four-pane window, squeegee, ant, sparkles, GLEAMING ANT / WINDOW & EXTERIOR CLEANING banners). A high-res raster export (PNG/transparent) from the client's original file is still welcome for social/OG images and print. |
+
+**On the real job photos (2026-07-18):** We shipped only images that read as genuine jobs, in
+keeping with the honest-signals brief:
+
+- `antony-van.jpg` — Antony at his kitted pure-water van (About "Our story").
+- `antony-reach-pole.jpg` — action shot, reach-&-washing an upstairs window (Window service detail).
+- `window-before.jpg` / `window-after.jpg` — the same dormer windows, dirty then clear.
+- `door-before.jpg` / `door-after.jpg` — the same uPVC door frame and sill, grimy then white.
+
+Shown via a reusable draggable `BeforeAfterSlider` (Home "See the difference" and the Window service
+detail) and a framed founder portrait on About. Total shipped weight ~1.0 MB (all `loading="lazy"`,
+explicit width/height, no CLS). The hero stays illustration — no photo in the hero.
+
+Deliberately **excluded**: the polished, mostly 16:9 per-service image sets on their live site
+(driveway, roof, patio, render, solar, gutter, plus glossy "yellow-glove-and-suds" and
+"squeegee-against-sky" window shots) read as stock or AI-generated marketing imagery, so they were
+**not** used as work examples. A few half-cleaned demonstration shots (render/brickwork/patio) looked
+plausibly genuine but had no in-scope placement and weren't verifiable as Gleaming Ant jobs, so they
+were left out too (when in doubt, exclude). Antony's own originals are welcome to replace or extend
+this set.
+
+These photos also **visually confirm the window method is a pure-water reach-&-wash (water-fed pole)
+system** — the van carries the reel, hoses and carbon reach poles, and the action shot shows the pole
+in use. The window service's `long_description` still carries a `[PLACEHOLDER: confirm method]` marker
+(see Services table above); it can be reworded to state the pure-water method as soon as Antony
+confirms, and it's DB text editable in the admin (no code change).
 
 ## Legal
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, Info } from 'lucide-react'
 import { ClockIcon, MapPinIcon, SparkleBurstIcon } from '../brand/icons-brand'
 import { cn } from '../../lib/cn'
@@ -42,6 +42,19 @@ function Row({
 /** The itemised quote body. Reused in the sidebar, the mobile sheet and step 5. */
 export function QuoteContent({ quote, bandLabel, frequencyLabel, showFrequency, postcode }: QuoteView) {
   const hasLines = quote !== null && quote.lines.length > 0
+  const total = quote?.total ?? null
+
+  // Brief highlight when the total changes — never on first render, and stilled
+  // under prefers-reduced-motion by the global reset in index.css.
+  const prevTotal = useRef<number | null>(null)
+  const [tick, setTick] = useState(0)
+  useEffect(() => {
+    if (total === null) return
+    if (prevTotal.current !== null && prevTotal.current !== total) {
+      setTick((t) => t + 1)
+    }
+    prevTotal.current = total
+  }, [total])
 
   return (
     <div>
@@ -98,7 +111,15 @@ export function QuoteContent({ quote, bandLabel, frequencyLabel, showFrequency, 
 
           <div className="my-3 border-t border-pane" />
 
-          <Row label="Total" value={formatGBP(quote.total)} strong />
+          <Row
+            label="Total"
+            value={
+              <span key={tick} className={cn('inline-block', tick > 0 && 'quote-tick')}>
+                {formatGBP(quote.total)}
+              </span>
+            }
+            strong
+          />
 
           <dl className="mt-4 space-y-1.5 text-xs text-ink-soft">
             <div className="flex items-center gap-1.5">

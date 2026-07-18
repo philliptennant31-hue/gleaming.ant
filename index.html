@@ -2,6 +2,12 @@
 <html lang="en-GB">
   <head>
     <meta charset="UTF-8" />
+    <!-- Progressive enhancement flag: lets CSS start scroll-reveal elements
+         hidden only when JS is available. Runs before paint, so no flash and,
+         crucially, without JS the class is absent and all content stays visible. -->
+    <script>
+      document.documentElement.classList.add('js')
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#2E655E" />

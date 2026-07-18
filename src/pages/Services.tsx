@@ -9,6 +9,7 @@ import { Button } from '../components/ui/Button'
 import { LoadingState, ErrorState, EmptyState } from '../components/ui/states'
 import { PageHeader } from '../components/layout/PageHeader'
 import { ServiceCard } from '../components/site/ServiceCard'
+import { Reveal } from '../components/site/Reveal'
 
 export default function Services() {
   useDocumentTitle('Our Services | Gleaming Ant')
@@ -38,11 +39,11 @@ export default function Services() {
             />
           )}
           {!loading && !error && data && data.length > 0 && (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <Reveal as="div" stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {data.map((service) => (
                 <ServiceCard key={service.id} service={service} />
               ))}
-            </div>
+            </Reveal>
           )}
         </Container>
       </section>

@@ -12,6 +12,7 @@ import { Badge } from '../components/ui/Badge'
 import { LoadingState, ErrorState, EmptyState } from '../components/ui/states'
 import { ServiceIcon } from '../components/brand/ServiceIcon'
 import { Sparkle } from '../components/brand/Sparkle'
+import { BeforeAfterSlider } from '../components/site/BeforeAfterSlider'
 
 interface DetailData {
   service: Service | null
@@ -49,6 +50,98 @@ function PriceTable({ service, bands, prices }: { service: Service; bands: Prope
           })}
         </tbody>
       </table>
+    </div>
+  )
+}
+
+/**
+ * Real-job media, keyed by service slug. Only services with genuine, honest
+ * photos appear here (see docs/PLACEHOLDERS.md). We deliberately do NOT attach
+ * photos to services whose only source imagery looked like stock/AI.
+ */
+interface BeforeAfterPair {
+  before: string
+  after: string
+  beforeAlt: string
+  afterAlt: string
+  label: string
+}
+interface ServiceMedia {
+  action?: { src: string; alt: string; caption: string; width: number; height: number }
+  intro: string
+  pairs: BeforeAfterPair[]
+}
+const SERVICE_MEDIA: Record<string, ServiceMedia> = {
+  'window-cleaning': {
+    action: {
+      src: '/images/work/antony-reach-pole.jpg',
+      alt: 'Antony cleaning an upstairs window from the ground with a water-fed pole',
+      caption: 'Pure-water reach-and-wash, no ladders, out on our Essex round.',
+      width: 750,
+      height: 1000,
+    },
+    intro: 'Real jobs from our round, phone-shot as we work. Drag the sliders to compare.',
+    pairs: [
+      {
+        before: '/images/work/window-before.jpg',
+        after: '/images/work/window-after.jpg',
+        beforeAlt: 'Dormer windows before cleaning, the glass dulled with dirt and watermarks',
+        afterAlt: 'The same dormer windows after cleaning, the glass left clear',
+        label: 'Windows',
+      },
+      {
+        before: '/images/work/door-before.jpg',
+        after: '/images/work/door-after.jpg',
+        beforeAlt: 'A uPVC door frame and sill before cleaning, marked with grime and black spotting',
+        afterAlt: 'The same uPVC door frame and sill after cleaning, back to clean white',
+        label: 'Frames & doors',
+      },
+    ],
+  },
+}
+
+function ServiceMediaBlock({ slug }: { slug: string }) {
+  const media = SERVICE_MEDIA[slug]
+  if (!media) return null
+
+  return (
+    <div className="mt-10 border-t border-pane pt-8">
+      <div className="grid gap-6 sm:grid-cols-[minmax(0,13rem)_1fr] sm:items-center">
+        {media.action && (
+          <figure className="m-0">
+            <img
+              src={media.action.src}
+              alt={media.action.alt}
+              width={media.action.width}
+              height={media.action.height}
+              loading="lazy"
+              decoding="async"
+              className="h-auto w-full rounded-card border border-pane object-cover shadow-card"
+            />
+            <figcaption className="mt-2 text-xs leading-relaxed text-ink-soft">{media.action.caption}</figcaption>
+          </figure>
+        )}
+        <div>
+          <h2 className="font-display text-xl font-bold text-ink">See the difference</h2>
+          <p className="mt-2 text-sm leading-relaxed text-ink-soft">{media.intro}</p>
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-5 sm:grid-cols-2">
+        {media.pairs.map((pair) => (
+          <div key={pair.label}>
+            <BeforeAfterSlider
+              beforeSrc={pair.before}
+              afterSrc={pair.after}
+              beforeAlt={pair.beforeAlt}
+              afterAlt={pair.afterAlt}
+              width={600}
+              height={555}
+            />
+            <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-ink-soft">{pair.label}</p>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -122,6 +215,8 @@ export default function ServiceDetail() {
                 <p className="mt-6 whitespace-pre-line leading-relaxed text-ink">
                   {data.service.long_description}
                 </p>
+
+                <ServiceMediaBlock slug={data.service.slug} />
 
                 <div className="mt-8">
                   <Button

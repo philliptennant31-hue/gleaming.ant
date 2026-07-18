@@ -1,73 +1,83 @@
-# First contact: the Instagram approach
+# First contact: the casual approach
 
-The full pitch (PITCH.md) is for the conversation after they reply. The DM has
-one job only: get them to open the link on their phone. Everything else the
-site says for itself.
+The full pitch (PITCH.md) is for the conversation after he replies. The first
+message has one job: get him to open the link on his phone and quote his own
+house. Everything else the site says for itself.
 
-## Before you send anything
+The framing has changed since his website went live: he is no longer a man with
+an under-construction page, he is a man who just proudly launched a site. So the
+message must do two things the old draft didn't: **compliment the new site**,
+and position ours as **the bit that plugs into it** — never a replacement.
 
-1. Warm the account for a day or two first. Follow them, like two or three of
-   their posts, reply to a story if one comes up. A DM from an account they
-   recognise lands in the main inbox; a cold one sits in Requests unseen.
-2. Send from your most credible account: real name, real face or logo, a bio
-   that says what you do. They will check it before they tap anything.
-3. Pre-send checks on the site: decide whether pressure washing should be
-   visible (it is currently live at a £90 placeholder), and run one test
-   booking so you know everything is warm.
-4. Send at a sensible hour, ideally early evening when a sole trader is off
-   the tools and on their phone.
+## Before sending anything
+
+1. Warm the account for a day or two: follow, like a couple of posts, react to
+   a story. A DM from a familiar account lands in the main inbox, not Requests.
+2. Send from your most credible profile: real name, real face, bio that says
+   what you build.
+3. Pre-send checks on the site: run one fresh test booking end-to-end so
+   everything is warm, and glance at the admin to make sure demo data looks
+   tidy. Remember every price on there is a placeholder — the message must
+   pre-empt that before he finds it.
+4. Send early evening, when a sole trader is off the tools and on his phone.
+   WhatsApp beats DM if the number's fair game — 07497 386385 is on his site,
+   so it is.
 
 ## The message
 
-Keep it to three short paragraphs. No costs, no tech talk, no feature list.
-The one thing it must pre-empt: they will see prices they never set, so tell
-them the prices are examples before they find them.
+Three short paragraphs, casual, zero tech talk. Compliment first, gift second,
+easy exit third.
 
-> Hi, hope you don't mind the message. I'm Phillip, I build websites for local
-> trades, and I kept seeing your posts. Your ant logo is honestly too good to
-> be sitting on an under-construction page, so I went ahead and built the site
-> it deserves. Have a look on your phone: gleaming-ant.netlify.app
+> Hi Antony — Phillip here, I build booking systems for local trades. Saw your
+> new site go up, it looks great. While I was on it I ended up building the
+> bit it doesn't do yet: instant quotes and online booking, in your brand,
+> with your services and your areas already loaded.
 >
-> It's your logo, your services and your areas, with online booking that
-> prices jobs on the spot, and a little assistant that answers questions.
-> The prices in there are just examples for you to change. If you like it,
-> it can be live on gleamingant.co.uk within a day. If it's not for you,
-> no hard feelings, I'll take it down.
+> Have a go on your phone — price up your own house, takes about a minute:
+> gleaming-ant.netlify.app. The prices in there are just examples for you to
+> change. There's even a little assistant that answers questions from your
+> actual price list.
 >
-> Fancy a quick call, or a coffee if you're local-ish to me? Happy to show
-> you round it either way.
+> If it's useful, it plugs into your site with one link change — your website
+> stays exactly as it is. If it's not for you, no hard feelings, I'll quietly
+> take it down. Happy to show you round on a call or over a coffee either way.
 
-Shorter variant if you would rather open lighter:
+Shorter variant, more casual still:
 
-> Hi, random one: I build websites for local trades and your ant logo
-> deserved better than an under-construction page. So I built you one:
-> gleaming-ant.netlify.app. Prices in there are just examples. If you like
-> it, it's yours; if not, I'll take it down, no hard feelings.
+> Random one — I build booking systems for local trades and your new site
+> caught my eye (it's good!). So I built the missing piece: instant quotes +
+> online booking, already in your brand. Try pricing up your own house:
+> gleaming-ant.netlify.app. Prices are just examples. Useful → it plugs into
+> your site with one link change. Not for you → I'll take it down, no drama.
 
 ## What to leave out of the first message
 
-- Your fee and the running costs. That is a conversation, not an opener.
-- The tech stack. They do not care, and it reads like a sales sheet.
-- The word "AI" doing heavy lifting. Sparkle introduces itself better than
-  a DM can.
-- Anything that needs a decision bigger than "tap the link".
+- Your fee and the running costs. Conversation, not opener.
+- Anything that could read as criticism of his new site. Not the privacy
+  policy, not the testimonials, not the stock photos. Those are for late in a
+  friendly conversation, as favours (PITCH.md section 8).
+- The tech stack, and "AI" doing heavy lifting. Sparkle introduces itself.
+- Anything needing a decision bigger than "tap the link".
 
-## After you send
+## After sending
 
-- Read but no reply after 4 or 5 days: one gentle bump, then leave it.
-  "No worries either way. If it's not useful I'll quietly take it down at
-  the end of the month." A soft deadline gives a reason to answer without
-  any pressure.
-- They reply with interest: offer the call or meet, and take PITCH.md as
-  your script. The live demo is the meeting: book a clean on their phone,
-  watch it land in the admin on yours.
-- They ask "how much" in the DM: give the running costs straight away
-  (roughly £8 to £10 a month plus their domain, everything on) and save
-  your build fee for the call. Answering the cheap number fast builds
-  trust; the bigger conversation deserves a voice.
+- Read, no reply after 4–5 days: one gentle bump, then leave it. "No worries
+  either way — if it's not useful I'll quietly take it down at the end of the
+  month." A soft deadline invites an answer without pressure.
+- He replies with interest: offer the call or coffee, and take PITCH.md as the
+  script. The live demo IS the meeting: he books a clean on his phone, you
+  show it landing in the admin on yours.
+- He asks "how much" in the DM: give the running-cost number straight
+  (£8–10 a month all-on) and save the fee for a voice conversation. Answering
+  the cheap number fast builds trust.
+- He says "I just paid for a website": agree with him — "and it's good, keep
+  it. This isn't a website, it's the booking system your website links to."
+  That sentence is the whole positioning; know it cold.
 
 ## Why this framing works
 
-You are not selling a promise, you are handing them something that already
-exists with their name on it. The only ask in the whole message is a tap.
-Everything after that is them convincing themselves.
+He can't hear "your site is missing X" a week after launching it — that's an
+attack on his judgement. He CAN hear "your site is great, here's what it can
+do now." You're not selling a promise or a rebuild: the thing already exists,
+loaded with his business, and the only ask in the message is a tap. From
+there, his own house price does the selling.

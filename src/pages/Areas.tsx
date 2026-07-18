@@ -10,10 +10,11 @@ import { Badge } from '../components/ui/Badge'
 import { Card } from '../components/ui/Card'
 import { LoadingState, ErrorState, EmptyState } from '../components/ui/states'
 import { PageHeader } from '../components/layout/PageHeader'
+import { Reveal } from '../components/site/Reveal'
 
 function AreaCard({ area }: { area: ServiceArea }) {
   return (
-    <Card className="flex h-full flex-col p-6">
+    <Card interactive className="flex h-full flex-col p-6">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-pane text-teal-deep">
@@ -73,15 +74,15 @@ export default function Areas() {
             />
           )}
           {!loading && !error && data && data.length > 0 && (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <Reveal as="div" stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {data.map((area) => (
                 <AreaCard key={area.id} area={area} />
               ))}
-            </div>
+            </Reveal>
           )}
 
           {/* Outside-area reassurance */}
-          <div className="mt-10 rounded-card border border-pane bg-pane/30 p-7 sm:p-9">
+          <Reveal className="mt-10 rounded-card border border-pane bg-pane/30 p-7 sm:p-9">
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="max-w-2xl">
                 <h2 className="font-display text-xl font-bold text-ink">Just outside our patch?</h2>
@@ -94,7 +95,7 @@ export default function Areas() {
                 Ask about your area
               </Button>
             </div>
-          </div>
+          </Reveal>
         </Container>
       </section>
     </>

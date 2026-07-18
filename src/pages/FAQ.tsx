@@ -8,6 +8,7 @@ import { Container } from '../components/ui/Container'
 import { Button } from '../components/ui/Button'
 import { LoadingState, ErrorState, EmptyState } from '../components/ui/states'
 import { PageHeader } from '../components/layout/PageHeader'
+import { Reveal } from '../components/site/Reveal'
 
 const CATEGORY_LABELS: Record<string, string> = {
   general: 'General',
@@ -68,7 +69,7 @@ export default function FAQ() {
           )}
 
           {!loading && !error && data && data.length > 0 && (
-            <div className="space-y-10">
+            <Reveal as="div" stagger className="space-y-10">
               {orderedCategories(data).map((category) => {
                 const items = data.filter((f) => f.category === category)
                 if (items.length === 0) return null
@@ -85,7 +86,7 @@ export default function FAQ() {
                   </div>
                 )
               })}
-            </div>
+            </Reveal>
           )}
 
           <div className="mt-12 flex flex-col items-center gap-4 rounded-card bg-pane/40 p-8 text-center">

@@ -161,6 +161,113 @@
   50% { opacity: 1; transform: scale(1.08); }
 }
 
+/* A single soft shine crosses the hero badge once on load — a "just cleaned"
+   glint that follows the same −3° tilt as the squeegee wipe. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-sheen { position: relative; }
+  .hero-sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(104deg, transparent 38%, rgba(255, 255, 255, 0.22) 50%, transparent 62%);
+    transform: translateX(-130%);
+    animation: hero-sheen 1000ms cubic-bezier(0.22, 1, 0.36, 1) 640ms both;
+  }
+}
+@keyframes hero-sheen {
+  to { transform: translateX(130%); }
+}
+
+/* ------------------------------------------------------------------ *
+ * Scroll reveal — progressive enhancement
+ * Content is fully visible by default. Only when JS is present (html.js,
+ * set by an inline script in index.html before paint) AND the user hasn't
+ * asked for reduced motion do elements start hidden and fade + rise in as
+ * they enter the viewport. No JS or reduced-motion => always visible.
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  html.js .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 400ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  html.js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Stagger direct children (grids / lists) once the group is revealed. */
+  html.js .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 400ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  html.js .reveal-stagger.is-visible > * {
+    opacity: 1;
+    transform: none;
+  }
+  html.js .reveal-stagger.is-visible > *:nth-child(1) { transition-delay: 0ms; }
+  html.js .reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 60ms; }
+  html.js .reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 120ms; }
+  html.js .reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 180ms; }
+  html.js .reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 240ms; }
+  html.js .reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 300ms; }
+  html.js .reveal-stagger.is-visible > *:nth-child(n + 7) { transition-delay: 340ms; }
+}
+
+/* The live quote total gives a brief tick when it changes (never on first
+   render — the class is only added on a real change). */
+@media (prefers-reduced-motion: no-preference) {
+  .quote-tick { animation: quote-tick 260ms ease-out; }
+}
+@keyframes quote-tick {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.045); color: var(--color-teal-deep); }
+  100% { transform: scale(1); }
+}
+
+/* Booking wizard: each step fades and slides a touch as it takes over. */
+@media (prefers-reduced-motion: no-preference) {
+  .step-swap { animation: step-swap 200ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+}
+@keyframes step-swap {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Chat launcher: a soft amber ripple asks for attention roughly every 9s.
+   The ripple sits at the tail of the cycle so it doesn't fire the instant the
+   page loads. Removed for good once the panel has been opened (see ChatWidget). */
+@media (prefers-reduced-motion: no-preference) {
+  .chat-attention::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    pointer-events: none;
+    box-shadow: 0 0 0 0 rgba(224, 145, 61, 0);
+    animation: chat-attention 9s ease-out infinite;
+  }
+}
+@keyframes chat-attention {
+  0%, 80% { box-shadow: 0 0 0 0 rgba(224, 145, 61, 0); }
+  86% { box-shadow: 0 0 0 0 rgba(224, 145, 61, 0.5); }
+  100% { box-shadow: 0 0 0 12px rgba(224, 145, 61, 0); }
+}
+
+/* Before/after slider: the divider eases only during the one-time hint sweep;
+   while dragging it tracks the pointer 1:1 (the component drops this class). */
+.ba-hinting .ba-reveal,
+.ba-hinting .ba-divider {
+  transition: left 620ms cubic-bezier(0.22, 1, 0.36, 1), clip-path 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* Reduced-motion safety net — honour the user on every animation. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

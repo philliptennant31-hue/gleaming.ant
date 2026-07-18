@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { InstagramIcon } from '../components/brand/icons'
 import {
@@ -21,6 +22,9 @@ import { Sparkle } from '../components/brand/Sparkle'
 import { TrustChips } from '../components/site/TrustChips'
 import { ServiceCard } from '../components/site/ServiceCard'
 import { HeroArt } from '../components/site/HeroArt'
+import { Reveal } from '../components/site/Reveal'
+import { BeforeAfterSlider } from '../components/site/BeforeAfterSlider'
+import { cn } from '../lib/cn'
 
 const STEPS = [
   {
@@ -72,13 +76,107 @@ function ServicesSection() {
             />
           )}
           {!loading && !error && data && data.length > 0 && (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <Reveal as="div" stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {data.map((service) => (
                 <ServiceCard key={service.id} service={service} />
               ))}
-            </div>
+            </Reveal>
           )}
         </div>
+      </Container>
+    </section>
+  )
+}
+
+const WORK_PAIRS = {
+  window: {
+    tab: 'Windows',
+    before: '/images/work/window-before.jpg',
+    after: '/images/work/window-after.jpg',
+    beforeAlt: 'Dormer windows before cleaning, the glass dulled with dirt and watermarks',
+    afterAlt: 'The same dormer windows after cleaning, the glass left clear',
+    caption: 'Dormer windows on an Essex home, cleaned with our pure-water poles.',
+  },
+  door: {
+    tab: 'Doors & frames',
+    before: '/images/work/door-before.jpg',
+    after: '/images/work/door-after.jpg',
+    beforeAlt: 'A uPVC door frame and sill before cleaning, marked with grime and black spotting',
+    afterAlt: 'The same uPVC door frame and sill after cleaning, back to clean white',
+    caption: 'A uPVC door frame and sill brought back to white on the same round.',
+  },
+} as const
+
+type WorkPairKey = keyof typeof WORK_PAIRS
+
+/** "See the difference": honest before/after sliders from real jobs, + IG CTA. */
+function WorkShowcase() {
+  const [pair, setPair] = useState<WorkPairKey>('window')
+  const active = WORK_PAIRS[pair]
+
+  return (
+    <section className="py-16 sm:py-20" aria-labelledby="work-heading">
+      <Container>
+        <Reveal className="mx-auto max-w-2xl">
+          <SectionHeading
+            id="work-heading"
+            align="center"
+            eyebrow="See the difference"
+            title="Real jobs, shot on the round"
+            description="No stock photos here. These are our own before-and-afters, taken on the job across Essex. Drag the slider to see the change."
+          />
+        </Reveal>
+
+        <Reveal className="mx-auto mt-9 max-w-2xl">
+          <div role="group" aria-label="Choose a before and after example" className="flex justify-center gap-2">
+            {(Object.keys(WORK_PAIRS) as WorkPairKey[]).map((key) => {
+              const selected = key === pair
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => setPair(key)}
+                  className={cn(
+                    'rounded-full px-4 py-1.5 text-sm font-semibold transition-colors',
+                    selected
+                      ? 'bg-teal-deep text-white'
+                      : 'border border-pane bg-white text-ink-soft hover:bg-pane/50',
+                  )}
+                >
+                  {WORK_PAIRS[key].tab}
+                </button>
+              )
+            })}
+          </div>
+
+          <BeforeAfterSlider
+            key={pair}
+            beforeSrc={active.before}
+            afterSrc={active.after}
+            beforeAlt={active.beforeAlt}
+            afterAlt={active.afterAlt}
+            width={600}
+            height={555}
+            className="mt-5"
+          />
+
+          <p className="mt-4 text-center text-sm text-ink-soft">
+            {active.caption} Real customer jobs, phone-shot as we work.
+          </p>
+
+          <div className="mt-6 flex justify-center">
+            <Button
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              variant="secondary"
+              leftIcon={<InstagramIcon className="h-4 w-4" />}
+            >
+              See more on Instagram
+            </Button>
+          </div>
+        </Reveal>
       </Container>
     </section>
   )
@@ -145,7 +243,7 @@ export default function Home() {
             title="Three steps to spotless"
             description="No phone tag, no vague promises. Here's exactly how a Gleaming Ant clean goes."
           />
-          <ol className="mt-12 grid gap-6 md:grid-cols-3">
+          <Reveal as="ol" stagger className="mt-12 grid gap-6 md:grid-cols-3">
             {STEPS.map((step, i) => (
               <li key={step.title} className="relative rounded-card border border-pane bg-white p-7 shadow-card">
                 <div className="flex items-center gap-4">
@@ -160,14 +258,14 @@ export default function Home() {
                 <p className="mt-2 text-sm leading-relaxed text-ink-soft">{step.body}</p>
               </li>
             ))}
-          </ol>
+          </Reveal>
         </Container>
       </section>
 
       {/* ---------------------------------------------------------- Areas strip */}
       <section className="py-14" aria-labelledby="areas-strip-heading">
         <Container>
-          <div className="flex flex-col items-center gap-6 text-center">
+          <Reveal className="flex flex-col items-center gap-6 text-center">
             <h2 id="areas-strip-heading" className="font-display text-2xl font-bold text-ink">
               Out and about across Essex
             </h2>
@@ -185,7 +283,7 @@ export default function Home() {
             <Button to="/areas" variant="ghost" rightIcon={<ArrowRight className="h-4 w-4" />}>
               Check we cover your postcode
             </Button>
-          </div>
+          </Reveal>
         </Container>
       </section>
 
@@ -213,7 +311,7 @@ export default function Home() {
               </div>
             </div>
 
-            <ul className="grid gap-4 sm:grid-cols-2">
+            <Reveal as="ul" stagger className="grid gap-4 sm:grid-cols-2">
               {[
                 { h: 'Best price per visit', p: 'Regular 4-weekly cleans are our lowest rate.' },
                 { h: 'Never a chore', p: "We remember your schedule so you don't have to." },
@@ -225,35 +323,19 @@ export default function Home() {
                   <p className="mt-1.5 text-sm text-pane/80">{item.p}</p>
                 </li>
               ))}
-            </ul>
+            </Reveal>
           </div>
         </Container>
       </section>
       <WipeEdge color="var(--color-teal-deep)" fillSide="up" className="-mt-px" />
 
-      {/* -------------------------------------------------------- Our work / IG */}
-      <section className="py-16" aria-labelledby="work-heading">
-        <Container>
-          <div className="flex flex-col items-center gap-6 rounded-card border border-pane bg-white p-8 text-center shadow-card sm:p-12">
-            <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pane text-teal-deep">
-              <InstagramIcon className="h-7 w-7" />
-            </span>
-            <SectionHeading
-              align="center"
-              title="See the difference for yourself"
-              description="Our before-and-afters live on Instagram. [PLACEHOLDER: real job photos to feature on the site]"
-            />
-            <Button href={INSTAGRAM_URL} target="_blank" rel="noreferrer" variant="secondary" leftIcon={<InstagramIcon className="h-4 w-4" />}>
-              Follow @gleaming.ant
-            </Button>
-          </div>
-        </Container>
-      </section>
+      {/* -------------------------------------------------- See the difference */}
+      <WorkShowcase />
 
       {/* ------------------------------------------------------------ Final CTA */}
       <section className="border-t border-pane bg-pane/40 py-16 sm:py-20" aria-labelledby="cta-heading">
         <Container>
-          <div className="flex flex-col items-center gap-6 text-center">
+          <Reveal className="flex flex-col items-center gap-6 text-center">
             <Sparkle size={22} className="text-teal" />
             <SectionHeading
               id="cta-heading"
@@ -269,7 +351,7 @@ export default function Home() {
                 Message us
               </Button>
             </div>
-          </div>
+          </Reveal>
         </Container>
       </section>
     </>

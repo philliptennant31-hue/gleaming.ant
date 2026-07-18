@@ -120,6 +120,7 @@ export default function ChatWidget() {
   const navigate = useNavigate()
 
   const [open, setOpen] = useState(false)
+  const [hasEverOpened, setHasEverOpened] = useState(false)
   const [messages, setMessages] = useState<DisplayMessage[]>(loadTranscript)
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
@@ -163,6 +164,7 @@ export default function ChatWidget() {
 
   const handleOpen = useCallback(() => {
     setOpen(true)
+    setHasEverOpened(true)
     setMessages((prev) => (prev.length === 0 ? [greetingMessage()] : prev))
   }, [])
 
@@ -330,6 +332,7 @@ export default function ChatWidget() {
         className={cn(
           'fixed right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-amber text-ink shadow-lift transition-colors hover:bg-amber-deep sm:right-6',
           aboveQuoteBar ? 'bottom-20 sm:bottom-6' : 'bottom-5 sm:bottom-6',
+          !hasEverOpened && 'chat-attention',
         )}
       >
         <Sparkle size={26} />

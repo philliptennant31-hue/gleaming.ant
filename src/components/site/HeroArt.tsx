@@ -12,7 +12,7 @@ export function HeroArt() {
       {/* soft glow */}
       <div className="absolute -inset-8 rounded-[2.5rem] bg-teal/25 blur-3xl" aria-hidden="true" />
 
-      <div className="relative">
+      <div className="hero-sheen relative">
         <BrandBadge
           size={480}
           className="h-auto w-full drop-shadow-[0_30px_60px_-30px_rgba(34,65,79,0.55)]"

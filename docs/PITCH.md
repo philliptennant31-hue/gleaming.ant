@@ -1,173 +1,145 @@
-# Gleaming Ant: the website, built and ready to go live
+# Gleaming Ant: the booking system your new website is missing
 
 ## 1. What this is
 
-I built this for Gleaming Ant before asking, because I think it fits you. It is a
-complete website and booking system in your own brand: your logo, your colours,
-your services and your areas. Window cleaning, solar panels, fascia and soffit,
-conservatories and gutter clearing are all in there, priced and ready to book. It
-covers Basildon, Laindon, Benfleet, Canvey Island, South Woodham Ferrers,
-Stanford-le-Hope and the streets around them. It is already live at a preview link
-you can open right now on your phone. The day you say yes, it moves to
-gleamingant.co.uk and goes live for real.
+Antony has a website now, and it's a good one: professional, SEO-savvy, his brand
+everywhere. Do not pitch against it. Pitch the layer it doesn't have.
 
-## 2. Guided demo
+Every "GET A FREE QUOTE" button on gleamingant.co.uk opens a contact form. Then
+Antony does admin: reply, quote, arrange, remember. This build is what those
+buttons should open instead — instant priced quotes, self-serve booking, a back
+office, and an AI assistant — already in his brand, with his real services, his
+real towns, his real photos and his own story in it. His website stays exactly
+where it is, run by whoever runs it. We add the missing half.
 
-A suggested order for showing it. One thing to open, one thing to say.
+Live now at gleaming-ant.netlify.app. The day he says yes, it becomes
+book.gleamingant.co.uk (one DNS record) and his site's quote buttons point at it
+(one link change for his web person). Nothing else on his site changes.
 
-1. **Home page and logo**
-   - Show: the home page, your logo built into the header, the ant at work.
-   - Say: "This is your brand on the web. Same ant, same colours, nothing off the shelf."
-2. **Price list**
-   - Show: the pricing page, every service and property size in one table.
-   - Say: "These are a starting point for you to sign off, not what I am telling you to charge."
-3. **A live booking, on a phone**
-   - Show: book a clean for an SS7 address; watch the quote build as you pick services, size and how often.
-   - Say: "A customer gets an instant price and books in five steps. It already knows SS7 is your patch."
-4. **Sparkle, the assistant**
-   - Show: open the chat, ask a normal question, then tap "Continue your quote" into a part-filled booking.
-   - Say: "This is Sparkle. It answers only from your real prices and areas, then hands the customer to a booking."
-5. **The booking lands with you**
-   - Show: on my phone, open the admin; the booking you just made is sitting there as pending.
-   - Say: "Every booking arrives here the moment it is made. This is your side of the site."
-6. **Confirm and notify**
-   - Show: open the booking, press Confirm, then the email and text drafts written for the customer.
-   - Say: "One tap confirms it. The message to the customer is written for you. You read it and send."
-7. **You run it yourself**
-   - Show: change a price, adjust opening hours, edit an area, all in the admin.
-   - Say: "Prices, hours, areas, services, all yours to edit here. No developer needed."
-8. **The day you say yes**
-   - Show: the preview link, then gleamingant.co.uk.
-   - Say: "It is live here today. Say yes and it moves to your own domain, same day."
+## 2. What his site does today, and what this adds on top
 
-## 3. What is included
+This is the heart of the pitch. Not "your site is missing things" — "look what
+your site can *do* now."
 
-**The website**
-- A fast, mobile-first site in your brand: home, services, pricing, about, contact and FAQ.
-- Your own words carried through, including your Reliable, Friendly, Fully Insured line.
-- Built to be found: proper page structure, a sitemap and search basics in place.
+| His website today | With this plugged in |
+|---|---|
+| "Get a free quote" → contact form → wait for a reply | Instant price on screen in under a minute, 24/7 |
+| Quote handled by message, from memory | Quote priced from his real rate card, every time, bundles included |
+| Booking arranged back-and-forth | Customer picks a real slot from his live diary and books it |
+| Enquiries land in an inbox | Bookings land in a dashboard: confirm, complete, note, message — one tap |
+| Prices, areas, hours live in his head | All editable by him in the admin, no web person needed |
+| Questions answered when he's off the tools | Sparkle answers from his real catalogue any hour, then hands the customer into a part-filled quote |
+| "Friendly reminders before every visit" (his promise) | Reminder and confirmation messages drafted for him, ready to send |
+| Photos sit on the website | His real before/afters, interactive slider, doing sales work |
+| Contact form with no privacy policy | Proper privacy page and data locked down at the database |
 
-**Instant quotes and booking**
-- A five-step booking: services, property size and frequency, address, date and time, review.
-- Live pricing as they go, with bundle discounts, regular or one-off cleans, and postcode area matching.
-- Every booking gets its own reference and lands in your dashboard as pending.
+The last row is a favour, not an attack — see section 8.
 
-**The management dashboard**
-- One place to run it: bookings, prices, services, hours, blocked dates, areas, messages and site details.
-- Confirm, complete, cancel and add notes to any booking.
-- Change almost anything on the public site yourself, no code change.
+## 3. Guided demo
 
-**Sparkle, the AI assistant**
-- A friendly chat helper on every page.
-- It answers only from your real catalogue, links only to real pages, and never invents a price.
-- It can hand a customer straight into a part-filled quote.
+The demo is the pitch. It now speaks his exact business — same 8 services as his
+menu, his 15 towns, his founder story, his van, his real before/afters. The
+moment to engineer is him realising: *"it already knows my business."*
 
-**Notifications**
-- Confirm a booking and the customer message is written for you: email and text drafts, ready to send.
-- Automatic confirmation emails can be switched on later, no code change (see costs).
+Hand him your phone. One thing to open, one thing to say.
 
-**Security and privacy basics**
-- Customer data is locked down at the database, not just hidden on the page.
-- No passwords to manage: you sign in with a one-time magic link to your email.
-- The site takes no card payments and stores no bank details.
+1. **Home**
+   - Show: his brand, the ant, his real before/after slider.
+   - Say: "This isn't a mock-up — these are your jobs, your services, your towns."
+2. **A live quote, his own house**
+   - Show: Get an instant quote → pick Window + Gutter → his bedroom count → his postcode (any CM or SS — Billericay, Basildon, Wickford all know they're his patch) → watch the price build, bundle discount included.
+   - Say: "That's what your quote button could do. Ninety seconds, priced, no admin."
+3. **Book it**
+   - Show: pick a real slot, book it, reference on screen.
+   - Say: "Your diary only offers times you actually work. You control the hours."
+4. **Sparkle**
+   - Show: ask it "do you do roof cleaning in Wickford?" then tap through into the part-filled quote.
+   - Say: "It only answers from your real prices and areas. It never makes things up."
+5. **The booking lands with him**
+   - Show: the admin on your phone — the booking sitting there as pending.
+   - Say: "This is your side. Confirm it and the customer message is drafted for you — that's your 'friendly reminder before every visit' promise, automated."
+6. **He runs it himself**
+   - Show: change a price, flip a service on or off, edit hours.
+   - Say: "No developer, no waiting. Yours to run."
+7. **How it plugs in**
+   - Show: his own site's GET A FREE QUOTE button.
+   - Say: "Your website doesn't change. Your web person points this button at book.gleamingant.co.uk — one line — and you're live."
 
-## 4. What I need from you
+## 4. What I still need from Antony
 
-None of this stops us going live. The site works today with sensible defaults. Each
-answer makes it more yours, and most of it you can edit yourself in the dashboard
-afterwards. Here is the lot, in one sitting.
+Much shorter than it used to be — his own website answered most of it (services,
+towns, contact details, his story, commercial work, the reminder promise, real
+photos). What's left:
 
-- **Contact details.** Your public phone, email, and a WhatsApp number if you use one, or tell me there is none.
-- **Prices, your sign-off.** Go through the price list and confirm or change each figure. The seeded numbers are placeholders to react to, not a suggestion of what to charge. Tell me the basis for a couple: solar per panel or per system, and whether a conservatory price includes the roof.
-- **Opening hours.** Your real hours, so the booking calendar only offers times you actually work.
-- **Policies.** What happens if it rains, and how access and payment work when the customer is out.
-- **Your story.** A few lines on how Gleaming Ant started and what makes you different, in your own words.
-- **Photos.** A handful of before and after shots, your Instagram ones are ideal, to show real work.
-- **Which extra services are real.** Confirm what you actually offer: pressure washing for drives and patios, commercial work, and the method for windows and gutters. I switch on only what is real.
-- **Payment.** How customers pay, for example bank transfer or card, and when payment is due.
-
-Two more when you have them: a high-resolution copy of your logo file for social
-images (the site artwork is already rebuilt to match it), and a solicitor to approve
-the privacy and terms pages before launch.
+- **Prices, his sign-off.** Every figure in there is a placeholder to react to. Especially the five services new to the build: driveway, roof, patio, render, brickwork — roof/render/brick are marked "confirmed after a quick survey," check he's happy with that framing.
+- **Opening hours.** Seeded Mon–Fri 8–5, Sat 9–2. Confirm.
+- **Policies.** Rain policy, access/payment when the customer is out, how he takes payment.
+- **Blessing on what I borrowed.** His founder story, the van photo and the before/afters came from his own site — confirm he's happy, and get originals if he has better.
+- **Postcode edges.** I've mapped his 15 towns to postcodes; he'll know the streets I've got wrong.
+- **WhatsApp.** Confirm 07497 386385 is the right number for booking handoff messages.
 
 ## 5. Running costs, honest numbers
 
-These are real prices, checked on 17 July 2026. They move over time, so treat them as a snapshot, not a promise.
+Real prices, checked 17 July 2026. Snapshots, not promises.
 
-**Running the site as it stands today**
-
-| What | Cost | Notes |
-|---|---|---|
-| Website hosting | £0 | Netlify free tier: 300 credits a month, about 15 GB of traffic. Far more than a local trade site uses. |
-| Database and sign-in | £0 | Supabase free tier: 500 MB, plenty for your bookings. It sleeps after 7 days with no activity, and a live site with real visitors never goes quiet that long. |
-| Sparkle the assistant | About 1.2p a message | Claude Sonnet 5. About £3.70 a month at 300 messages. The free rules-only mode costs nothing per message. |
-| Domain | About £10 to £15 a year | gleamingant.co.uk renewal, wherever it is held. |
-
-Total: roughly £0 to £4 a month, plus the domain.
-
-**The full service, everything switched on**
+**As it stands today**
 
 | What | Cost | Notes |
 |---|---|---|
-| Website hosting | £0 | Netlify free tier, as above. |
-| Database and sign-in | £0 | Supabase free tier, as above. |
-| Nightly backups | £0 | A free scheduled job I set up that copies your whole database to private storage every night. Your data is small, so this covers you well. |
-| Sparkle the assistant | About £3.70 a month | Claude Sonnet 5 at 300 messages, as above. |
-| Confirmation emails | £0 | Resend free tier: 3,000 emails a month, 100 a day. Well inside your numbers. |
-| Automated texts | About £4 to £5 a month | Twilio: about 4p a text. Around 100 texts covers a confirmation and a day-before reminder for 50 cleans. A one-way sender name is free, so no number to rent. |
+| Hosting | £0 | Netlify free tier — far more than a local trade site uses. |
+| Database and sign-in | £0 | Supabase free tier, plenty for his bookings. Nightly backup job keeps it warm and copied. |
+| Sparkle | ~1.2p a message | Claude Sonnet 5; about £3.70/month at 300 messages. Rules-only fallback is free. |
+| Subdomain | £0 | book.gleamingant.co.uk is a record on the domain he already owns. |
 
-Total: roughly £8 to £10 a month, plus the domain.
+**Everything switched on** (auto emails via Resend £0, texts via Twilio ~£4–5/month): roughly **£8–10 a month total**. Full breakdown, ownership of accounts, and the Supabase Pro upgrade trigger are unchanged from before: seven accounts, all created in Gleaming Ant's name at handover, the business owns every piece.
 
-One optional upgrade for later: Supabase Pro at about £19 a month swaps the free backup job for managed daily backups with one-click restore and support. To be clear about when you would need it: not for space or traffic. The free tier holds years of bookings for a round this size, and the nightly backup keeps the database active, so the free tier's sleep rule never bites. The £19 buys recovery speed and someone to call. The day this system runs your whole week's diary, that is worth having. I will tell you when you are there; today you are not.
+**Alongside his current site.** This build costs him nothing extra on his website side: his site stays on its hosting, his arrangement with his web person stays whatever it is. This is an addition, not a migration. (If he ever wants the whole site in one place, that door exists — it's a DNS decision, not a rebuild. Don't pitch it; let him arrive there.)
 
-**The accounts, and who owns them**
+## 6. The day he says yes
 
-Seven accounts run the lot: Netlify (hosting), Supabase (database and sign-in), GitHub (the code), Anthropic (the assistant), Resend (email), Twilio (texts) and the domain registrar. Each is created in Gleaming Ant's name at handover, with me kept on as a helper for support. The business owns every piece outright.
-
-**Against staying on Wix**
-
-A Wix plan with booking built in runs £16 to £25 a month (Core to Business, billed yearly, before VAT). If a Wix plan lapses, the site drops offline: the address falls back to a wix.com link, Wix ads appear, and bookings stop. You cannot export a Wix site to run elsewhere, so the build stays locked to their platform. Here, the code, the data and the design are yours in standard formats, the hosting is portable, and at your traffic the hosting bill is zero. The domain is yours in both worlds while it is renewed. Moving it is a repoint, not a repurchase.
-
-Dollar prices converted at $1 = £0.74 (mid-market, 17 July 2026). Hosting, database, the assistant, email and texts all bill in US dollars, so the pound figures shift with the rate. Claude Sonnet 5 is on introductory pricing until 31 August 2026, which makes the assistant about a third cheaper today, and the budget model, Claude Haiku 4.5, is about 0.4p a message.
-
-## 6. The day you say yes
-
-- Point gleamingant.co.uk at the site. That is a DNS change, about an hour including the wait for it to take effect.
-- Add your email as an admin so you can sign in.
-- Drop in the answers from the list above.
+- His web person adds one CNAME: `book` → gleaming-ant.netlify.app. Two minutes' work, breaks nothing.
+- Same person points the site's quote buttons at book.gleamingant.co.uk.
+- Antony's email goes on the admin; he signs in with a magic link.
+- His real prices go in (I load them with him on a call, or he does it from the dashboard).
 - Live the same day.
-- Nothing changes for anyone already using the preview link. It keeps working.
 
-## 7. Later, if you want it
+## 7. Cost to him
 
-All optional, for whenever it suits you.
+**Start with a free month, his real prices loaded.** Once his customers have
+booked themselves in for four weeks, going back to the form will feel like
+going back to a paper diary. That's the sale doing itself.
 
-- Automated text confirmations, and a day-before reminder to cut no-shows. About 4p a text, roughly £4 to £5 a month at your volume (see costs).
-- A booking-received email the moment someone books, before you even confirm.
-- A before and after gallery pulled from your Instagram.
-- Customer reviews on the site.
-- A tie-in with your Google Business profile.
-- Seasonal offers run through the built-in discounts.
+Recommended structure for an add-on service (my view):
 
-## 8. Cost to you
+- **£0 setup** — "it's already built; I built it because I rate what you're doing."
+- **£[FOR PHILLIP: 49?] a month**, everything running: hosting, Sparkle, backups, small changes and support included. Anchor it to jobs, not software: one extra driveway job a month is £110+; one regular window customer is worth £200+ a year. It costs less than half of one small job.
+- **Cancel anytime, data exported, no hard feelings.** The form on his site keeps working regardless — there's genuinely no lock-in, which is exactly why he can say yes quickly.
 
-It starts with a free month. Use the site for 30 days. If it has not brought
-you work by then, I take it down and we are square.
+Alternative if he'd rather own it outright (the original two-package structure):
+**£500 handover** (everything in his name, an hour's walkthrough) or **£750
+launch** (I do the lot with him and stay on call for the first month), then
+~£10/month running costs in his own name, optional £15/month for me to keep an
+eye on it. Offer this only if he bristles at subscriptions — sole traders often
+prefer owning to renting, and both roads are fine for us.
 
-After that, two ways to have it:
+[FOR PHILLIP: pick the recommended number and whether the outright option stays
+on the table before the meeting — don't decide prices live in the room.]
 
-**The handover, £500.** Everything moves into your name: the domain live on
-gleamingant.co.uk, your email on the admin, backups running, and an hour on
-the phone showing you round. You fill in your details and prices yourself
-from a simple checklist.
+## 8. The favours file
 
-**The launch, £750.** The handover, plus I do the lot with you. We sit down
-once and go through the question list, I put every answer in, set up the
-confirmation emails, and stay on call through your first month live.
+Things spotted on his site that his web person should fix. Never open with
+these — they read as rubbishing his purchase. Drop them in late, generously,
+as free value ("by the way…"). Each one quietly shows you notice things.
 
-**Day to day after that.** The site runs in your name at about £10 a month
-all in, cheaper than a Wix plan, and you are not tied to me at all. Small
-things, message me and I will usually just sort them. Bigger jobs from the
-list above, a fixed price agreed before I start. If you would rather I
-formally keep an eye on the whole thing, £15 a month covers monitoring,
-backup checks and small changes without the clock running.
+- **No privacy policy anywhere** — his contact form collects names, postcodes, phones and emails; UK GDPR requires a privacy notice. Ours ships with one. Offer him a template for his site either way.
+- **The testimonials** are first-name-only and read agency-written; if they're not real customers, they should come down (fake reviews are now explicitly illegal in the UK — DMCC Act). The better play: collect real Google reviews, and this build can show them later.
+- **The per-service photo sets** on his site (driveway, roof, render…) look stock or AI-generated. His REAL photos — the van, the before/afters — are far more convincing, which is why this build uses only those.
+- A leftover "Hello world" blog post from the WordPress install is still live.
+
+## 9. Later, if he wants it
+
+- Automated text confirmations and day-before reminders (~4p a text).
+- Real Google reviews on the site, and a Google Business profile tie-in.
+- A before/after gallery fed from his Instagram.
+- Seasonal offers through the built-in discounts.
+- Programmatic town-by-service pages (the SEO play his agency did by hand, generated from his live data) — only relevant if the site ever consolidates here.

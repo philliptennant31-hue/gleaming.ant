@@ -19,6 +19,7 @@ import { SectionHeading } from '../components/ui/SectionHeading'
 import { LoadingState, ErrorState } from '../components/ui/states'
 import { PageHeader } from '../components/layout/PageHeader'
 import { ServiceIcon } from '../components/brand/ServiceIcon'
+import { Reveal } from '../components/site/Reveal'
 
 interface PricingData {
   services: Service[]
@@ -89,7 +90,7 @@ function FrequencyExplainer({ frequencies }: { frequencies: Frequency[] }) {
   const cheapest = Math.min(...frequencies.map((f) => f.multiplier))
 
   return (
-    <div className="grid gap-4 sm:grid-cols-3">
+    <Reveal as="div" stagger className="grid gap-4 sm:grid-cols-3">
       {frequencies.map((freq) => {
         const savings = oneOff > 0 ? Math.round((1 - freq.multiplier / oneOff) * 100) : 0
         const isBest = freq.multiplier === cheapest
@@ -119,7 +120,7 @@ function FrequencyExplainer({ frequencies }: { frequencies: Frequency[] }) {
           </div>
         )
       })}
-    </div>
+    </Reveal>
   )
 }
 
