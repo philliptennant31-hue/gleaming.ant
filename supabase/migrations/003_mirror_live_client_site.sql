@@ -1,5 +1,5 @@
-﻿-- ============================================================
--- Gleaming Ant â€” 003: mirror the live client site
+-- ============================================================
+-- Gleaming Ant — 003: mirror the live client site
 -- ------------------------------------------------------------
 -- Source of truth: the client's own live site gleamingant.co.uk
 -- (scraped 2026-07-18). This migration replaces our earlier
@@ -19,12 +19,12 @@
 --   * Guide prices for the five new services are our estimates.
 --   * Postcode-prefix boundaries per town are inferred from UK
 --     postcode geography. Several outcodes intentionally appear in
---     more than one town row; because every area carries a Â£0.00
+--     more than one town row; because every area carries a £0.00
 --     surcharge, any longest-prefix match is equivalent for pricing.
 -- ============================================================
 
 -- ------------------------------------------------------------
--- a) SERVICES â€” mirror the client's catalogue and running order
+-- a) SERVICES — mirror the client's catalogue and running order
 -- ------------------------------------------------------------
 
 -- Core window cleaning stays put at the top.
@@ -100,7 +100,7 @@ where s.slug in ('driveway-cleaning','roof-cleaning','patio-cleaning','render-cl
 on conflict (service_id, band_code) do nothing;
 
 -- ------------------------------------------------------------
--- b) SERVICE AREAS â€” their Essex-wide coverage, zero surcharge
+-- b) SERVICE AREAS — their Essex-wide coverage, zero surcharge
 -- ------------------------------------------------------------
 
 -- Their base and headline area is "Basildon"; rename our old combined
@@ -128,51 +128,51 @@ update public.service_areas sa set
        is_active = true,
        sort_order = v.sort_order
   from (values
-    ('Billericay',                        '{CM12,CM11}'::text[],           true,  1),
-    ('Basildon',                          '{SS13,SS14,SS15,SS16}'::text[], true,  2),
-    ('Wickford',                          '{SS11,SS12}'::text[],           true,  3),
-    ('Brentwood',                         '{CM14,CM13,CM15}'::text[],      true,  4),
-    ('Shenfield',                         '{CM15}'::text[],                true,  5),
-    ('Hutton',                            '{CM13}'::text[],                true,  6),
-    ('Ingatestone',                       '{CM4}'::text[],                 true,  7),
-    ('Stock',                             '{CM4}'::text[],                 true,  8),
-    ('Ramsden Heath',                     '{CM11}'::text[],                true,  9),
-    ('Mountnessing',                      '{CM15}'::text[],                true, 10),
-    ('Chelmsford',                        '{CM1,CM2}'::text[],             true, 11),
-    ('Danbury',                           '{CM3}'::text[],                 true, 12),
-    ('Great Baddow',                      '{CM2}'::text[],                 true, 13),
-    ('Rayleigh',                          '{SS6}'::text[],                 true, 14),
-    ('South Woodham Ferrers',             '{CM3}'::text[],                 true, 15),
-    ('Essex & surrounding areas',  '{SS,CM,CO,RM,IG}'::text[],      false, 99)
+    ('Billericay',                  '{CM12,CM11}'::text[],           true,  1),
+    ('Basildon',                    '{SS13,SS14,SS15,SS16}'::text[], true,  2),
+    ('Wickford',                    '{SS11,SS12}'::text[],           true,  3),
+    ('Brentwood',                   '{CM14,CM13,CM15}'::text[],      true,  4),
+    ('Shenfield',                   '{CM15}'::text[],                true,  5),
+    ('Hutton',                      '{CM13}'::text[],                true,  6),
+    ('Ingatestone',                 '{CM4}'::text[],                 true,  7),
+    ('Stock',                       '{CM4}'::text[],                 true,  8),
+    ('Ramsden Heath',               '{CM11}'::text[],                true,  9),
+    ('Mountnessing',                '{CM15}'::text[],                true, 10),
+    ('Chelmsford',                  '{CM1,CM2}'::text[],             true, 11),
+    ('Danbury',                     '{CM3}'::text[],                 true, 12),
+    ('Great Baddow',                '{CM2}'::text[],                 true, 13),
+    ('Rayleigh',                    '{SS6}'::text[],                 true, 14),
+    ('South Woodham Ferrers',       '{CM3}'::text[],                 true, 15),
+    ('Essex & surrounding areas',   '{SS,CM,CO,RM,IG}'::text[],      false, 99)
   ) as v(name, prefixes, is_core, sort_order)
  where sa.name = v.name;
 
 insert into public.service_areas (name, postcode_prefixes, surcharge, is_core, is_active, sort_order)
 select v.name, v.prefixes, 0.00, v.is_core, true, v.sort_order
   from (values
-    ('Billericay',                        '{CM12,CM11}'::text[],           true,  1),
-    ('Basildon',                          '{SS13,SS14,SS15,SS16}'::text[], true,  2),
-    ('Wickford',                          '{SS11,SS12}'::text[],           true,  3),
-    ('Brentwood',                         '{CM14,CM13,CM15}'::text[],      true,  4),
-    ('Shenfield',                         '{CM15}'::text[],                true,  5),
-    ('Hutton',                            '{CM13}'::text[],                true,  6),
-    ('Ingatestone',                       '{CM4}'::text[],                 true,  7),
-    ('Stock',                             '{CM4}'::text[],                 true,  8),
-    ('Ramsden Heath',                     '{CM11}'::text[],                true,  9),
-    ('Mountnessing',                      '{CM15}'::text[],                true, 10),
-    ('Chelmsford',                        '{CM1,CM2}'::text[],             true, 11),
-    ('Danbury',                           '{CM3}'::text[],                 true, 12),
-    ('Great Baddow',                      '{CM2}'::text[],                 true, 13),
-    ('Rayleigh',                          '{SS6}'::text[],                 true, 14),
-    ('South Woodham Ferrers',             '{CM3}'::text[],                 true, 15),
-    ('Essex & surrounding areas',  '{SS,CM,CO,RM,IG}'::text[],      false, 99)
+    ('Billericay',                  '{CM12,CM11}'::text[],           true,  1),
+    ('Basildon',                    '{SS13,SS14,SS15,SS16}'::text[], true,  2),
+    ('Wickford',                    '{SS11,SS12}'::text[],           true,  3),
+    ('Brentwood',                   '{CM14,CM13,CM15}'::text[],      true,  4),
+    ('Shenfield',                   '{CM15}'::text[],                true,  5),
+    ('Hutton',                      '{CM13}'::text[],                true,  6),
+    ('Ingatestone',                 '{CM4}'::text[],                 true,  7),
+    ('Stock',                       '{CM4}'::text[],                 true,  8),
+    ('Ramsden Heath',               '{CM11}'::text[],                true,  9),
+    ('Mountnessing',                '{CM15}'::text[],                true, 10),
+    ('Chelmsford',                  '{CM1,CM2}'::text[],             true, 11),
+    ('Danbury',                     '{CM3}'::text[],                 true, 12),
+    ('Great Baddow',                '{CM2}'::text[],                 true, 13),
+    ('Rayleigh',                    '{SS6}'::text[],                 true, 14),
+    ('South Woodham Ferrers',       '{CM3}'::text[],                 true, 15),
+    ('Essex & surrounding areas',   '{SS,CM,CO,RM,IG}'::text[],      false, 99)
   ) as v(name, prefixes, is_core, sort_order)
  where not exists (
    select 1 from public.service_areas sa where sa.name = v.name
  );
 
 -- ------------------------------------------------------------
--- c) FAQs â€” confirm the answers their site now makes public
+-- c) FAQs — confirm the answers their site now makes public
 -- ------------------------------------------------------------
 
 -- Commercial work is confirmed (was a placeholder).
@@ -195,7 +195,7 @@ where not exists (
 );
 
 -- ------------------------------------------------------------
--- d) SETTINGS â€” real contact details
+-- d) SETTINGS — real contact details
 -- ------------------------------------------------------------
 -- whatsapp is stored as digits only: Contact.tsx / Footer.tsx build the
 -- link as https://wa.me/<digits>, giving https://wa.me/447497386385.
