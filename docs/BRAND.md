@@ -5,12 +5,12 @@ Derived from the company's logo and Instagram presence (instagram.com/gleaming.a
 
 ## The business (facts — do not invent beyond these)
 
-- **Gleaming Ant** — Window & Exterior Cleaning, Essex, UK.
-- Services: window cleaning, solar panels, fascia & soffit, conservatories, gutter clearing "& more".
-- Areas: Basildon, Laindon, Benfleet, Canvey Island, South Woodham Ferrers, Stanford-le-Hope + surrounding.
-- Positioning from their own bio: **Reliable • Friendly • Fully Insured**, regular & one-off cleans, free quotes.
-- Young, hardworking local business (launched 2026). The ant is the brand: small, diligent, stronger than it looks.
-- No public phone/email yet → use `[PLACEHOLDER]` markers wired to `site_settings`.
+- **Gleaming Ant** — Window & Exterior Cleaning, Essex, UK. Founded by **Antony** (the "Ant" in the name), a local window cleaner. Facts below sourced from their own live site gleamingant.co.uk (2026-07-18).
+- Services (their menu order): window, driveway, roof, gutter, patio, solar panel, render, brickwork cleaning — plus fascias & soffits and conservatories (mentioned in their prose).
+- Areas: Basildon base, covering Essex county-wide — Billericay, Basildon, Wickford, Brentwood, Shenfield, Hutton, Ingatestone, Stock, Ramsden Heath, Mountnessing, Chelmsford, Danbury, Great Baddow, Rayleigh, South Woodham Ferrers + surrounding. No travel surcharge.
+- Positioning from their own bio: **Reliable • Friendly • Fully Insured**, regular & one-off cleans, free quotes. They also promise a friendly reminder before every visit. Residential & commercial (offices, shops, schools).
+- Young, hardworking local business (launched 2026). The ant is the brand: small, diligent, stronger than it looks — with a nod to Antony.
+- Public contact: 07497 386385 · hello@gleamingant.co.uk · WhatsApp 447497386385 (stored in `site_settings`).
 - Currency £, UK spelling ("specialising", "colour"), UK postcodes.
 
 ## Logo

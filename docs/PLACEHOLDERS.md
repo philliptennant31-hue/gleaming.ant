@@ -10,17 +10,21 @@ change. Others are page copy or assets.
 
 ## Contact details
 
-| Item | Where it appears | What we need |
+**RESOLVED (2026-07-18, source: client's live site gleamingant.co.uk)** — mirrored in
+`003_mirror_live_client_site.sql` (`site_settings.contact`) and `index.html` JSON-LD.
+
+| Item | Where it appears | Status |
 |---|---|---|
-| Phone number | Footer, Contact page, `index.html` JSON-LD `telephone` | Public phone number → set `site_settings.contact.phone` (and the JSON-LD value) |
-| Email address | Footer, Contact page | Public email → set `site_settings.contact.email` |
-| WhatsApp | Footer, Contact page | WhatsApp number (or confirm none) → set `site_settings.contact.whatsapp` |
+| Phone number | Footer, Contact page, `index.html` JSON-LD `telephone` | **DONE** → `07497 386385` (JSON-LD `+44 7497 386385`) |
+| Email address | Footer, Contact page, `index.html` JSON-LD `email` | **DONE** → `hello@gleamingant.co.uk` |
+| WhatsApp | Footer, Contact page | **DONE** → `447497386385` (link `https://wa.me/447497386385`) |
 
 ## Pricing
 
 | Item | Where it appears | What we need |
 |---|---|---|
 | Real prices sign-off | Pricing matrix, every Service detail, booking quotes (Phase 2) | Confirm/adjust the seeded prices in `service_prices` and each `services.base_price`. Note shown on Pricing: "indicative and awaiting final sign-off" |
+| **New-service guide prices** | Driveway, Roof, Patio, Render, Brickwork detail + pricing matrix | **Antony's real numbers.** Their live site lists these services but no prices, so `003_mirror_live_client_site.sql` seeds our own guide prices (driveway £90–150, roof £395–650, patio £70–120, render/brickwork £150–260). Each carries a "guide price, confirmed…" note; roof/render/brickwork are survey-priced in reality. |
 | Per-service price basis | Service detail `price_note` | Solar (per panel vs system), conservatory (roof included?), etc. — confirm basis |
 | Payment methods | Home "How it works" step 3, FAQ "How do I pay?", Terms §5 | Which methods (bank transfer, card, direct debit…) and when payment is due |
 
@@ -32,8 +36,22 @@ change. Others are page copy or assets.
 | Gutter equipment | Service detail (gutter) long description | Confirm equipment (e.g. camera-guided vacuum) |
 | Conservatory roof | Service detail (conservatory) long description | Confirm whether roof cleaning is included or priced separately |
 | Solar price basis | Service detail (solar) long description | Per panel or per system |
-| Pressure washing offered? | Currently hidden (`is_active = false`) | Confirm whether driveway/patio pressure washing is offered; if so, activate + price |
-| Commercial cleaning | FAQ "Do you clean commercial properties?" | Confirm commercial offering (shops, offices, schools) |
+| ~~Pressure washing offered?~~ | — | **RESOLVED (2026-07-18)** → their menu splits this into **Driveway Cleaning** and **Patio Cleaning** (both now active); the old combined `pressure-washing` row is retired (`is_active = false`). |
+| Service catalogue | Services list, nav, pricing | **RESOLVED (2026-07-18, source: gleamingant.co.uk)** → mirrored their full menu: window, driveway, roof, gutter, patio, solar, render, brickwork (+ fascia/soffit and conservatory, confirmed in their homepage prose). Prices still pending (row above). |
+| ~~Commercial cleaning~~ | FAQ "Do you clean commercial properties?" | **RESOLVED (2026-07-18)** → confirmed yes: homes, offices, shops, schools and a wide range of commercial buildings. |
+
+## Coverage areas
+
+**RESOLVED (2026-07-18, source: gleamingant.co.uk locations page)** — `003_mirror_live_client_site.sql`
+replaces the old South-Essex list + £7.50 surcharge with their real Essex-wide coverage: 15 named
+towns (Billericay, Basildon, Wickford, Brentwood, Shenfield, Hutton, Ingatestone, Stock, Ramsden
+Heath, Mountnessing, Chelmsford, Danbury, Great Baddow, Rayleigh, South Woodham Ferrers) plus an
+"Essex & surrounding areas" catch-all, **all £0.00 surcharge** (their site has no travel
+surcharge). Base is Basildon.
+
+| Item | Where it appears | What we need |
+|---|---|---|
+| Postcode-prefix boundaries | `service_areas.postcode_prefixes`, booking area-match, chat | **Inferred from UK postcode geography — needs Antony's confirmation.** Their site names towns but not outcodes. Some outcodes intentionally sit in more than one town (e.g. CM15 covers Brentwood/Shenfield/Mountnessing; CM4 covers Ingatestone/Stock; CM1x may read as Billericay). Because every area is £0.00 surcharge, this only affects the *area name* shown, never coverage or price. Confirm the per-town outcodes if precise labelling matters. |
 
 ## Policies & hours
 
@@ -47,7 +65,7 @@ change. Others are page copy or assets.
 
 | Item | Where it appears | What we need |
 |---|---|---|
-| About-page story | About → "Our story" (two marked paragraphs) | Founder's story in their own words + what makes Gleaming Ant different (no invented claims) |
+| About-page story | About → "Our story" | **DRAFTED (2026-07-18, source: gleamingant.co.uk)** → real copy written from their founder facts (Antony, local Essex window cleaner; reputation via reliability, attention to detail and high standards; homes + commercial across Essex from Basildon). The `[PLACEHOLDER]` markers are gone. **Pending: Antony's sign-off on tone/wording** in his own words. |
 | Real job photos | Home "See the difference" section | Before/after photos (they have some on Instagram) to feature on the site |
 | Official logo files | Everywhere (`Logo`/`BrandBadge`, `AntMascot`, favicon) | Site artwork was rebuilt as SVG to faithfully match the supplied logo (tilted four-pane window, squeegee, ant, sparkles, GLEAMING ANT / WINDOW & EXTERIOR CLEANING banners). A high-res raster export (PNG/transparent) from the client's original file is still welcome for social/OG images and print. |
 

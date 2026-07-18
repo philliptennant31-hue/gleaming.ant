@@ -3,7 +3,6 @@ import { MapPinIcon } from '../components/brand/icons-brand'
 import { useAsync } from '../lib/useAsync'
 import { fetchServiceAreas } from '../lib/api'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
-import { formatGBP } from '../lib/format'
 import type { ServiceArea } from '../lib/types'
 import { Container } from '../components/ui/Container'
 import { Button } from '../components/ui/Button'
@@ -40,9 +39,7 @@ function AreaCard({ area }: { area: ServiceArea }) {
 
       <p className="mt-4 flex items-center gap-2 text-sm text-ink-soft">
         <Check className="h-4 w-4 text-teal" aria-hidden="true" />
-        {area.surcharge > 0
-          ? `Covered with a small ${formatGBP(area.surcharge)} travel charge`
-          : 'No travel surcharge'}
+        {area.is_core ? 'Covered as standard' : 'Covered, just ask'}
       </p>
     </Card>
   )
@@ -56,8 +53,8 @@ export default function Areas() {
     <>
       <PageHeader
         eyebrow="Areas"
-        title="Covering South Essex"
-        lead="We're based in the heart of South Essex and cover the towns below plus the surrounding villages. Not sure about your postcode? We'll always let you know."
+        title="Covering Essex"
+        lead="We're based in Basildon and cover the towns below plus villages right across Essex. Not sure about your postcode? We'll always let you know."
       >
         <Button to="/booking" rightIcon={<ArrowRight className="h-4 w-4" />}>
           Check your postcode

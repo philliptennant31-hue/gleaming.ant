@@ -10,7 +10,7 @@ import { fieldLabel } from '../../components/ui/field'
 import { Modal, Switch, useToast } from './primitives'
 import { createService, slugify, updateService, type ServiceDraft } from './data'
 
-const ICON_OPTIONS = ['window', 'gutter', 'fascia', 'conservatory', 'solar', 'pressure', 'sparkles']
+const ICON_OPTIONS = ['window', 'gutter', 'fascia', 'conservatory', 'solar', 'pressure', 'roof', 'render', 'brick', 'sparkles']
 
 interface Draft {
   name: string

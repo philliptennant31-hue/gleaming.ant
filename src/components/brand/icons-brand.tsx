@@ -176,6 +176,68 @@ export function SparkleBurstIcon(props: BrandIconProps) {
   )
 }
 
+/** Roof cleaning: a pitched roof, moss lifted, with a clean glint. */
+export function RoofIcon(props: BrandIconProps) {
+  const roof = 'M4.6 20.4 L16 7.2 L27.4 20.4 Z'
+  return (
+    <IconBase {...props}>
+      <path d={roof} fill={WHITE} stroke={WHITE} strokeWidth="4.6" />
+      <path d={roof} fill={MID} />
+      <path d="M9.2 16 H22.8 M11.6 13.1 H20.4" stroke={WHITE} strokeWidth="1.6" />
+      <path d={roof} stroke={NAVY} strokeWidth="2.2" fill="none" />
+      <path d="M6.2 23.6 H25.8" stroke={WHITE} strokeWidth="4.6" />
+      <path d="M6.2 23.6 H25.8" stroke={NAVY} strokeWidth="2.2" />
+      <g transform="translate(21.4 3) scale(0.28)">
+        <path d={STAR} fill={WHITE} />
+      </g>
+    </IconBase>
+  )
+}
+
+/** Render cleaning: a speckled exterior wall with a clean wipe across it. */
+export function RenderIcon(props: BrandIconProps) {
+  return (
+    <IconBase {...props}>
+      <rect x="6.4" y="6.4" width="19.2" height="19.2" rx="2.4" fill={WHITE} stroke={WHITE} strokeWidth="3" />
+      <rect x="6.4" y="6.4" width="19.2" height="19.2" rx="2.4" fill={LIGHT} />
+      <g fill={MID}>
+        <circle cx="11" cy="11" r="0.9" />
+        <circle cx="15.4" cy="13.2" r="0.9" />
+        <circle cx="20" cy="10.4" r="0.9" />
+        <circle cx="12.6" cy="16.4" r="0.9" />
+        <circle cx="19.2" cy="15.6" r="0.9" />
+        <circle cx="21.2" cy="20" r="0.9" />
+        <circle cx="10.4" cy="20.6" r="0.9" />
+      </g>
+      <path d="M8.8 21 L20.8 9" stroke={WHITE} strokeWidth="3.2" opacity="0.9" />
+      <rect x="6.4" y="6.4" width="19.2" height="19.2" rx="2.4" fill="none" stroke={NAVY} strokeWidth="2.2" />
+      <g transform="translate(21.6 3) scale(0.26)">
+        <path d={STAR} fill={WHITE} />
+      </g>
+    </IconBase>
+  )
+}
+
+/** Brickwork cleaning: a brick wall in running bond, freshly cleaned. */
+export function BrickIcon(props: BrandIconProps) {
+  return (
+    <IconBase {...props}>
+      <rect x="5.6" y="7" width="20.8" height="18" rx="2.2" fill={WHITE} stroke={WHITE} strokeWidth="3" />
+      <rect x="5.6" y="7" width="20.8" height="18" rx="2.2" fill={MID} />
+      <path d="M5.6 13 H26.4 M5.6 19 H26.4" stroke={WHITE} strokeWidth="1.8" />
+      <path
+        d="M12.5 7 V13 M19.5 7 V13 M9 13 V19 M16 13 V19 M23 13 V19 M12.5 19 V25 M19.5 19 V25"
+        stroke={WHITE}
+        strokeWidth="1.6"
+      />
+      <rect x="5.6" y="7" width="20.8" height="18" rx="2.2" fill="none" stroke={NAVY} strokeWidth="2.2" />
+      <g transform="translate(21.8 2.8) scale(0.24)">
+        <path d={STAR} fill={WHITE} />
+      </g>
+    </IconBase>
+  )
+}
+
 /* ------------------------------------------------------------------ *
  * Support set (quieter — steps, chips, legends, meta rows)
  * ------------------------------------------------------------------ */

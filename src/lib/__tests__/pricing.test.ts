@@ -3,8 +3,9 @@ import { computeQuote, matchArea, normalisePostcode, round2 } from '../pricing'
 import type { BundleDiscount, Frequency, Service, ServiceArea, ServicePrice } from '../types'
 
 // ---------------------------------------------------------------------------
-// Fixtures — mirror the seed data in supabase/migrations/001_init.sql so the
-// tests double as a guard on the real catalogue's behaviour.
+// Fixtures — mirror the seed data in supabase/migrations (001_init.sql plus the
+// 003_mirror_live_client_site.sql delta) so the tests double as a guard on the
+// real catalogue's behaviour.
 // ---------------------------------------------------------------------------
 
 function svc(partial: Partial<Service> & Pick<Service, 'id' | 'slug' | 'name'>): Service {
@@ -28,7 +29,7 @@ const window = svc({
   base_price: 15, duration_minutes: 45, supports_frequency: true, sort_order: 0,
 })
 const gutter = svc({
-  id: 'gut', slug: 'gutter-clearing', name: 'Gutter Clearing',
+  id: 'gut', slug: 'gutter-cleaning', name: 'Gutter Cleaning',
   base_price: 70, duration_minutes: 90, supports_frequency: false, sort_order: 1,
 })
 const fascia = svc({
@@ -84,13 +85,27 @@ function area(
   return { id: name, name, postcode_prefixes, surcharge, is_core, is_active: true, sort_order }
 }
 
+// Mirrors the real Essex-wide coverage from 003_mirror_live_client_site.sql:
+// every area £0 surcharge, with intentional overlapping outcodes (CM15 covers
+// Brentwood/Shenfield/Mountnessing; CM4 covers Ingatestone/Stock) plus the
+// Essex-wide catch-all sorted last.
 const areas: ServiceArea[] = [
-  area('Basildon & Laindon', ['SS13', 'SS14', 'SS15', 'SS16'], 0, true, 0),
-  area('Benfleet', ['SS7'], 0, true, 1),
-  area('Canvey Island', ['SS8'], 0, true, 2),
-  area('South Woodham Ferrers', ['CM3'], 0, true, 3),
-  area('Stanford-le-Hope', ['SS17'], 0, true, 4),
-  area('Surrounding Essex', ['SS', 'CM'], 7.5, false, 5),
+  area('Billericay', ['CM12', 'CM11'], 0, true, 1),
+  area('Basildon', ['SS13', 'SS14', 'SS15', 'SS16'], 0, true, 2),
+  area('Wickford', ['SS11', 'SS12'], 0, true, 3),
+  area('Brentwood', ['CM14', 'CM13', 'CM15'], 0, true, 4),
+  area('Shenfield', ['CM15'], 0, true, 5),
+  area('Hutton', ['CM13'], 0, true, 6),
+  area('Ingatestone', ['CM4'], 0, true, 7),
+  area('Stock', ['CM4'], 0, true, 8),
+  area('Ramsden Heath', ['CM11'], 0, true, 9),
+  area('Mountnessing', ['CM15'], 0, true, 10),
+  area('Chelmsford', ['CM1', 'CM2'], 0, true, 11),
+  area('Danbury', ['CM3'], 0, true, 12),
+  area('Great Baddow', ['CM2'], 0, true, 13),
+  area('Rayleigh', ['SS6'], 0, true, 14),
+  area('South Woodham Ferrers', ['CM3'], 0, true, 15),
+  area('Essex & surrounding areas', ['SS', 'CM', 'CO', 'RM', 'IG'], 0, false, 99),
 ]
 
 const data = { services, prices, frequencies, bundles, areas }
@@ -115,33 +130,35 @@ describe('normalisePostcode', () => {
 })
 
 describe('matchArea — longest-prefix postcode matching', () => {
-  it('matches a core area on the more specific prefix, not the broad "SS"', () => {
-    expect(matchArea('SS15 1AA', areas)?.name).toBe('Basildon & Laindon')
-    expect(matchArea('ss15 1aa', areas)?.name).toBe('Basildon & Laindon') // case/space-insensitive
-    expect(matchArea('SS16 5ZZ', areas)?.name).toBe('Basildon & Laindon')
+  it('matches a specific town outcode over the broad Essex catch-all', () => {
+    expect(matchArea('SS15 1AA', areas)?.name).toBe('Basildon')
+    expect(matchArea('ss15 1aa', areas)?.name).toBe('Basildon') // case/space-insensitive
+    expect(matchArea('SS16 5ZZ', areas)?.name).toBe('Basildon')
+    expect(matchArea('SS6 9ZZ', areas)?.name).toBe('Rayleigh')
   })
 
-  it('routes SS17 to Stanford-le-Hope, never the broad SS surcharge area', () => {
-    const match = matchArea('SS17 0AB', areas)
-    expect(match?.name).toBe('Stanford-le-Hope')
-    expect(match?.is_core).toBe(true)
-    expect(match?.surcharge).toBe(0)
+  it('resolves overlapping prefixes deterministically (lowest sort_order wins the tie)', () => {
+    // CM15 sits in Brentwood, Shenfield AND Mountnessing — all length 4. The
+    // first in sort order (Brentwood) wins; every area is £0 so the result is
+    // equivalent for pricing whichever way the tie breaks. Must never throw.
+    const cm15 = matchArea('CM15 9AA', areas)
+    expect(cm15?.name).toBe('Brentwood')
+    expect(cm15?.surcharge).toBe(0)
+    // CM4 sits in Ingatestone AND Stock — deterministic, harmless.
+    expect(matchArea('CM4 1AA', areas)?.name).toBe('Ingatestone')
   })
 
-  it('routes CM3 to South Woodham Ferrers, not the broad CM area', () => {
-    expect(matchArea('CM3 5AA', areas)?.name).toBe('South Woodham Ferrers')
-  })
-
-  it('falls back to the broad prefix for other SS/CM postcodes (surcharge, non-core)', () => {
-    const ss9 = matchArea('SS9 4AB', areas)
-    expect(ss9?.name).toBe('Surrounding Essex')
-    expect(ss9?.is_core).toBe(false)
-    expect(ss9?.surcharge).toBe(7.5)
-    expect(matchArea('CM99 9ZZ', areas)?.name).toBe('Surrounding Essex')
+  it('falls back to the Essex-wide catch-all for other in-county postcodes', () => {
+    const co1 = matchArea('CO1 1AA', areas)
+    expect(co1?.name).toBe('Essex & surrounding areas')
+    expect(co1?.is_core).toBe(false)
+    expect(co1?.surcharge).toBe(0)
+    expect(matchArea('RM12 6XY', areas)?.name).toBe('Essex & surrounding areas')
   })
 
   it('returns null for a postcode outside every area, and for empty input', () => {
     expect(matchArea('AB12 3CD', areas)).toBeNull()
+    expect(matchArea('LS1 4PQ', areas)).toBeNull()
     expect(matchArea('', areas)).toBeNull()
     expect(matchArea('   ', areas)).toBeNull()
   })
@@ -159,7 +176,7 @@ describe('computeQuote — single service', () => {
     expect(q.discountPercent).toBe(0)
     expect(q.discountAmount).toBe(0)
     expect(q.surcharge).toBe(0)
-    expect(q.areaName).toBe('Basildon & Laindon')
+    expect(q.areaName).toBe('Basildon')
     expect(q.outsideArea).toBe(false)
     expect(q.total).toBe(20)
     expect(q.durationMinutes).toBe(45)
@@ -255,15 +272,29 @@ describe('computeQuote — bundle discounts', () => {
 })
 
 describe('computeQuote — area surcharge & outside area', () => {
-  it('adds the surcharge for a non-core (surrounding) postcode', () => {
+  it('covers an edge Essex postcode via the catch-all with no surcharge', () => {
     const q = computeQuote(
       { selectedServiceIds: ['gut'], bandCode: 'band_3', frequencyCode: 'one_off', postcode: 'SS9 4AB' },
       data,
     )
-    expect(q.areaName).toBe('Surrounding Essex')
-    expect(q.surcharge).toBe(7.5)
+    // SS9 is not a named town, so it lands on the zero-surcharge catch-all.
+    expect(q.areaName).toBe('Essex & surrounding areas')
+    expect(q.surcharge).toBe(0)
     expect(q.outsideArea).toBe(false)
-    expect(q.total).toBe(87.5) // 80 subtotal + 7.5 surcharge, no discount
+    expect(q.total).toBe(80) // 80 subtotal, no surcharge
+  })
+
+  it('still applies a surcharge when an area defines one (engine capability)', () => {
+    // Live data is all £0, but the engine must keep supporting a surcharge for
+    // any area an admin adds via the dashboard.
+    const surchargedAreas: ServiceArea[] = [area('Far Field', ['XX'], 9.5, false, 1)]
+    const q = computeQuote(
+      { selectedServiceIds: ['gut'], bandCode: 'band_3', frequencyCode: 'one_off', postcode: 'XX1 2AB' },
+      { ...data, areas: surchargedAreas },
+    )
+    expect(q.areaName).toBe('Far Field')
+    expect(q.surcharge).toBe(9.5)
+    expect(q.total).toBe(89.5) // 80 subtotal + 9.5 surcharge
   })
 
   it('charges no surcharge inside a core area', () => {
@@ -271,7 +302,7 @@ describe('computeQuote — area surcharge & outside area', () => {
       { selectedServiceIds: ['gut'], bandCode: 'band_3', frequencyCode: 'one_off', postcode: 'SS13 3AA' },
       data,
     )
-    expect(q.areaName).toBe('Basildon & Laindon')
+    expect(q.areaName).toBe('Basildon')
     expect(q.surcharge).toBe(0)
     expect(q.total).toBe(80)
   })

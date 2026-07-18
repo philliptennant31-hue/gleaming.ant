@@ -19,11 +19,11 @@ import { Container } from '../ui/Container'
 
 const AREAS = [
   'Basildon',
-  'Laindon',
-  'Benfleet',
-  'Canvey Island',
-  'South Woodham Ferrers',
-  'Stanford-le-Hope',
+  'Billericay',
+  'Wickford',
+  'Brentwood',
+  'Chelmsford',
+  'Rayleigh',
 ]
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']

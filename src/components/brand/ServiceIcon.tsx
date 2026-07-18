@@ -1,9 +1,12 @@
 import type { ComponentType } from 'react'
 import {
+  BrickIcon,
   ConservatoryIcon,
   FasciaIcon,
   GutterIcon,
   PressureWashIcon,
+  RenderIcon,
+  RoofIcon,
   SolarIcon,
   SparkleBurstIcon,
   WindowPaneIcon,
@@ -20,6 +23,9 @@ const ICONS: Record<string, ComponentType<BrandIconProps>> = {
   conservatory: ConservatoryIcon,
   solar: SolarIcon,
   pressure: PressureWashIcon,
+  roof: RoofIcon,
+  render: RenderIcon,
+  brick: BrickIcon,
   sparkles: SparkleBurstIcon,
 }
 

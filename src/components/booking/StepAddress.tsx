@@ -18,24 +18,27 @@ function AreaFeedback({ postcode, matchedArea }: { postcode: string; matchedArea
   const norm = normalisePostcode(postcode)
   if (norm === '') return null
 
-  if (matchedArea && matchedArea.is_core) {
-    return (
-      <div className="mt-2 flex items-start gap-2 rounded-lg bg-teal/10 px-3 py-2.5 text-sm text-teal-deep">
-        <Check className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-        <span>
-          Great news, we cover <strong className="font-semibold">{matchedArea.name}</strong>. No travel surcharge.
-        </span>
-      </div>
-    )
-  }
-
-  if (matchedArea && !matchedArea.is_core) {
+  // A surcharge only ever applies if an area explicitly defines one (the
+  // pricing engine still supports it). Live coverage is all £0, so this branch
+  // is dormant unless an admin adds a surcharged area.
+  if (matchedArea && matchedArea.surcharge > 0) {
     return (
       <div className="mt-2 flex items-start gap-2 rounded-lg bg-pane/50 px-3 py-2.5 text-sm text-ink">
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-teal-deep" aria-hidden="true" />
         <span>
           You're just outside our core patch, so a small {formatGBP(matchedArea.surcharge)} travel surcharge
           applies. Everything else is priced exactly the same.
+        </span>
+      </div>
+    )
+  }
+
+  if (matchedArea) {
+    return (
+      <div className="mt-2 flex items-start gap-2 rounded-lg bg-teal/10 px-3 py-2.5 text-sm text-teal-deep">
+        <Check className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+        <span>
+          Great news, we cover <strong className="font-semibold">{matchedArea.name}</strong>.
         </span>
       </div>
     )

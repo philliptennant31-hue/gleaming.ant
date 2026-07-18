@@ -17,10 +17,12 @@ export function normalisePostcode(postcode: string): string {
 
 /**
  * Match a postcode to a service area by LONGEST matching prefix.
- * "SS15…" → Basildon (SS15) beats the broad "SS" catch-all; "SS17…" →
- * Stanford-le-Hope, not the "SS" surcharge area. Returns null when nothing
- * matches (caller flags the quote `outsideArea`). On an equal-length tie the
- * first area wins — pass areas pre-sorted by sort_order (core areas first).
+ * "SS15…" → Basildon (SS15) beats the broad "SS" Essex-wide catch-all; "SS6…" →
+ * Rayleigh, not the catch-all. Returns null when nothing matches (caller flags
+ * the quote `outsideArea`). On an equal-length tie the first area wins — pass
+ * areas pre-sorted by sort_order (core towns first, catch-all last). Some
+ * outcodes intentionally sit in several towns; every area is £0 surcharge, so
+ * the tie-break only affects the area name shown, never the price.
  */
 export function matchArea(postcode: string, areas: ServiceArea[]): ServiceArea | null {
   const norm = normalisePostcode(postcode)

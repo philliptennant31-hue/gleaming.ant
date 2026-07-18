@@ -31,7 +31,7 @@ const STEPS = [
   {
     icon: SqueegeeIcon,
     title: 'We clean',
-    body: "We turn up when we say we will and leave everything gleaming: windows, frames and sills included.",
+    body: "We send a friendly reminder before every visit, turn up when we say we will, and leave everything gleaming: windows, frames and sills included.",
   },
   {
     icon: PoundCoinIcon,
@@ -40,7 +40,7 @@ const STEPS = [
   },
 ]
 
-const AREAS = ['Basildon', 'Laindon', 'Benfleet', 'Canvey Island', 'South Woodham Ferrers', 'Stanford-le-Hope']
+const AREAS = ['Basildon', 'Billericay', 'Wickford', 'Brentwood', 'Chelmsford', 'Rayleigh', 'South Woodham Ferrers']
 
 function ServicesSection() {
   const { data, loading, error, reload } = useAsync<Service[]>(fetchActiveServices, [])
@@ -169,7 +169,7 @@ export default function Home() {
         <Container>
           <div className="flex flex-col items-center gap-6 text-center">
             <h2 id="areas-strip-heading" className="font-display text-2xl font-bold text-ink">
-              Out and about across South Essex
+              Out and about across Essex
             </h2>
             <ul className="flex flex-wrap justify-center gap-2.5">
               {AREAS.map((area) => (

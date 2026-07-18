@@ -45,18 +45,19 @@ export default function About() {
           </h2>
           <div className="mt-5 space-y-4 leading-relaxed text-ink">
             <p>
-              [PLACEHOLDER: the founder's story — who started Gleaming Ant, their background, and why they
-              set up a window &amp; exterior cleaning business in Essex. A short, personal paragraph in the
-              owner's own words works best here.]
+              Gleaming Ant was founded by Antony, a local Essex window cleaner with a genuine passion for
+              delivering brilliant results on every job. What started with windows has grown into full
+              exterior cleaning, all run from our base in the Basildon area.
             </p>
             <p>
-              [PLACEHOLDER: what makes Gleaming Ant different — the approach to a clean, the kit used, and
-              the promise made to every customer. Keep it honest and specific; no invented claims.]
+              We've built our reputation the honest way: reliable service, real attention to detail, and
+              consistently high standards, visit after visit. No pushy sales and no cutting corners, just a
+              clean you'll notice and a team that turns up when we say we will.
             </p>
             <p>
-              What we can tell you today: we're small, we're local, and we care about doing the job
-              properly. Whether it's a regular window round or the full frontage, you'll get the same
-              reliable, friendly, fully insured service every time.
+              Today we look after homes right across Essex, along with offices, shops, schools and a wide
+              range of commercial buildings. Whether it's a regular window round or the full frontage, you'll
+              get the same friendly, fully insured service every time.
             </p>
           </div>
         </Container>
@@ -103,9 +104,10 @@ export default function About() {
               </h2>
               <div className="mt-4 space-y-4 leading-relaxed text-ink">
                 <p>
-                  Ants are small, but they're famously diligent and far stronger than they look. That's
-                  exactly the spirit we bring to every job: quietly hardworking, paying attention to the
-                  details, and shifting more than you'd expect from a small local team.
+                  There's a nod to Antony in the name, but the ant fits the work too. Ants are small, yet
+                  famously diligent and far stronger than they look. That's exactly the spirit we bring to
+                  every job: quietly hardworking, paying attention to the details, and shifting more than
+                  you'd expect from a small local team.
                 </p>
                 <p>
                   It's also a reminder to stay humble and do the little things well. A streak-free sill.

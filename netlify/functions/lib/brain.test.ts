@@ -25,8 +25,8 @@ const data: BusinessData = {
     },
     {
       id: 'svc-gutter',
-      slug: 'gutter-clearing',
-      name: 'Gutter Clearing',
+      slug: 'gutter-cleaning',
+      name: 'Gutter Cleaning',
       short_description: 'Blocked gutters emptied, checked and flowing again.',
       long_description: '',
       base_price: 70,
@@ -77,33 +77,54 @@ const data: BusinessData = {
     { id: 'b1', min_services: 2, discount_percent: 10, is_active: true },
     { id: 'b2', min_services: 3, discount_percent: 15, is_active: true },
   ],
+  // Mirrors the real Essex-wide coverage (003 migration): every area £0
+  // surcharge, with intentional overlapping outcodes (CM15 in Brentwood
+  // AND Shenfield) to exercise deterministic longest-prefix resolution.
   serviceAreas: [
     {
       id: 'a1',
-      name: 'Basildon & Laindon',
+      name: 'Basildon',
       postcode_prefixes: ['SS13', 'SS14', 'SS15', 'SS16'],
       surcharge: 0,
       is_core: true,
       is_active: true,
-      sort_order: 0,
+      sort_order: 2,
     },
     {
       id: 'a2',
-      name: 'Benfleet',
-      postcode_prefixes: ['SS7'],
+      name: 'Brentwood',
+      postcode_prefixes: ['CM14', 'CM13', 'CM15'],
       surcharge: 0,
       is_core: true,
       is_active: true,
-      sort_order: 1,
+      sort_order: 4,
     },
     {
       id: 'a3',
-      name: 'Surrounding Essex',
-      postcode_prefixes: ['SS', 'CM'],
-      surcharge: 7.5,
+      name: 'Shenfield',
+      postcode_prefixes: ['CM15'],
+      surcharge: 0,
+      is_core: true,
+      is_active: true,
+      sort_order: 5,
+    },
+    {
+      id: 'a4',
+      name: 'Rayleigh',
+      postcode_prefixes: ['SS6'],
+      surcharge: 0,
+      is_core: true,
+      is_active: true,
+      sort_order: 14,
+    },
+    {
+      id: 'a5',
+      name: 'Essex & surrounding areas',
+      postcode_prefixes: ['SS', 'CM', 'CO', 'RM', 'IG'],
+      surcharge: 0,
       is_core: false,
       is_active: true,
-      sort_order: 2,
+      sort_order: 99,
     },
   ],
   faqs: [
@@ -197,8 +218,36 @@ describe('answerWithRules — intents', () => {
 
   it('describes a service by synonym (gutters)', () => {
     const res = ask('tell me about your guttering work')
-    expect(res.reply).toContain('Gutter Clearing')
-    expect(res.links.some((l) => l.path === '/services/gutter-clearing')).toBe(true)
+    expect(res.reply).toContain('Gutter Cleaning')
+    expect(res.links.some((l) => l.path === '/services/gutter-cleaning')).toBe(true)
+    assertShape(res)
+  })
+
+  it('matches a new service by keyword (driveway / jet wash)', () => {
+    const withDriveway: BusinessData = {
+      ...data,
+      services: [
+        ...data.services,
+        {
+          id: 'svc-driveway',
+          slug: 'driveway-cleaning',
+          name: 'Driveway Cleaning',
+          short_description: 'Restoring driveways to a cleaner, smarter finish.',
+          long_description: '',
+          base_price: 90,
+          unit_label: 'per visit',
+          duration_minutes: 150,
+          supports_frequency: false,
+          price_note: '',
+          icon: 'pressure',
+          is_active: true,
+          sort_order: 1,
+        },
+      ],
+    }
+    const res = answerWithRules([{ role: 'user', content: 'can you jet wash my drive?' }], withDriveway)
+    expect(res.reply).toContain('Driveway Cleaning')
+    expect(res.links.some((l) => l.path === '/services/driveway-cleaning')).toBe(true)
     assertShape(res)
   })
 
@@ -211,7 +260,7 @@ describe('answerWithRules — intents', () => {
   it('lists services for a generic services question', () => {
     const res = ask('what services do you offer?')
     expect(res.reply).toContain('Window Cleaning')
-    expect(res.reply).toContain('Gutter Clearing')
+    expect(res.reply).toContain('Gutter Cleaning')
     expect(res.links.some((l) => l.path === '/services')).toBe(true)
     assertShape(res)
   })
@@ -224,14 +273,46 @@ describe('answerWithRules — intents', () => {
 
   it('confirms a core postcode inside the area', () => {
     const res = ask('do you cover SS14?')
-    expect(res.reply).toContain('Basildon & Laindon')
+    expect(res.reply).toContain('Basildon')
     expect(res.links.some((l) => l.path === '/booking')).toBe(true)
     assertShape(res)
   })
 
-  it('flags a surrounding postcode with a surcharge', () => {
+  it('covers an edge Essex postcode via the catch-all, no surcharge', () => {
     const res = ask('do you cover SS9?')
-    expect(res.reply).toContain('SS9')
+    // SS9 is not a named town, so it falls to the zero-surcharge catch-all.
+    expect(res.reply.toLowerCase()).toContain('cover')
+    expect(res.reply.toLowerCase()).not.toContain('surcharge')
+    assertShape(res)
+  })
+
+  it('resolves an overlapping-prefix postcode deterministically', () => {
+    // CM15 sits in Brentwood AND Shenfield; the lower sort_order (Brentwood)
+    // wins the longest-prefix tie, deterministically and without error.
+    const res = ask('do you cover CM15?')
+    expect(res.reply).toContain('Brentwood')
+    expect(res.reply.toLowerCase()).not.toContain('surcharge')
+    assertShape(res)
+  })
+
+  it('still mentions a surcharge when an area actually has one (dormant capability)', () => {
+    // Live data is all £0, but the branch must stay correct if an admin
+    // ever adds a surcharged area via the dashboard.
+    const surchargedData: BusinessData = {
+      ...data,
+      serviceAreas: [
+        {
+          id: 'far',
+          name: 'Far Field',
+          postcode_prefixes: ['XX'],
+          surcharge: 12.5,
+          is_core: false,
+          is_active: true,
+          sort_order: 1,
+        },
+      ],
+    }
+    const res = answerWithRules([{ role: 'user', content: 'do you cover XX1?' }], surchargedData)
     expect(res.reply.toLowerCase()).toContain('surcharge')
     assertShape(res)
   })
@@ -245,7 +326,7 @@ describe('answerWithRules — intents', () => {
 
   it('lists areas for a plain coverage question', () => {
     const res = ask('which areas do you cover?')
-    expect(res.reply).toContain('Basildon & Laindon')
+    expect(res.reply).toContain('Basildon')
     expect(res.links.some((l) => l.path === '/areas')).toBe(true)
     assertShape(res)
   })
@@ -387,12 +468,12 @@ describe('answerWithRules — quote handoff extraction', () => {
 
   it('builds a full multi-service draft from the whole history', () => {
     const messages: ChatMessage[] = [
-      { role: 'user', content: 'how much is window cleaning and gutter clearing?' },
+      { role: 'user', content: 'how much is window cleaning and gutter cleaning?' },
       { role: 'assistant', content: 'Happy to help!' },
       { role: 'user', content: 'book them for my 4 bed house in CM3, every 8 weeks' },
     ]
     const res = answerWithRules(messages, data)
-    expect(res.quote_draft?.services).toEqual(['window-cleaning', 'gutter-clearing'])
+    expect(res.quote_draft?.services).toEqual(['window-cleaning', 'gutter-cleaning'])
     expect(res.quote_draft?.band_code).toBe('band_4')
     expect(res.quote_draft?.frequency_code).toBe('every_8_weeks')
     expect(res.quote_draft?.postcode).toBe('CM3')
@@ -428,7 +509,7 @@ describe('validateQuoteDraft', () => {
   it('keeps valid optional fields and dedupes services', () => {
     const draft = validateQuoteDraft(
       {
-        services: ['window-cleaning', 'window-cleaning', 'gutter-clearing'],
+        services: ['window-cleaning', 'window-cleaning', 'gutter-cleaning'],
         band_code: 'band_3',
         frequency_code: 'every_8_weeks',
         postcode: 'ss14 1aa',
@@ -436,7 +517,7 @@ describe('validateQuoteDraft', () => {
       data,
     )
     expect(draft).toEqual({
-      services: ['window-cleaning', 'gutter-clearing'],
+      services: ['window-cleaning', 'gutter-cleaning'],
       band_code: 'band_3',
       frequency_code: 'every_8_weeks',
       postcode: 'ss14 1aa',
@@ -457,13 +538,13 @@ describe('extractQuoteDraft (exported for the chat.ts server guarantee)', () => 
         {
           role: 'user',
           content:
-            'I want window cleaning and gutter clearing at my 3 bed house in SS7 1AB, every 4 weeks. Can you sort me a quote?',
+            'I want window cleaning and gutter cleaning at my 3 bed house in SS7 1AB, every 4 weeks. Can you sort me a quote?',
         },
       ],
       data,
     )
     expect(draft).toBeDefined()
-    expect(draft?.services).toEqual(['window-cleaning', 'gutter-clearing'])
+    expect(draft?.services).toEqual(['window-cleaning', 'gutter-cleaning'])
     expect(draft?.band_code).toBe('band_3')
     expect(draft?.frequency_code).toBe('every_4_weeks')
     expect(draft?.postcode).toContain('SS7')

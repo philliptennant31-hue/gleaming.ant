@@ -53,7 +53,18 @@ export function isRoutePath(path: string): boolean {
 
 const SERVICE_SYNONYMS: Record<string, string[]> = {
   'window-cleaning': ['window', 'windows', 'glass', 'panes', 'pane'],
-  'gutter-clearing': [
+  'driveway-cleaning': [
+    'driveway',
+    'driveways',
+    'drive',
+    'jet wash',
+    'jetwash',
+    'jet washing',
+    'pressure wash',
+    'pressure washing',
+  ],
+  'roof-cleaning': ['roof', 'roofs', 'roof moss', 'moss removal'],
+  'gutter-cleaning': [
     'gutter',
     'gutters',
     'guttering',
@@ -61,20 +72,12 @@ const SERVICE_SYNONYMS: Record<string, string[]> = {
     'downpipes',
     'down pipe',
   ],
+  'patio-cleaning': ['patio', 'patios', 'paving', 'slabs', 'paved'],
+  'solar-panel-cleaning': ['solar', 'solar panel', 'solar panels', 'pv', 'panels'],
+  'render-cleaning': ['render', 'rendering', 'rendered', 'k-rend', 'krend'],
+  'brickwork-cleaning': ['brick', 'bricks', 'brickwork'],
   'fascia-soffit': ['fascia', 'fascias', 'soffit', 'soffits', 'facia'],
   'conservatory-cleaning': ['conservatory', 'conservatories'],
-  'solar-panel-cleaning': ['solar', 'solar panel', 'solar panels', 'pv', 'panels'],
-  'pressure-washing': [
-    'pressure wash',
-    'pressure washing',
-    'driveway',
-    'driveways',
-    'patio',
-    'patios',
-    'jet wash',
-    'jetwash',
-    'decking',
-  ],
 }
 
 const STOPWORDS = new Set<string>([
@@ -470,7 +473,7 @@ function areasResponse(outcode: string | null, data: BusinessData): ChatResponse
   const list =
     coreNames.length > 0
       ? `${coreNames.join(', ')} and the surrounding Essex area`
-      : 'Basildon, Laindon, Benfleet, Canvey Island, South Woodham Ferrers, Stanford-le-Hope and the surrounding Essex area'
+      : 'Basildon, Billericay, Wickford, Brentwood, Chelmsford, Rayleigh, South Woodham Ferrers and across Essex'
   return reply(
     `We cover ${list}. Not sure about your postcode? Enter it in the booking tool or send the team a message.`,
     [LINK_AREAS, LINK_QUOTE],
@@ -556,7 +559,7 @@ function serviceResponse(text: string, data: BusinessData): ChatResponse | null 
     const list =
       names.length > 0
         ? names.join(', ')
-        : 'window cleaning, gutter clearing, fascia & soffit cleaning, conservatory cleaning and solar panel cleaning'
+        : 'window cleaning, gutter cleaning, driveway and patio cleaning, roof cleaning, solar panel cleaning and more'
     return reply(
       `We offer ${list}. Want details or a price on any of them?`,
       [LINK_SERVICES, LINK_QUOTE],
