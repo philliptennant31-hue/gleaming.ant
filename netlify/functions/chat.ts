@@ -398,10 +398,12 @@ export default async function handler(req: Request): Promise<Response> {
       } else {
         console.error('Sparkle: Claude call failed — using rules fallback', error)
       }
-      result = answerWithRules(messages, data)
+      // The fallback must not drop a handoff in progress: top up the rules
+      // answer with the draft extracted from history, same as the AI path.
+      result = ensureQuoteDraft(answerWithRules(messages, data), messages, data)
     }
   } else {
-    result = answerWithRules(messages, data)
+    result = ensureQuoteDraft(answerWithRules(messages, data), messages, data)
   }
 
   return json(result, 200)

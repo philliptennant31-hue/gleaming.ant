@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isDegenerateReply } from './chat'
+import { isDegenerateReply } from '../chat'
 
 // Guards the degenerate-reply recovery path: when the structured-output model
 // emits filler like "placeholder" instead of prose, coerceAiResponse throws and
