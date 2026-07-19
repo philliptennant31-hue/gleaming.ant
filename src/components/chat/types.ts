@@ -36,3 +36,19 @@ export interface DisplayMessage {
   /** UI-only messages (greeting, error notices) — never sent to the API. */
   local?: boolean
 }
+
+/**
+ * How complete a quote draft is, for the chat handoff UI. 'ready' once the
+ * visitor has named a service AND a property size (band_code) — enough for the
+ * booking wizard to land on a real price — which earns the prominent CTA.
+ * Anything less is 'partial': offer only a quiet "skip ahead" link so it never
+ * competes with the question the visitor is still answering. Pure + exported so
+ * it can be unit-tested without rendering the widget.
+ */
+export function draftReadiness(draft: QuoteDraft): 'ready' | 'partial' {
+  const hasService =
+    Array.isArray(draft.services) &&
+    draft.services.some((s) => typeof s === 'string' && s.trim().length > 0)
+  const hasBand = typeof draft.band_code === 'string' && draft.band_code.trim().length > 0
+  return hasService && hasBand ? 'ready' : 'partial'
+}

@@ -215,15 +215,18 @@ function buildSystemPrompt(data: BusinessData): string {
     '- Once the visitor has named at least one service AND wants a price or to book, you MUST include the `quote_draft` object. Never skip it: put everything gathered so far in it (services is required; add band_code, frequency_code and postcode when known), using the exact slugs and codes listed above. Keep asking for the next missing detail in your reply.',
     '- Never use the label "Continue your quote" on an ordinary link. That button is generated automatically from quote_draft, so a link with that label but no draft is a broken handoff. If you add a link alongside the draft, give it a different label.',
     '- Never block the handoff on missing fields. A partial draft is fine. Only include quote_draft once the visitor actually wants a price or to book.',
+    '- While handing off (any reply that includes quote_draft): do not attach page links, keep the reply to the single next question, and make suggested_replies short ANSWERS to that question (e.g. "3 bedrooms", "Every 4 weeks", "One-off"), never new questions.',
     '',
     'STRICT RULES:',
     '- Only discuss Gleaming Ant, its services, prices, areas, and booking. Politely decline anything else and steer back.',
     '- Never invent prices, policies, hours, or contact details. Use ONLY the data above. If it is not there, say the team will confirm and point to /contact or /booking.',
+    '- Write the reply in full and ready to show a visitor as-is. Never emit filler or placeholder text such as "placeholder", "TBD" or "N/A"; if you lack a detail, say the team will confirm it.',
     '- Quote prices as the "from" price and note the exact price depends on property size; recommend /booking for an instant quote.',
     '- Links must come from the route map only. Use /services/:slug with a real slug from the data.',
+    '- Link labels must read as navigation ("See Window Cleaning", "Open the price list", "How pricing works"), never a bare service name that a visitor could mistake for a reply option to tap.',
     '- Keep replies under 120 words, warm and plain-spoken UK English (say "we" and "your"; contractions welcome). No corporate filler, no invented claims.',
     '- Never use em dashes. Use commas or separate sentences.',
-    '- Provide at most 2 links and at most 3 short suggested replies (each a question a visitor might ask next).',
+    '- Provide at most 2 links and at most 3 short suggested replies. Normally each is a question a visitor might ask next; during a quote handoff they are instead short ANSWERS to the question you just asked (e.g. "3 bedrooms", "Every 4 weeks", "One-off").',
     '- Respond ONLY with the required JSON object. Include quote_draft only when handing a visitor into a quote (see QUOTE HANDOFF).',
   ].join('\n')
 }
@@ -236,6 +239,29 @@ function toAiHistory(messages: ChatMessage[]): Anthropic.MessageParam[] {
   return history.map((m) => ({ role: m.role, content: m.content }))
 }
 
+// A structured-output model occasionally emits a degenerate `reply` — a literal
+// "placeholder"/"TBD", or a stray fragment — instead of real prose (observed in
+// live testing). Treat these as a failed generation: throwing here lets the
+// handler's catch fall back to the rules brain, which always returns a proper
+// answer. Rejects a small case-insensitive set of filler tokens, or any reply
+// too short to be a real sentence.
+const DEGENERATE_REPLIES = new Set<string>([
+  'placeholder',
+  'todo',
+  'tbd',
+  'n/a',
+  'na',
+  '...',
+  '-',
+  'xxx',
+])
+
+export function isDegenerateReply(reply: string): boolean {
+  const trimmed = reply.trim()
+  if (trimmed.length < 8) return true
+  return DEGENERATE_REPLIES.has(trimmed.toLowerCase())
+}
+
 function coerceAiResponse(parsed: unknown, data: BusinessData): ChatResponse {
   if (!parsed || typeof parsed !== 'object') {
     throw new Error('AI response is not an object')
@@ -244,6 +270,12 @@ function coerceAiResponse(parsed: unknown, data: BusinessData): ChatResponse {
 
   const reply = typeof obj.reply === 'string' ? obj.reply.trim() : ''
   if (!reply) throw new Error('AI response has no reply')
+  if (isDegenerateReply(reply)) {
+    console.error(
+      `Sparkle: degenerate AI reply rejected (${JSON.stringify(reply)}) — using rules fallback`,
+    )
+    throw new Error(`AI response reply is degenerate: ${JSON.stringify(reply)}`)
+  }
 
   const links: ChatLink[] = []
   if (Array.isArray(obj.links)) {

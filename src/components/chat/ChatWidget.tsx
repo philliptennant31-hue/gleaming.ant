@@ -16,9 +16,11 @@ import {
   type FormEvent,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react'
+import { ArrowRight } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Sparkle } from '../brand/Sparkle'
 import { cn } from '../../lib/cn'
+import { draftReadiness } from './types'
 import type { ChatResponse, DisplayMessage, QuoteDraft } from './types'
 
 const STORAGE_KEY = 'ga_sparkle_chat_v1'
@@ -404,17 +406,35 @@ export default function ChatWidget() {
                       {message.content}
                     </div>
 
-                    {quoteDraft && (
-                      <button
-                        type="button"
-                        onClick={() => handleNavigate(buildQuoteUrl(quoteDraft))}
-                        className="inline-flex items-center gap-1.5 rounded-btn bg-amber px-3.5 py-2 text-xs font-bold text-ink shadow-card transition-colors hover:bg-amber-deep"
-                      >
-                        <Sparkle size={14} />
-                        Continue your quote
-                      </button>
-                    )}
+                    {/* Quote handoff only on the latest turn: a loud amber CTA
+                        once the draft is price-ready (service + property size),
+                        otherwise a quiet skip-ahead link that never competes
+                        with the question the visitor is still answering. */}
+                    {isLast &&
+                      quoteDraft &&
+                      (draftReadiness(quoteDraft) === 'ready' ? (
+                        <button
+                          type="button"
+                          onClick={() => handleNavigate(buildQuoteUrl(quoteDraft))}
+                          className="inline-flex items-center gap-1.5 rounded-btn bg-amber px-3.5 py-2 text-xs font-bold text-ink shadow-card transition-colors hover:bg-amber-deep"
+                        >
+                          <Sparkle size={14} />
+                          Continue your quote
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleNavigate(buildQuoteUrl(quoteDraft))}
+                          className="inline-flex items-center gap-1 rounded-sm text-xs font-semibold text-teal-deep transition-all hover:gap-1.5 hover:text-ink"
+                        >
+                          Skip ahead to the quote form
+                          <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                        </button>
+                      ))}
 
+                    {/* Navigation links: squarer shape + trailing arrow read as
+                        "go somewhere", setting them apart from the round
+                        suggestion pills below (which say the reply for you). */}
                     {links.length > 0 && (
                       <div className="flex flex-wrap gap-2">
                         {links.map((link) => (
@@ -422,9 +442,11 @@ export default function ChatWidget() {
                             key={`${message.id}-${link.path}-${link.label}`}
                             type="button"
                             onClick={() => handleNavigate(link.path)}
-                            className="inline-flex items-center rounded-btn border border-teal-deep/40 bg-white px-3 py-1.5 text-xs font-semibold text-teal-deep transition-colors hover:bg-pane"
+                            aria-label={`Open ${link.label}`}
+                            className="inline-flex items-center gap-1.5 rounded-btn border border-teal-deep/40 bg-white px-3 py-1.5 text-xs font-semibold text-teal-deep transition-colors hover:bg-pane"
                           >
                             {link.label}
+                            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                           </button>
                         ))}
                       </div>
