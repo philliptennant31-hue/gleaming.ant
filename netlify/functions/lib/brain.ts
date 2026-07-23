@@ -164,6 +164,23 @@ function gbp(amount: number): string {
   return Number.isInteger(amount) ? `£${amount}` : `£${amount.toFixed(2)}`
 }
 
+/**
+ * Inline contact channels for "the team will confirm" answers, so the chat
+ * never sends a visitor elsewhere just to GET an answer (answer-first policy:
+ * unknown facts are answered honestly WITH the contact details in the reply).
+ * Returns '' when nothing real is published (all placeholders).
+ */
+function contactDetails(data: BusinessData): string {
+  const { phone, whatsapp, email } = data.settings.contact
+  const parts: string[] = []
+  if (isReal(phone)) parts.push(`call ${phone}`)
+  if (isReal(whatsapp)) parts.push(`WhatsApp ${whatsapp}`)
+  if (isReal(email)) parts.push(`email ${email}`)
+  if (parts.length === 0) return ''
+  if (parts.length === 1) return parts[0]
+  return `${parts.slice(0, -1).join(', ')} or ${parts[parts.length - 1]}`
+}
+
 function tokenize(text: string): string[] {
   return text
     .toLowerCase()
@@ -423,14 +440,14 @@ function pricingResponse(text: string, data: BusinessData): ChatResponse {
   if (service) {
     const price = fromPrice(service, data.servicePrices)
     return reply(
-      `${service.name} starts from ${gbp(price)}. The exact price depends on your property size. Check the full price list or grab an instant online quote.`,
-      [LINK_PRICES, LINK_QUOTE],
-      ['Which areas do you cover?', 'How often should I book?', 'Book a clean'],
+      `${service.name} starts from ${gbp(price)}. The exact price depends on your property size, so tell me a few details and I can pin it down, or see the full price list.`,
+      [LINK_PRICES],
+      ['Which areas do you cover?', 'How often should I book?', "I'm ready to book"],
     )
   }
   return reply(
-    "Our prices depend on the service and your property size. You'll find the full list on our pricing page, or get an instant quote in under a minute.",
-    [LINK_PRICES, LINK_QUOTE],
+    "Prices depend on which service you need and your property size. Tell me the service you're after and I'll give you the starting price, or see the full list on our pricing page.",
+    [LINK_PRICES],
     SUGGEST_DEFAULT,
   )
 }
@@ -448,22 +465,26 @@ function areasResponse(outcode: string | null, data: BusinessData): ChatResponse
     const area = matchArea(outcode, data.serviceAreas)
     if (area && area.surcharge > 0) {
       return reply(
-        `We can reach ${outcode}, though it's just outside our core patch, so a small travel surcharge may apply. Get an instant quote to see the full price.`,
-        [LINK_QUOTE, LINK_AREAS],
-        ['What services do you offer?', 'How much is window cleaning?', 'Book a clean'],
+        `Yes, we cover ${outcode} — that's in ${area.name}, just outside our core patch, so there's a ${gbp(area.surcharge)} travel surcharge on top of the usual price. Want me to help you get a price?`,
+        [LINK_AREAS],
+        ['How much is window cleaning?', 'What services do you offer?', "I'm ready to book"],
       )
     }
     if (area) {
       return reply(
-        `Good news, we cover ${area.name}! Pop your details into the booking tool for an instant quote.`,
-        [LINK_QUOTE, LINK_AREAS],
-        ['How much is window cleaning?', 'What services do you offer?', 'Book a clean'],
+        `Yes, we cover ${outcode} — that's right in ${area.name}, with no extra travel cost. Want me to help you get a price?`,
+        [LINK_AREAS],
+        ['How much is window cleaning?', 'What services do you offer?', "I'm ready to book"],
       )
     }
+    const details = contactDetails(data)
+    const text = details
+      ? `I can't confirm from here whether we cover ${outcode}. The quickest way to be sure is to ${details} and the team will let you know right away.`
+      : `I can't confirm from here whether we cover ${outcode}. Send the team a message and we'll let you know right away.`
     return reply(
-      `I can't confirm from here whether we regularly cover ${outcode}. Drop the team a message and we'll let you know right away.`,
+      text,
       [LINK_CONTACT, LINK_AREAS],
-      ['What services do you offer?', 'How much is window cleaning?', 'Book a clean'],
+      ['What services do you offer?', 'How much is window cleaning?', 'Which areas do you cover?'],
     )
   }
 
@@ -475,9 +496,9 @@ function areasResponse(outcode: string | null, data: BusinessData): ChatResponse
       ? `${coreNames.join(', ')} and the surrounding Essex area`
       : 'Basildon, Billericay, Wickford, Brentwood, Chelmsford, Rayleigh, South Woodham Ferrers and across Essex'
   return reply(
-    `We cover ${list}. Not sure about your postcode? Enter it in the booking tool or send the team a message.`,
-    [LINK_AREAS, LINK_QUOTE],
-    ['How much is window cleaning?', 'What services do you offer?', 'Book a clean'],
+    `We cover ${list}. Tell me your postcode and I'll check it for you right now.`,
+    [LINK_AREAS],
+    ['How much is window cleaning?', 'What services do you offer?', 'Are you insured?'],
   )
 }
 
@@ -506,14 +527,21 @@ function insuranceResponse(data: BusinessData): ChatResponse {
 function paymentResponse(data: BusinessData): ChatResponse {
   const faq = findFaq(data.faqs, ['pay', 'payment'])
   const answer = faq ? sanitize(faq.answer) : ''
-  const text =
-    answer.length >= 8
-      ? answer
-      : "The team will confirm the payment options with you. Just drop us a message and we'll sort it out."
-  return reply(text, [LINK_CONTACT, LINK_FAQ], [
+  if (answer.length >= 8) {
+    return reply(answer, [LINK_FAQ], [
+      'What services do you offer?',
+      'Which areas do you cover?',
+      "I'm ready to book",
+    ])
+  }
+  const details = contactDetails(data)
+  const text = details
+    ? `The team will confirm the exact payment options — the quickest way is to ${details} and they'll sort it out with you.`
+    : "The team will confirm the exact payment options with you. Send us a message and we'll sort it out."
+  return reply(text, [LINK_CONTACT], [
     'What services do you offer?',
     'Which areas do you cover?',
-    'Get a quote',
+    "I'm ready to book",
   ])
 }
 
@@ -581,12 +609,12 @@ function faqResponse(text: string, data: BusinessData): ChatResponse | null {
   ])
 }
 
-function fallbackResponse(): ChatResponse {
-  return reply(
-    'I can help with our services, prices, areas and booking. For anything else, message the team and they’ll be happy to help.',
-    [LINK_CONTACT, LINK_SERVICES],
-    SUGGEST_DEFAULT,
-  )
+function fallbackResponse(data: BusinessData): ChatResponse {
+  const details = contactDetails(data)
+  const help = details
+    ? `I can help with our services, prices, areas and booking. For anything else, ${details} and the team will be happy to help.`
+    : 'I can help with our services, prices, areas and booking. For anything else, message the team and they’ll be happy to help.'
+  return reply(help, [LINK_CONTACT, LINK_SERVICES], SUGGEST_DEFAULT)
 }
 
 // ---------------------------------------------------------------------------
@@ -775,5 +803,5 @@ export function answerWithRules(
   const faqReply = faqResponse(text, data)
   if (faqReply) return faqReply
 
-  return fallbackResponse()
+  return fallbackResponse(data)
 }

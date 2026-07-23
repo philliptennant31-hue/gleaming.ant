@@ -271,10 +271,12 @@ describe('answerWithRules — intents', () => {
     assertShape(res)
   })
 
-  it('confirms a core postcode inside the area', () => {
+  it('confirms a core postcode inside the area, answered in chat (not deferred to the tool)', () => {
     const res = ask('do you cover SS14?')
     expect(res.reply).toContain('Basildon')
-    expect(res.links.some((l) => l.path === '/booking')).toBe(true)
+    // Answer-first: coverage is confirmed in the reply, never punted to the booking tool.
+    expect(res.reply.toLowerCase()).not.toContain('tool')
+    expect(res.links.some((l) => l.path === '/booking')).toBe(false)
     assertShape(res)
   })
 
@@ -423,6 +425,70 @@ describe('answerWithRules — contract', () => {
     }
     assertShape(answerWithRules([{ role: 'user', content: 'what services do you offer?' }], empty))
     assertShape(answerWithRules([{ role: 'user', content: 'do you cover SS14?' }], empty))
+  })
+})
+
+describe('answer-first policy (owner mandate 2026-07-22)', () => {
+  // A variant with REAL contact details so "unknown fact" answers can prove
+  // they inline the phone rather than punting to a page.
+  const withContact: BusinessData = {
+    ...data,
+    settings: {
+      ...data.settings,
+      contact: { phone: '07700 900123', email: 'hello@example.co.uk', whatsapp: '07700 900123' },
+    },
+  }
+  const askC = (content: string): ChatResponse =>
+    answerWithRules([{ role: 'user', content }], withContact)
+
+  it('coverage WITHOUT a postcode: invites a postcode in chat, never redirects to the booking tool', () => {
+    const res = ask('which areas do you cover?')
+    // Invites the postcode right here...
+    expect(res.reply.toLowerCase()).toContain('postcode')
+    // ...and does NOT frame a page/tool as where to check, nor link /booking.
+    expect(res.reply.toLowerCase()).not.toContain('tool')
+    expect(res.reply.toLowerCase()).not.toContain('booking tool')
+    expect(res.links.some((l) => l.path === '/booking')).toBe(false)
+    assertShape(res)
+  })
+
+  it('coverage WITH a postcode: answers decisively with the area name', () => {
+    expect(ask('do you cover SS14?').reply).toContain('Basildon')
+    expect(ask('do you cover CM15?').reply).toContain('Brentwood')
+  })
+
+  it('payment fallback inlines the real contact number (no page-as-answer)', () => {
+    const res = askC('how do I pay you?')
+    expect(res.reply).toContain('07700 900123')
+    expect(res.reply).not.toContain('[PLACEHOLDER')
+    assertShape(res)
+  })
+
+  it('hours (unknown fact) fallback inlines the real contact number', () => {
+    const res = askC('what are your opening hours?')
+    expect(res.reply).toContain('07700 900123')
+    assertShape(res)
+  })
+
+  it('no suggested reply ever tells the visitor to navigate (no "tool"/"page")', () => {
+    const probes = [
+      'which areas do you cover?',
+      'do you cover SS14?',
+      'do you cover LS1?',
+      'how much is window cleaning?',
+      'what are your prices like?',
+      'how do I pay?',
+      'what are your opening hours?',
+      'what services do you offer?',
+      "I'd like to book",
+      'are you insured?',
+    ]
+    for (const probe of probes) {
+      for (const s of askC(probe).suggested_replies) {
+        expect(s.toLowerCase()).not.toContain('tool')
+        expect(s.toLowerCase()).not.toContain('page')
+      }
+    }
   })
 })
 
