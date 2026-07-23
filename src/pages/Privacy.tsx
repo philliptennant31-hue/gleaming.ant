@@ -18,7 +18,7 @@ const SECTIONS: { heading: string; body: string }[] = [
   },
   {
     heading: '4. Legal basis for processing',
-    body: '[PLACEHOLDER: state the lawful bases relied on under UK GDPR — e.g. contract, legitimate interests, consent.]',
+    body: '[PLACEHOLDER: state the lawful bases relied on under UK GDPR, e.g. contract, legitimate interests, consent.]',
   },
   {
     heading: '5. Sharing your information',

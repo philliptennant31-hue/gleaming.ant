@@ -638,3 +638,76 @@ describe('isRoutePath', () => {
     expect(isRoutePath('/services/Window Cleaning')).toBe(false)
   })
 })
+
+describe('brain replies — public voice (owner mandate)', () => {
+  // PUBLIC VOICE RULE: no em dashes in any user-visible chat string.
+  const withContact: BusinessData = {
+    ...data,
+    settings: {
+      ...data.settings,
+      contact: { phone: '07497 386385', email: 'hello@gleamingant.co.uk', whatsapp: '447497386385' },
+    },
+  }
+  // A surcharged, non-core area so the travel-surcharge coverage reply is exercised.
+  const withSurcharge: BusinessData = {
+    ...data,
+    serviceAreas: [
+      ...data.serviceAreas,
+      {
+        id: 'a-sur',
+        name: 'Far Field',
+        postcode_prefixes: ['XX1'],
+        surcharge: 10,
+        is_core: false,
+        is_active: true,
+        sort_order: 50,
+      },
+    ],
+  }
+
+  const noEmDash = (res: ChatResponse): void => {
+    expect(res.reply, res.reply).not.toContain('—')
+    for (const s of res.suggested_replies) expect(s, s).not.toContain('—')
+    for (const l of res.links) expect(l.label, l.label).not.toContain('—')
+  }
+
+  it('coverage with a core postcode has no em dash', () => {
+    noEmDash(answerWithRules([{ role: 'user', content: 'do you cover SS14?' }], data))
+  })
+
+  it('coverage with a surcharged postcode has no em dash', () => {
+    const res = answerWithRules([{ role: 'user', content: 'do you cover XX1?' }], withSurcharge)
+    expect(res.reply.toLowerCase()).toContain('surcharge')
+    noEmDash(res)
+  })
+
+  it('coverage without a postcode has no em dash', () => {
+    noEmDash(answerWithRules([{ role: 'user', content: 'which areas do you cover?' }], data))
+  })
+
+  it('pricing has no em dash', () => {
+    noEmDash(answerWithRules([{ role: 'user', content: 'how much is window cleaning?' }], data))
+  })
+
+  it('payment with real contact details has no em dash', () => {
+    const res = answerWithRules([{ role: 'user', content: 'how do I pay?' }], withContact)
+    expect(res.reply).toContain('07497 386385')
+    noEmDash(res)
+  })
+
+  it('fallback and general intents have no em dash', () => {
+    const probes = [
+      '',
+      'hello there',
+      'asdf qwer zxcv',
+      'are you insured?',
+      'how often should I clean?',
+      'can I talk to someone?',
+      "I'm ready to book",
+      'what services do you offer?',
+    ]
+    for (const probe of probes) {
+      noEmDash(answerWithRules([{ role: 'user', content: probe }], withContact))
+    }
+  })
+})

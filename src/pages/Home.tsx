@@ -41,7 +41,7 @@ const STEPS = [
   {
     icon: PoundCoinIcon,
     title: 'Pay after',
-    body: 'Settle up once the job is done and you are happy. [PLACEHOLDER: payment methods — e.g. bank transfer, card, direct debit]',
+    body: 'Settle up once the job is done and you are happy. [PLACEHOLDER: payment methods, e.g. bank transfer, card, direct debit]',
   },
 ]
 
@@ -228,7 +228,7 @@ export default function Home() {
               <div className="rise-in rise-in-2">
                 <HeroArt>
                   <QuoteStarter
-                    supportLine="Tell us your property and what needs cleaning — instant price, nothing to pay now."
+                    supportLine="Tell us your property and what needs cleaning. Instant price, nothing to pay now."
                     sizeLabel="Your property"
                   />
                 </HeroArt>

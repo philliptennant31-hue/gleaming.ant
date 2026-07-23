@@ -162,7 +162,7 @@ export default function BookingConfirmedPage() {
           <ul className="mt-3 space-y-2.5 text-sm text-ink">
             <li className="flex items-start gap-2.5">
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-teal-deep" aria-hidden="true" />
-              We'll confirm your day and time by message. [PLACEHOLDER: confirmation channel — e.g. text /
+              We'll confirm your day and time by message. [PLACEHOLDER: confirmation channel, e.g. text /
               WhatsApp / email].
             </li>
             {quote.outsideArea && (

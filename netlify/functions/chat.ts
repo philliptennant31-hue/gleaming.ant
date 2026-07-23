@@ -233,7 +233,7 @@ function buildSystemPrompt(data: BusinessData): string {
     '- Links must come from the route map only. Use /services/:slug with a real slug from the data.',
     '- Link labels must read as navigation ("See Window Cleaning", "Open the price list", "How pricing works"), never a bare service name that a visitor could mistake for a reply option to tap, and never a label that implies the answer is behind the link.',
     '- Keep replies under 120 words, warm and plain-spoken UK English (say "we" and "your"; contractions welcome). No corporate filler, no invented claims.',
-    '- Never use em dashes. Use commas or separate sentences.',
+    '- Never use em dashes (use commas or separate sentences). Write plain, human UK English: no AI-typical phrasing, no rhetorical triads, no "it is not X, it is Y" constructions, and no brochure words such as seamless, elevate, or delve.',
     '- Provide at most 2 links and at most 3 short suggested replies. Normally each is a question a visitor might ask next; during a quote handoff they are instead short ANSWERS to the question you just asked (e.g. "3 bedrooms", "Every 4 weeks", "One-off").',
     '- Respond ONLY with the required JSON object. Include quote_draft only when handing a visitor into a quote (see QUOTE HANDOFF).',
   ].join('\n')

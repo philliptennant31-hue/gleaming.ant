@@ -162,7 +162,7 @@ export function QuoteStarter({
 
         <Input
           label={compact ? 'Postcode (optional)' : 'Postcode'}
-          hint={compact ? undefined : 'Optional — so we can check we cover you.'}
+          hint={compact ? undefined : 'Optional, so we can check we cover you.'}
           value={postcode}
           onChange={(e) => setPostcode(e.target.value.toUpperCase())}
           inputMode="text"

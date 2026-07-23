@@ -465,14 +465,14 @@ function areasResponse(outcode: string | null, data: BusinessData): ChatResponse
     const area = matchArea(outcode, data.serviceAreas)
     if (area && area.surcharge > 0) {
       return reply(
-        `Yes, we cover ${outcode} — that's in ${area.name}, just outside our core patch, so there's a ${gbp(area.surcharge)} travel surcharge on top of the usual price. Want me to help you get a price?`,
+        `Yes, we cover ${outcode}. That's in ${area.name}, just outside our core patch, so there's a ${gbp(area.surcharge)} travel surcharge on top of the usual price. Want me to help you get a price?`,
         [LINK_AREAS],
         ['How much is window cleaning?', 'What services do you offer?', "I'm ready to book"],
       )
     }
     if (area) {
       return reply(
-        `Yes, we cover ${outcode} — that's right in ${area.name}, with no extra travel cost. Want me to help you get a price?`,
+        `Yes, we cover ${outcode}. That's right in ${area.name}, with no extra travel cost. Want me to help you get a price?`,
         [LINK_AREAS],
         ['How much is window cleaning?', 'What services do you offer?', "I'm ready to book"],
       )
@@ -536,7 +536,7 @@ function paymentResponse(data: BusinessData): ChatResponse {
   }
   const details = contactDetails(data)
   const text = details
-    ? `The team will confirm the exact payment options — the quickest way is to ${details} and they'll sort it out with you.`
+    ? `The team will confirm the exact payment options. The quickest way is to ${details} and they'll sort it out with you.`
     : "The team will confirm the exact payment options with you. Send us a message and we'll sort it out."
   return reply(text, [LINK_CONTACT], [
     'What services do you offer?',
