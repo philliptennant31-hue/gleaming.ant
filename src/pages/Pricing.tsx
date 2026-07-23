@@ -56,20 +56,22 @@ function PriceMatrix({ services, bands, prices }: Pick<PricingData, 'services' |
                 <span className="flex items-center gap-2.5">
                   <ServiceIcon name={service.icon} className="h-4 w-4 shrink-0 text-teal-deep" />
                   <Link
-                    to={`/booking?services=${service.slug}`}
+                    to={`/services/${service.slug}`}
                     className="rounded-sm text-ink hover:text-teal-deep hover:underline"
                   >
                     {service.name}
                   </Link>
                 </span>
-                <Link
+                <Button
                   to={`/booking?services=${service.slug}`}
-                  aria-label={`Quote ${service.name}`}
-                  className="mt-1.5 inline-flex items-center gap-1 rounded-sm text-xs font-semibold text-teal-deep hover:gap-1.5 hover:text-ink"
+                  variant="secondary"
+                  size="sm"
+                  aria-label={`Get an instant quote for ${service.name}`}
+                  className="mt-2"
+                  rightIcon={<ArrowRight className="h-3.5 w-3.5" />}
                 >
-                  Quote this
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </Link>
+                  Quote
+                </Button>
               </th>
               {bands.map((band) => (
                 <td key={band.code} className="px-5 py-4 text-right font-mono text-ink">
