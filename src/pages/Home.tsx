@@ -22,6 +22,7 @@ import { Sparkle } from '../components/brand/Sparkle'
 import { TrustChips } from '../components/site/TrustChips'
 import { ServiceCard } from '../components/site/ServiceCard'
 import { HeroArt } from '../components/site/HeroArt'
+import { QuoteStarter } from '../components/site/QuoteStarter'
 import { Reveal } from '../components/site/Reveal'
 import { BeforeAfterSlider } from '../components/site/BeforeAfterSlider'
 import { cn } from '../lib/cn'
@@ -192,40 +193,49 @@ export default function Home() {
         <Sparkle size={20} className="twinkle absolute left-[6%] top-16 text-pane/40" />
         <Sparkle size={14} className="twinkle twinkle-2 absolute right-[45%] top-10 text-white/50" />
 
-        <Container className="relative py-16 sm:py-20 lg:py-24">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-pane">
-                <MapPinIcon className="h-3.5 w-3.5" />
-                Essex · Window &amp; exterior cleaning
-              </span>
+        {/* Height-constrained so the whole hero (headline block + card) sits in
+            one viewport; the content is vertically centred within it. */}
+        <div className="flex min-h-[min(88svh,820px)] items-center">
+          <Container className="relative w-full py-10 sm:py-12">
+            <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+              <div>
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-pane">
+                  <MapPinIcon className="h-3.5 w-3.5" />
+                  Essex · Window &amp; exterior cleaning
+                </span>
 
-              <h1 className="wipe-headline rise-in mt-5 max-w-xl font-display text-[2.6rem] font-extrabold leading-[1.03] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Gleaming windows. Tidy gutters. One friendly visit.
-              </h1>
+                <h1 className="wipe-headline rise-in mt-4 max-w-xl font-display text-[2.6rem] font-extrabold leading-[1.03] tracking-tight text-white sm:text-5xl lg:text-6xl">
+                  Gleaming windows. Tidy gutters. One friendly visit.
+                </h1>
 
-              <p className="rise-in rise-in-2 mt-5 max-w-lg text-lg leading-relaxed text-pane/85">
-                We're the small, hardworking local team keeping Essex homes bright. Reliable,
-                friendly and fully insured, on a regular round or a one-off spruce-up.
-              </p>
+                <p className="rise-in rise-in-2 mt-4 max-w-lg text-lg leading-relaxed text-pane/85">
+                  We're the small, hardworking local team keeping Essex homes bright. Reliable,
+                  friendly and fully insured, on a regular round or a one-off spruce-up.
+                </p>
 
-              <div className="rise-in rise-in-3 mt-8 flex flex-wrap gap-3">
-                <Button to="/booking" size="lg" rightIcon={<ArrowRight className="h-5 w-5" />}>
-                  Get an instant quote
-                </Button>
-                <Button to="/pricing" size="lg" variant="secondary" onDark>
-                  See our prices
-                </Button>
+                <div className="rise-in rise-in-3 mt-6 flex flex-wrap gap-3">
+                  <Button to="/booking" size="lg" rightIcon={<ArrowRight className="h-5 w-5" />}>
+                    Get an instant quote
+                  </Button>
+                  <Button to="/pricing" size="lg" variant="secondary" onDark>
+                    See our prices
+                  </Button>
+                </div>
+
+                <TrustChips tone="light" className="rise-in rise-in-4 mt-6" />
               </div>
 
-              <TrustChips tone="light" className="rise-in rise-in-4 mt-8" />
+              <div className="rise-in rise-in-2">
+                <HeroArt>
+                  <QuoteStarter
+                    supportLine="Tell us your property and what needs cleaning — instant price, nothing to pay now."
+                    sizeLabel="Your property"
+                  />
+                </HeroArt>
+              </div>
             </div>
-
-            <div className="rise-in rise-in-2">
-              <HeroArt />
-            </div>
-          </div>
-        </Container>
+          </Container>
+        </div>
 
         <WipeEdge color="var(--color-paper)" fillSide="down" />
       </section>
