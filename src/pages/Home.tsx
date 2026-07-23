@@ -193,22 +193,24 @@ export default function Home() {
         <Sparkle size={20} className="twinkle absolute left-[6%] top-16 text-pane/40" />
         <Sparkle size={14} className="twinkle twinkle-2 absolute right-[45%] top-10 text-white/50" />
 
-        {/* Height-constrained so the whole hero (headline block + card) sits in
-            one viewport; the content is vertically centred within it. */}
+        {/* Height-constrained so the whole hero (headline, quote card and photo
+            panel) sits in one viewport; the row is vertically centred within it.
+            Three columns on desktop: the pitch, the quick quote, then the photo
+            panel. On mobile they stack: headline, card, photo banner. */}
         <div className="flex min-h-[min(88svh,820px)] items-center">
           <Container className="relative w-full py-10 sm:py-12">
-            <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+            <div className="grid items-center gap-8 lg:grid-cols-[1.5fr_1fr_1.2fr] lg:gap-10">
               <div>
                 <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-pane">
                   <MapPinIcon className="h-3.5 w-3.5" />
                   Essex · Window &amp; exterior cleaning
                 </span>
 
-                <h1 className="wipe-headline rise-in mt-4 max-w-xl font-display text-[2.6rem] font-extrabold leading-[1.03] tracking-tight text-white sm:text-5xl lg:text-6xl">
+                <h1 className="wipe-headline rise-in mt-4 font-display text-[2.4rem] font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-[3.2rem]">
                   Gleaming windows. Tidy gutters. One friendly visit.
                 </h1>
 
-                <p className="rise-in rise-in-2 mt-4 max-w-lg text-lg leading-relaxed text-pane/85">
+                <p className="rise-in rise-in-2 mt-4 max-w-lg text-base leading-relaxed text-pane/85 lg:text-lg">
                   We're the small, hardworking local team keeping Essex homes bright. Reliable,
                   friendly and fully insured, on a regular round or a one-off spruce-up.
                 </p>
@@ -226,12 +228,14 @@ export default function Home() {
               </div>
 
               <div className="rise-in rise-in-2">
-                <HeroArt>
-                  <QuoteStarter
-                    supportLine="Tell us your property and what needs cleaning. Instant price, nothing to pay now."
-                    sizeLabel="Your property"
-                  />
-                </HeroArt>
+                <QuoteStarter
+                  supportLine="Tell us your property and what needs cleaning. Instant price, nothing to pay now."
+                  sizeLabel="Your property"
+                />
+              </div>
+
+              <div className="rise-in rise-in-3">
+                <HeroArt />
               </div>
             </div>
           </Container>

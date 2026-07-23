@@ -20,12 +20,18 @@ import { ArrowRight } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Sparkle } from '../brand/Sparkle'
 import { cn } from '../../lib/cn'
-import { draftReadiness } from './types'
+import { draftReadiness, isChatTeaserDismissed, rememberChatTeaserDismissed } from './types'
 import type { ChatResponse, DisplayMessage, QuoteDraft } from './types'
 
 const STORAGE_KEY = 'ga_sparkle_chat_v1'
 const MAX_INPUT = 600
 const MAX_HISTORY = 12
+
+// The one-time launcher teaser: a short line in Sparkle's voice, shown a few
+// seconds after load so the chat is easy to find without shouting.
+const TEASER_LINE = "Hi, I'm Sparkle. Ask me for a price any time."
+const TEASER_SHOW_DELAY_MS = 4000
+const TEASER_AUTO_HIDE_MS = 12000
 
 const GREETING =
   "Hi! I'm Sparkle, the Gleaming Ant assistant. I can help with our services, prices, the areas we cover and booking. What can I help you with?"
@@ -123,6 +129,7 @@ export default function ChatWidget() {
 
   const [open, setOpen] = useState(false)
   const [hasEverOpened, setHasEverOpened] = useState(false)
+  const [teaserOpen, setTeaserOpen] = useState(false)
   const [messages, setMessages] = useState<DisplayMessage[]>(loadTranscript)
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
@@ -164,11 +171,36 @@ export default function ChatWidget() {
 
   const handleClose = useCallback(() => closePanel(true), [closePanel])
 
+  const dismissTeaser = useCallback(() => {
+    setTeaserOpen(false)
+    rememberChatTeaserDismissed(typeof window !== 'undefined' ? window.sessionStorage : null)
+  }, [])
+
   const handleOpen = useCallback(() => {
     setOpen(true)
     setHasEverOpened(true)
+    dismissTeaser()
     setMessages((prev) => (prev.length === 0 ? [greetingMessage()] : prev))
+  }, [dismissTeaser])
+
+  // One-time launcher teaser: surface it a few seconds after load (unless the
+  // visitor has already dismissed it this session), then auto-hide it. Opening
+  // the chat also dismisses it (see handleOpen).
+  useEffect(() => {
+    const store = typeof window !== 'undefined' ? window.sessionStorage : null
+    if (isChatTeaserDismissed(store)) return
+    const showTimer = window.setTimeout(() => {
+      // Re-check: the visitor may have opened the chat before the delay elapsed.
+      if (!isChatTeaserDismissed(store)) setTeaserOpen(true)
+    }, TEASER_SHOW_DELAY_MS)
+    return () => window.clearTimeout(showTimer)
   }, [])
+
+  useEffect(() => {
+    if (!teaserOpen) return
+    const hideTimer = window.setTimeout(dismissTeaser, TEASER_AUTO_HIDE_MS)
+    return () => window.clearTimeout(hideTimer)
+  }, [teaserOpen, dismissTeaser])
 
   const send = useCallback(
     async (raw: string) => {
@@ -324,21 +356,66 @@ export default function ChatWidget() {
 
   return (
     <>
-      <button
-        ref={launcherRef}
-        type="button"
-        onClick={open ? handleClose : handleOpen}
-        aria-label={open ? 'Close chat with Sparkle' : 'Chat with Sparkle'}
-        aria-haspopup="dialog"
-        aria-expanded={open}
+      {/* Launcher cluster: the round button, a "Chat with Sparkle" label chip to
+          its left, and a one-time teaser bubble above it. */}
+      <div
         className={cn(
-          'fixed right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-amber text-ink shadow-lift transition-colors hover:bg-amber-deep sm:right-6',
+          'fixed right-5 z-40 flex items-center gap-2.5 sm:right-6',
           aboveQuoteBar ? 'bottom-20 sm:bottom-6' : 'bottom-5 sm:bottom-6',
-          !hasEverOpened && 'chat-attention',
         )}
       >
-        <Sparkle size={26} />
-      </button>
+        {/* Label chip — a mouse affordance that mirrors the launcher. Hidden
+            while the panel is open and below ~380px so it never crowds the
+            corner. Hidden from assistive tech, which uses the labelled button. */}
+        {!open && (
+          <button
+            type="button"
+            onClick={handleOpen}
+            tabIndex={-1}
+            aria-hidden="true"
+            className="hidden items-center gap-1.5 rounded-full bg-amber py-2 pl-3.5 pr-4 text-sm font-semibold text-ink shadow-lift transition-colors hover:bg-amber-deep min-[380px]:inline-flex"
+          >
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-teal-deep/70" />
+            Chat with Sparkle
+          </button>
+        )}
+
+        <div className="relative">
+          {teaserOpen && !open && (
+            <div
+              role="status"
+              className="chat-teaser absolute bottom-full right-0 mb-3 w-60 rounded-2xl rounded-br-sm border border-pane bg-white px-3.5 py-2.5 text-left shadow-lift"
+            >
+              <button
+                type="button"
+                onClick={dismissTeaser}
+                aria-label="Dismiss"
+                className="absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-pane hover:text-ink"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+                </svg>
+              </button>
+              <p className="pr-4 text-sm leading-snug text-ink">{TEASER_LINE}</p>
+            </div>
+          )}
+
+          <button
+            ref={launcherRef}
+            type="button"
+            onClick={open ? handleClose : handleOpen}
+            aria-label={open ? 'Close chat with Sparkle' : 'Chat with Sparkle'}
+            aria-haspopup="dialog"
+            aria-expanded={open}
+            className={cn(
+              'relative flex h-14 w-14 items-center justify-center rounded-full bg-amber text-ink shadow-lift transition-colors hover:bg-amber-deep',
+              !hasEverOpened && 'chat-attention',
+            )}
+          >
+            <Sparkle size={26} />
+          </button>
+        </div>
+      </div>
 
       {open && (
         <div

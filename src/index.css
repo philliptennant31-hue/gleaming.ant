@@ -261,6 +261,17 @@
   100% { box-shadow: 0 0 0 12px rgba(224, 145, 61, 0); }
 }
 
+/* Chat launcher teaser: the one-time bubble eases in once. It is fully visible
+   by default, so reduced-motion visitors simply get it with no movement (and
+   never any bounce). */
+@media (prefers-reduced-motion: no-preference) {
+  .chat-teaser { animation: chat-teaser-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+}
+@keyframes chat-teaser-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
 /* Before/after slider: the divider eases only during the one-time hint sweep;
    while dragging it tracks the pointer 1:1 (the component drops this class). */
 .ba-hinting .ba-reveal,
