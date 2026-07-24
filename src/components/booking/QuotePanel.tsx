@@ -4,7 +4,20 @@ import { ClockIcon, MapPinIcon, SparkleBurstIcon } from '../brand/icons-brand'
 import { cn } from '../../lib/cn'
 import { formatDuration, formatGBP } from '../../lib/format'
 import type { QuoteBreakdown } from '../../lib/pricing'
+import type { BundleDiscount, Service, ServicePrice } from '../../lib/types'
+import { addChipLabel, bundleUpsellHeading, resolveBundleUpsell } from './pairings'
 import { Sparkle } from '../brand/Sparkle'
+
+/** Data + handler the panel needs to offer the quiet bundle nudge. */
+export interface QuoteUpsell {
+  services: Service[]
+  prices: ServicePrice[]
+  bundles: BundleDiscount[]
+  selectedIds: string[]
+  bandCode: string
+  /** Adds a service to the draft — the same handler the services step uses. */
+  onAdd: (serviceId: string) => void
+}
 
 export interface QuoteView {
   quote: QuoteBreakdown | null
@@ -15,6 +28,46 @@ export interface QuoteView {
   /** Whether any selected service supports frequency (so it's worth showing). */
   showFrequency: boolean
   postcode: string
+  /** When present, drives the one-service bundle nudge (see BundleUpsellStrip). */
+  upsell?: QuoteUpsell
+}
+
+/**
+ * A quiet, always-visible bundle nudge. When exactly one service is selected and
+ * an active 2-service discount exists, it shows the saving and up to two one-tap
+ * add chips. It renders nothing in every other state (handled by
+ * resolveBundleUpsell), so prefilled visitors who skipped the services step
+ * still see the other services and the discount. No motion.
+ */
+function BundleUpsellStrip({ upsell }: { upsell: QuoteUpsell }) {
+  const model = resolveBundleUpsell({
+    services: upsell.services,
+    prices: upsell.prices,
+    bundles: upsell.bundles,
+    selectedIds: upsell.selectedIds,
+    bandCode: upsell.bandCode,
+  })
+  if (!model) return null
+
+  return (
+    <div className="mt-4 rounded-lg border border-pane p-3">
+      <p className="text-xs font-semibold text-teal-deep">{bundleUpsellHeading(model.savePercent)}</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {model.chips.map(({ service, price }) => (
+          <button
+            key={service.id}
+            type="button"
+            onClick={() => upsell.onAdd(service.id)}
+            aria-label={addChipLabel(service.name, formatGBP(price))}
+            className="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-pane px-3 py-1 text-xs font-semibold text-ink hover:border-teal"
+          >
+            <span>{service.name}</span>
+            <span className="font-mono text-teal-deep">+{formatGBP(price)}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 function Row({
@@ -40,7 +93,7 @@ function Row({
 }
 
 /** The itemised quote body. Reused in the sidebar, the mobile sheet and step 5. */
-export function QuoteContent({ quote, bandLabel, frequencyLabel, showFrequency, postcode }: QuoteView) {
+export function QuoteContent({ quote, bandLabel, frequencyLabel, showFrequency, postcode, upsell }: QuoteView) {
   const hasLines = quote !== null && quote.lines.length > 0
   const total = quote?.total ?? null
 
@@ -149,6 +202,8 @@ export function QuoteContent({ quote, bandLabel, frequencyLabel, showFrequency, 
               Looks like you're outside our usual patch. Send the booking through and we'll confirm by message.
             </p>
           )}
+
+          {upsell && <BundleUpsellStrip upsell={upsell} />}
         </>
       )}
     </div>

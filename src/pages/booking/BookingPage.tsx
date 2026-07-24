@@ -147,14 +147,6 @@ export default function BookingPage() {
   const bandLabel = data?.bands.find((b) => b.code === bandCode)?.label ?? null
   const frequencyLabel = data?.frequencies.find((f) => f.code === frequencyCode)?.label ?? null
 
-  const quoteView: QuoteView = {
-    quote,
-    bandLabel,
-    frequencyLabel,
-    showFrequency: anySupportsFrequency,
-    postcode: address.postcode,
-  }
-
   // ---- Field handlers ----
   const clearError = useCallback((key: string) => {
     setErrors((e) => {
@@ -190,6 +182,22 @@ export default function BookingPage() {
     },
     [clearError],
   )
+
+  const quoteView: QuoteView = {
+    quote,
+    bandLabel,
+    frequencyLabel,
+    showFrequency: anySupportsFrequency,
+    postcode: address.postcode,
+    upsell: {
+      services,
+      prices: data?.prices ?? [],
+      bundles: data?.bundles ?? [],
+      selectedIds: selectedServiceIds,
+      bandCode,
+      onAdd: toggleService,
+    },
+  }
 
   // ---- Validation ----
   function validateStep(n: number): Record<string, string> {
